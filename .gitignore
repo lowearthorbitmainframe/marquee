@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+data/enrich.log
+ios/preview/
+ios/*.xcodeproj/xcuserdata/
+ios/*.xcodeproj/project.xcworkspace/xcuserdata/
