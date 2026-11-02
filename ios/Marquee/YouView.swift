@@ -65,7 +65,8 @@ struct YourArtistsShows: View {
 
     private func subtitle(_ result: (events: [Event], artists: Set<String>)) -> String {
         if result.events.isEmpty { return "None of your artists have listed shows yet" }
-        return "\(result.artists.count) of your artists, \(result.events.count) upcoming shows"
+        let shows = result.events.count == 1 ? "1 upcoming show" : "\(result.events.count) upcoming shows"
+        return "\(result.artists.count) of your artists, \(shows)"
     }
 }
 
