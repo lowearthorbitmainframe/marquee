@@ -18,12 +18,12 @@ TOUR_WORDS = re.compile(
 )
 SEPARATORS = re.compile(
     r"\s+(?:with special guests?|special guests?|and special guests?|with|w/|feat\.?|"
-    r"ft\.?|featuring|plus|support(?:ing)?(?: from| by)?|b2b|x|vs\.?)\s+|\s+\+\s+|\s*,\s*|\s+/\s+|\s*\|\s*|:\s+",
+    r"ft\.?|featuring|plus|support(?:ing)?(?: from| by)?|b2b|x|vs\.?)\s+|\s+\+\s+|\s*,\s*|\s+/\s+|\s+_\s+|\s*\|\s*|:\s+",
     re.I,
 )
 ROLE_SUFFIX = re.compile(r"\s*\([^)]*\)\s*$")
 TOUR_PHRASE = re.compile(r"^(live\b|an evening with\b|hosted by\b|the .* tour$)|\b(19|20)\d\d\b", re.I)
-PLACEHOLDER = re.compile(r"^(special guests?|guests?|tba|tbd|more|and more|many more|friends|\+? ?more)$", re.I)
+PLACEHOLDER = re.compile(r"\b(tba|tbd)\b|^(special guests?|guests?|more|and more|many more|friends|\+? ?more)$", re.I)
 LEADING_LINK = re.compile(r"^(?:with|w/|and|&|\+|plus|performed by|featuring|feat\.?|ft\.?)\s+", re.I)
 
 # Words that mean a title is not a band name. Those events stay in the feed,
@@ -101,7 +101,7 @@ def parse_artists(title):
 
     artists = []
     for piece in SEPARATORS.split(", ".join(kept)):
-        name = ROLE_SUFFIX.sub("", piece).strip(" -–—:;\"'“”")
+        name = ROLE_SUFFIX.sub("", piece).strip(" -–—:;*\"'“”")
         name = LEADING_LINK.sub("", name).strip()
         if _is_plausible_artist(name) and artist_key(name) not in [artist_key(a) for a in artists]:
             artists.append(name)

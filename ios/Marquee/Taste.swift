@@ -65,6 +65,20 @@ extension Set {
     }
 }
 
+extension TasteProfile {
+    /// Upcoming shows by artists you follow or have in your library, soonest first.
+    func shows(in feed: Feed?) -> (events: [Event], artists: Set<String>) {
+        let keys = Set((favoriteArtists + libraryArtists).map(ArtistKey.make))
+        var artists = Set<String>()
+        let events = (feed?.events ?? []).filter { event in
+            let matches = event.artists.filter { keys.contains(ArtistKey.make($0)) }
+            artists.formUnion(matches.map(ArtistKey.make))
+            return !matches.isEmpty && !event.cancelled
+        }
+        return (events, artists)
+    }
+}
+
 struct Recommendation {
     var score: Int
     var reason: String?

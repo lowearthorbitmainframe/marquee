@@ -6,6 +6,7 @@ LOS_ANGELES = {
     "name": "Los Angeles",
     "timezone": "America/Los_Angeles",
     "sources": [
+        {"adapter": "troubadour", "url": "https://www.troubadour.com/", "venue": "troubadour"},
         {"adapter": "live_nation", "url": "https://www.theecho.com/shows/rooms/echoplex", "venue": "echoplex"},
         {"adapter": "live_nation", "url": "https://www.theecho.com/shows/rooms/the-echo", "venue": "the-echo"},
         {"adapter": "live_nation", "url": "https://www.wiltern.com/shows", "venue": "the-wiltern"},
@@ -22,10 +23,27 @@ LOS_ANGELES = {
         {"adapter": "rockhouse", "url": "https://1720.la/", "venue": "1720"},
         {"adapter": "plot_cards", "url": "https://themintla.com/", "venue": "the-mint"},
         {"adapter": "table_listing", "url": "http://roadhouse.permanentrecordsla.com/", "venue": "permanent-records-roadhouse"},
+        {"adapter": "eventbrite_organizer", "url": "https://www.eventbrite.com/o/npu-16532911902", "venue": "non-plus-ultra"},
+        {"adapter": "squarespace_events", "url": "https://www.thesmell.org/events", "venue": "the-smell"},
+        # City-wide sources run last, so a venue's own listing wins any duplicate.
+        {
+            "adapter": "dice_city",
+            "url": "https://dice.fm/browse/losangeles-5982e13c613de866017c3e3a",
+            "categories": ["music/gig", "music/dj", "music/party"],
+        },
+        {
+            "adapter": "ticketmaster",
+            "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+            "dma": 324,
+            "cities": ["Los Angeles", "Hollywood", "West Hollywood", "Inglewood", "Pasadena", "Long Beach", "Santa Monica", "Burbank", "Glendale", "Culver City", "North Hollywood", "Studio City", "Venice"],
+        },
     ],
     # Venues the AEG feed adds on its own come with an address but no map pin.
     "venues": {
         "echoplex": {"name": "Echoplex", "neighborhood": "Echo Park", "address": "1154 Glendale Blvd, Los Angeles, CA 90026", "lat": 34.0778, "lon": -118.2600, "url": "https://www.theecho.com/shows/rooms/echoplex"},
+        "troubadour": {"name": "Troubadour", "neighborhood": "West Hollywood", "address": "9081 Santa Monica Blvd, West Hollywood, CA 90069", "lat": 34.0815, "lon": -118.3895, "url": "https://www.troubadour.com/"},
+        "non-plus-ultra": {"name": "Non Plus Ultra", "neighborhood": "Address by DM", "url": "https://www.eventbrite.com/o/npu-16532911902"},
+        "the-smell": {"name": "The Smell", "neighborhood": "Downtown", "address": "247 S Main St, Los Angeles, CA 90012", "lat": 34.0512, "lon": -118.2470, "url": "https://www.thesmell.org/events"},
         "the-echo": {"name": "The Echo", "neighborhood": "Echo Park", "address": "1822 W Sunset Blvd, Los Angeles, CA 90026", "lat": 34.0779, "lon": -118.2601, "url": "https://www.theecho.com/shows/rooms/the-echo"},
         "the-wiltern": {"name": "The Wiltern", "neighborhood": "Koreatown", "address": "3790 Wilshire Blvd, Los Angeles, CA 90010", "lat": 34.0617, "lon": -118.3085, "url": "https://www.wiltern.com/shows"},
         "hollywood-palladium": {"name": "Hollywood Palladium", "neighborhood": "Hollywood", "address": "6215 W Sunset Blvd, Los Angeles, CA 90028", "lat": 34.0979, "lon": -118.3247, "url": "https://www.hollywoodpalladium.com/shows"},

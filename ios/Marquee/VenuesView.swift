@@ -134,7 +134,9 @@ struct VenueDetailView: View {
     }
 
     private var mapsURL: URL? {
-        let query = (venue.address ?? venue.name).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        // Some rooms keep their address private.
+        guard let address = venue.address else { return nil }
+        let query = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         return URL(string: "https://maps.apple.com/?q=\(query)")
     }
 }

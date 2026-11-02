@@ -66,9 +66,12 @@ swiftc -swift-version 5 -module-name MarqueeHarness -o /tmp/marquee-harness \
 
 ## Known gaps
 
-The Troubadour, Zebulon, Viper Room, Largo, Hotel Cafe and others aren't covered yet:
-their sites block automated requests or load shows through scripts. A free Ticketmaster
-Discovery API key would likely fill several of these.
+Viper Room, Largo, Hotel Cafe and others aren't covered yet: their sites block automated
+requests or load shows through scripts. DICE only exposes its soonest 20 or so shows per
+category, so DICE-only rooms show the next couple of weeks, not months ahead.
+
+Ticketmaster is optional. Add a free Discovery API key as the `TM_API_KEY` repository
+secret, and the scraper picks it up on its next run. Without a key that source is skipped.
 
 Listings and poster images belong to the venues. That's fine for your own phone, but
 get permission or use official APIs before releasing this on the App Store.

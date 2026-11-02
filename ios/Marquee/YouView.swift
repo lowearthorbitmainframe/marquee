@@ -24,6 +24,7 @@ struct YouView: View {
                         }
                         ForEach(saved) { EventLink(event: $0, showsDate: true) }
                     }
+                    YourArtistsShows()
                     ArtistsEditor()
                     GenresEditor()
                     StatusSection()
@@ -34,6 +35,37 @@ struct YouView: View {
             .navigationTitle("You")
             .marqueeDestinations()
         }
+    }
+}
+
+/// Doubles as a way to check a library import: every row is an artist it found.
+struct YourArtistsShows: View {
+    @EnvironmentObject private var store: FeedStore
+    @EnvironmentObject private var taste: TasteStore
+
+    @State private var showsAll = false
+
+    private let previewCount = 5
+
+    var body: some View {
+        let result = taste.profile.shows(in: store.feed)
+        if !taste.profile.favoriteArtists.isEmpty || !taste.profile.libraryArtists.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                SectionHeader(title: "Your artists in \(store.city?.name ?? "town")", subtitle: subtitle(result))
+                ForEach(showsAll ? result.events : Array(result.events.prefix(previewCount))) {
+                    EventLink(event: $0, showsDate: true)
+                }
+                if result.events.count > previewCount {
+                    Button(showsAll ? "Show fewer" : "Show all \(result.events.count)") { showsAll.toggle() }
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+            }
+        }
+    }
+
+    private func subtitle(_ result: (events: [Event], artists: Set<String>)) -> String {
+        if result.events.isEmpty { return "None of your artists have listed shows yet" }
+        return "\(result.artists.count) of your artists, \(result.events.count) upcoming shows"
     }
 }
 

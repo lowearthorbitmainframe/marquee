@@ -2,8 +2,8 @@ import unittest
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from adapters import image_url
-from scrape import normalize
+from adapters import image_url, parse_ticketmaster, slugify
+from scrape import normalize, remove_duplicates
 from titles import artist_key, classify, display_title, is_sold_out, parse_artists
 
 
@@ -33,6 +33,13 @@ class ParseArtists(unittest.TestCase):
         self.check("Marilyn Manson: Live in Los Angeles", ["Marilyn Manson"])
         self.check("Cody Dickinson (of North Mississippi Allstars)", ["Cody Dickinson"])
 
+    def test_slash_and_underscore_lineups(self):
+        self.check("lozenge / Blimp / Hysteria57", ["lozenge", "Blimp", "Hysteria57"])
+        self.check("TALEEN KALI _ SALINE _ NEOCONS", ["TALEEN KALI", "SALINE", "NEOCONS"])
+        self.check("POPFREE / **tba special guest** / Blazed", ["POPFREE", "Blazed"])
+        self.check("MINERVA HOYT / FRUIT LO0OPS (CHI) / SLEEVIES (SEA)", ["MINERVA HOYT", "FRUIT LO0OPS", "SLEEVIES"])
+        self.check("AC/DC", ["AC/DC"])
+
     def test_drops_connectors_and_placeholders(self):
         self.check("with Silverdeer", ["Silverdeer"])
         self.check("performed by Jimmy Rip", ["Jimmy Rip"])
@@ -58,6 +65,36 @@ class Helpers(unittest.TestCase):
         self.assertTrue(normalize(raw, zone)["timeTBA"])
         raw["start"] = datetime(2027, 5, 25, 20, 0)
         self.assertNotIn("timeTBA", normalize(raw, zone))
+
+    def test_same_show_from_two_sources_is_kept_once(self):
+        first = {"venueId": "1720", "start": "2026-11-07T20:00:00-08:00", "artists": ["Gutalax"], "title": "Gutalax"}
+        second = dict(first, title="GUTALAX with Friends", artists=["Gutalax", "Spasm"])
+        other_day = dict(first, start="2026-11-08T20:00:00-08:00")
+        self.assertEqual(remove_duplicates([first, second, other_day]), [first, other_day])
+
+    def test_venue_spellings_merge(self):
+        self.assertEqual(slugify("The Roxy Theatre"), "the-roxy")
+        self.assertEqual(slugify("The Mint "), "the-mint")
+
+    def test_ticketmaster_event(self):
+        item = {
+            "name": "Beach House", "url": "https://tm.example/1",
+            "dates": {"start": {"localDate": "2026-12-01", "localTime": "19:30:00"}, "status": {"code": "onsale"}},
+            "images": [{"url": "small.jpg", "width": 100}, {"url": "big.jpg", "width": 1000}],
+            "priceRanges": [{"min": 45.5}],
+            "_embedded": {
+                "venues": [{"name": "Hollywood Bowl", "city": {"name": "Los Angeles"}, "address": {"line1": "2301 N Highland Ave"}, "location": {"latitude": "34.11", "longitude": "-118.33"}}],
+                "attractions": [{"name": "Beach House"}, {"name": "Slow Pulp"}],
+            },
+        }
+        event = parse_ticketmaster(item)
+        self.assertEqual(event["venue"], "hollywood-bowl")
+        self.assertEqual(event["artists"], ["Beach House", "Slow Pulp"])
+        self.assertEqual(event["image"], "big.jpg")
+        self.assertEqual(event["price"], "From $46")
+        self.assertEqual(event["start"], datetime(2026, 12, 1, 19, 30))
+        self.assertEqual(event["venue_info"]["lat"], 34.11)
+        self.assertIsNone(parse_ticketmaster(dict(item, name="VIP Parking Pass")))
 
     def test_image_shapes(self):
         self.assertEqual(image_url("a.jpg"), "a.jpg")

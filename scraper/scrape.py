@@ -79,6 +79,20 @@ def normalize(raw, zone):
     return event
 
 
+def remove_duplicates(events):
+    """Sources can list the same show. The first source to list it wins."""
+    kept = []
+    seen = set()
+    for event in events:
+        names = event["artists"] or [event["title"]]
+        keys = {(event["venueId"], event["start"][:10], artist_key(name)) for name in names}
+        if keys & seen:
+            continue
+        seen |= keys
+        kept.append(event)
+    return kept
+
+
 def load_json(path, default):
     try:
         return json.loads(path.read_text())
@@ -107,31 +121,34 @@ def scrape_city(city, run_enrich, budget, minutes):
         status = {"source": label, "adapter": source["adapter"]}
         try:
             raws = adapter(source, fetch, today)
-            normalized = [e for e in (normalize(r, zone) for r in raws) if e]
+            normalized = [dict(e, source=label) for e in (normalize(r, zone) for r in raws) if e]
             if not normalized:
                 raise ValueError("no events found")
             for raw in raws:
                 info = raw.get("venue_info")
                 if info and raw["venue"] not in venues:
                     venues[raw["venue"]] = {"id": raw["venue"], "name": info["name"]}
-                if info and info.get("address"):
-                    venues[raw["venue"]].setdefault("address", info["address"])
+                for field in ("address", "neighborhood", "lat", "lon"):
+                    if info and info.get(field):
+                        venues[raw["venue"]].setdefault(field, info[field])
             for event in normalized:
                 events[event["id"]] = event
             status.update(ok=True, count=len(normalized))
+        except adapters.Skip:
+            continue
         except Exception as error:  # Keep the last good shows for this source.
             status.update(ok=False, error=str(error)[:200])
-            if source.get("venue"):
-                kept = [e for e in previous["events"] if e["venueId"] == source["venue"]]
-                for event in kept:
-                    events.setdefault(event["id"], event)
-                status["keptFromLastRun"] = len(kept)
+            kept = [e for e in previous["events"]
+                    if e.get("source") == label or e["venueId"] == source.get("venue")]
+            for event in kept:
+                events.setdefault(event["id"], event)
+            status["keptFromLastRun"] = len(kept)
         sources.append(status)
         print("%-30s %s" % (label, status.get("count", "FAILED: %s" % status.get("error"))))
         time.sleep(PAUSE_BETWEEN_SOURCES)
 
     upcoming = sorted(
-        (e for e in events.values() if e["start"][:10] >= today.isoformat()),
+        remove_duplicates(e for e in events.values() if e["start"][:10] >= today.isoformat()),
         key=lambda e: (e["start"][:10], bool(e.get("timeTBA")), e["start"], e["venueId"]),
     )
 

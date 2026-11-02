@@ -21,6 +21,8 @@ jobs:
         working-directory: scraper
       - run: python scrape.py --budget 150 --minutes 15
         working-directory: scraper
+        env:
+          TM_API_KEY: ${{ secrets.TM_API_KEY }}
       - name: Publish
         run: |
           git config user.name "marquee-bot"

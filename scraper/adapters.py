@@ -7,16 +7,42 @@
 normalizes them. Adapters raise on layout changes so the last good data is kept.
 """
 import json
+import os
 import re
+import time
 import unicodedata
-from datetime import date, datetime
+import urllib.parse
+from datetime import date, datetime, timezone
 
 from titles import clean_text, parse_artists
 
 
+class Skip(Exception):
+    """This source isn't configured, which is not a failure."""
+
+
+# Other spellings of venues, so every source files shows under one venue.
+VENUE_ALIASES = {
+    "the-dock-at-the-historic-sears-building": "the-dock-at-historic-sears-building",
+    "the-greek-theatre": "greek-theatre",
+    "greek-theatre-los-angeles": "greek-theatre",
+    "the-fonda-theatre": "fonda-theatre",
+    "the-roxy-theatre": "the-roxy",
+    "roxy-theatre": "the-roxy",
+    "the-teragram-ballroom": "teragram-ballroom",
+    "whisky-a-go-go-west-hollywood": "whisky-a-go-go",
+    "the-whisky-a-go-go": "whisky-a-go-go",
+    "wiltern": "the-wiltern",
+    "the-troubadour": "troubadour",
+    "hollywood-palladium-los-angeles": "hollywood-palladium",
+    "lodge-room-highland-park": "lodge-room",
+}
+
+
 def slugify(name):
     text = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower()
-    return re.sub(r"[^a-z0-9]+", "-", text).strip("-")
+    slug = re.sub(r"[^a-z0-9]+", "-", text).strip("-")
+    return VENUE_ALIASES.get(slug, slug)
 
 
 def infer_year(month, day, today):
@@ -54,8 +80,9 @@ def parse_month_day(text, today):
     return date(year, month, day)
 
 
-def combine(day, clock, default=(20, 0)):
-    hour, minute = clock or default
+def combine(day, clock):
+    """No clock means midnight, which scrape.py reports as Time TBA."""
+    hour, minute = clock or (0, 0)
     return datetime(day.year, day.month, day.day, hour, minute)
 
 
@@ -179,7 +206,7 @@ def ticketweb_plugin(source, fetch, today):
         day = parse_month_day(when.group(1), today)
         if not day:
             continue
-        time_match = re.search(r'tw-event-time">([^<]*)<', card)
+        time_match = re.search(r'tw-event-time(?:-complete)?">\s*(?:<span[^>]*>)?([^<]*)<', card)
         doors_match = re.search(r'tw-event-door-time">([^<]*)<', card)
         tickets = re.search(r'href="(https?://[^"]*(?:ticketweb|ticketmaster)\.com/[^"]+)"', card)
         images = re.findall(r'<img[^>]+src="([^"]+)"', chunks[index])
@@ -234,14 +261,14 @@ def rockhouse(source, fetch, today):
         day = parse_month_day(date_match.group(1), today)
         if not day:
             continue
-        times = re.search(r"(?:Doors?|Show)[^<]{0,40}?\d{1,2}(?::\d{2})?\s*[ap]\.?m", card, re.I)
+        times = re.search(r'eventDoorStartDate.*?<span[^>]*>\s*([^<]+)<', card, re.S)
         tickets = re.search(r'href="(https://www\.etix\.com/[^"]+)"', card)
         image = re.search(r'<img[^>]+src="([^"]+)"', card)
         age = re.search(r'eventAgeRestriction[^>]*>\s*([^<]+?)\s*<', card)
         events.append({
             "venue": source["venue"],
             "title": clean_text(title.group(2)),
-            "start": combine(day, parse_clock(times.group(0)) if times else None),
+            "start": combine(day, parse_clock(times.group(1)) if times else None),
             "url": title.group(1),
             "ticket_url": tickets.group(1) if tickets else title.group(1),
             "image": image.group(1) if image else None,
@@ -299,7 +326,192 @@ def table_listing(source, fetch, today):
             "venue": source["venue"],
             "title": ", ".join(names),
             "artists": artists,
-            "start": combine(day, parse_clock(match.group(2)), default=(19, 0)),
+            "start": combine(day, parse_clock(match.group(2))),
             "ticket_url": tickets.group(1) if tickets else source["url"],
         })
+    return events
+
+
+def next_data(page):
+    match = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', page, re.S)
+    if not match:
+        raise ValueError("no __NEXT_DATA__ on page")
+    return json.loads(match.group(1))["props"]["pageProps"]
+
+
+def dice_city(source, fetch, today):
+    """DICE's city pages. Their robots rules allow listings that link back.
+    Each category shows only its soonest 20 or so shows."""
+    seen = {}
+    for category in source["categories"]:
+        for item in next_data(fetch("%s/%s" % (source["url"], category)))["events"]:
+            seen[item["id"]] = item
+        time.sleep(1)
+
+    events = []
+    for item in seen.values():
+        venue = (item.get("venues") or [{}])[0]
+        name = (venue.get("name") or "").strip()
+        if not name or "tba" in name.lower():
+            continue
+        dates = item.get("dates") or {}
+        start = parse_iso(dates.get("event_start_date"))
+        if not start:
+            continue
+        city = venue.get("city") or {}
+        location = city.get("location") or {}
+        price = (item.get("price") or {}).get("amount_from")
+        events.append({
+            "venue": slugify(name),
+            "venue_info": {
+                "name": name,
+                "address": (venue.get("address") or "").replace(", United States", ""),
+                "neighborhood": city.get("name"),
+                "lat": location.get("lat"),
+                "lon": location.get("lng"),
+            },
+            "title": item["name"],
+            "start": start,
+            "ticket_url": "https://dice.fm/event/" + item["id"],
+            "image": (item.get("images") or {}).get("square"),
+            "price": "From $%d" % round(price / 100) if price else None,
+            "sold_out": item.get("status") == "sold-out",
+            "cancelled": item.get("status") == "cancelled",
+        })
+    return events
+
+
+def eventbrite_organizer(source, fetch, today):
+    """An organizer's Eventbrite page, for rooms with no site of their own."""
+    data = next_data(fetch(source["url"]))
+    events = []
+    for item in data.get("upcomingEvents") or []:
+        start = parse_iso("%sT%s" % (item.get("start_date"), item.get("start_time")))
+        if not start:
+            continue
+        image = item.get("image") or {}
+        availability = item.get("ticket_availability") or {}
+        events.append({
+            "venue": source["venue"],
+            "title": item["name"],
+            "start": start,
+            "ticket_url": item.get("url"),
+            "image": image.get("url"),
+            "sold_out": availability.get("is_sold_out"),
+            "cancelled": item.get("is_cancelled"),
+        })
+    return events
+
+
+def squarespace_events(source, fetch, today):
+    """A Squarespace events page. The Smell tags each band on the event."""
+    data = json.loads(fetch(source["url"] + "?format=json"))
+    base = "{0.scheme}://{0.netloc}".format(urllib.parse.urlsplit(source["url"]))
+    events = []
+    for item in data.get("upcoming") or []:
+        names = []
+        for tag in item.get("tags") or []:
+            if not re.search(r"\b(19|20)\d\d\b", tag):
+                names.extend(parse_artists(tag))
+        events.append({
+            "venue": source["venue"],
+            # The Smell titles events with the date, so the lineup reads better.
+            "title": " / ".join(names) or clean_text(item["title"]),
+            "artists": names,
+            "start": datetime.fromtimestamp(item["startDate"] / 1000, timezone.utc),
+            "url": base + item["fullUrl"],
+            "ticket_url": base + item["fullUrl"],
+            "image": item.get("assetUrl"),
+        })
+    return events
+
+
+def troubadour(source, fetch, today):
+    """The Troubadour's homepage, which gives dates but no times."""
+    events = []
+    seen = set()
+    for card in re.split(r'class="(?:splide__slide|eventItem)[" ]', fetch(source["url"]))[1:]:
+        day_match = re.search(r'class="date">\s*([^<]+?)\s*<', card)
+        title = re.search(r'<h3[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', card, re.S)
+        if not day_match or not title:
+            continue
+        day = parse_month_day(day_match.group(1), today)
+        if not day or title.group(1) in seen:
+            continue
+        seen.add(title.group(1))
+        tickets = re.search(r'<a href="([^"]+)"[^>]*class="tickets', card)
+        image = re.search(r'<img[^>]+src="([^"]+)"', card)
+        tagline = re.search(r'class="tagline">\s*(.*?)\s*</h4>', card, re.S)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(2)),
+            "tour": clean_text(tagline.group(1)) if tagline else None,
+            "start": combine(day, None),
+            "url": title.group(1),
+            "ticket_url": tickets.group(1).replace("&amp;", "&") if tickets else title.group(1),
+            "image": image.group(1) if image else None,
+            "sold_out": "soldout" in card.lower().replace(" ", ""),
+        })
+    return events
+
+
+TICKETMASTER_NOT_SHOWS = re.compile(r"\b(parking|vip|package|suite|premium|shuttle|upgrade|voucher|gift card|add-?on)\b", re.I)
+
+
+def parse_ticketmaster(item):
+    if TICKETMASTER_NOT_SHOWS.search(item.get("name", "")):
+        return None
+    embedded = item.get("_embedded") or {}
+    venue = (embedded.get("venues") or [{}])[0]
+    start_info = (item.get("dates") or {}).get("start") or {}
+    if not venue.get("name") or not start_info.get("localDate"):
+        return None
+    clock = "%sT%s" % (start_info["localDate"], start_info.get("localTime") or "00:00:00")
+    images = sorted(item.get("images") or [], key=lambda i: i.get("width") or 0)
+    prices = item.get("priceRanges") or []
+    location = venue.get("location") or {}
+    status = ((item.get("dates") or {}).get("status") or {}).get("code")
+    return {
+        "venue": slugify(venue["name"]),
+        "venue_info": {
+            "name": venue["name"],
+            "address": ", ".join(x for x in [(venue.get("address") or {}).get("line1"), (venue.get("city") or {}).get("name")] if x),
+            "city": (venue.get("city") or {}).get("name"),
+            "lat": float(location["latitude"]) if location.get("latitude") else None,
+            "lon": float(location["longitude"]) if location.get("longitude") else None,
+        },
+        "title": item["name"],
+        "artists": [a["name"] for a in embedded.get("attractions") or [] if a.get("name")],
+        "start": parse_iso(clock),
+        "ticket_url": item.get("url"),
+        "image": images[-1].get("url") if images else None,
+        "price": "From $%d" % round(prices[0]["min"]) if prices and prices[0].get("min") else None,
+        "cancelled": status in ("cancelled", "postponed"),
+    }
+
+
+def ticketmaster(source, fetch, today):
+    """Ticketmaster's Discovery API. Needs a free key in TM_API_KEY."""
+    key = os.environ.get("TM_API_KEY")
+    if not key:
+        raise Skip()
+    cities = set(source["cities"])
+    events = []
+    for page in range(source.get("pages", 5)):
+        query = urllib.parse.urlencode({
+            "apikey": key, "dmaId": source["dma"], "classificationName": "music",
+            "size": 200, "page": page, "sort": "date,asc", "locale": "en-us",
+        })
+        try:
+            data = json.loads(fetch("https://app.ticketmaster.com/discovery/v2/events.json?" + query))
+        except Exception as error:
+            raise ValueError(type(error).__name__ + ": " + str(error).replace(key, "***"))
+        for item in (data.get("_embedded") or {}).get("events") or []:
+            event = parse_ticketmaster(item)
+            if event and event["venue_info"]["city"] in cities:
+                events.append(event)
+        info = data.get("page") or {}
+        if page + 1 >= (info.get("totalPages") or 0):
+            break
+        time.sleep(0.3)
     return events
