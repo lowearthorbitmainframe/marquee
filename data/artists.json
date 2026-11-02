@@ -6378,6 +6378,15 @@
 "L'Orange"
 ]
 },
+"guiltyascharged": {
+"appleUrl": "https://music.apple.com/us/artist/guilty-as-charged/1741375511?uo=4",
+"checked": "2026-11-02T13:21:01+00:00",
+"fans": 376,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/204c0d7b116791a340b593efae4cc86e/250x250-000000-80-0-0.jpg",
+"name": "Guilty as Charged",
+"related": []
+},
 "guitar": {
 "appleUrl": "https://music.apple.com/us/artist/guitar/1639133238?uo=4",
 "checked": "2026-11-02T06:01:51+00:00",
@@ -7856,6 +7865,28 @@
 "Themba",
 "ARYM\u00c9",
 "Berin"
+]
+},
+"johnmulaney": {
+"appleUrl": "https://music.apple.com/us/artist/john-mulaney/307807924?uo=4",
+"checked": "2026-11-02T13:21:01+00:00",
+"fans": 1878,
+"genre": "Comedy",
+"image": "https://cdn-images.dzcdn.net/images/artist/e12daf093e9d6fe08352a037b9c6e48a/250x250-000000-80-0-0.jpg",
+"name": "John Mulaney",
+"related": [
+"Vertex",
+"Kammarheit",
+"Alchemist",
+"Ion Dissonance",
+"First of October",
+"Grorr",
+"Foreign Hands",
+"Barren Earth",
+"Kayo Dot",
+"The Absence",
+"Parius",
+"Steve von Till"
 ]
 },
 "johnnyjewel": {
@@ -10622,6 +10653,10 @@
 "Royal & the Serpent",
 "Arrested Youth"
 ]
+},
+"misterwhatever": {
+"checked": "2026-11-02T13:21:01+00:00",
+"name": "Mister Whatever"
 },
 "mixmaglab": {
 "checked": "2026-10-31T03:16:23+00:00",
@@ -14300,6 +14335,10 @@
 "name": "Sqwerv",
 "related": []
 },
+"stacykimj": {
+"checked": "2026-11-02T13:21:01+00:00",
+"name": "Stacy Kim J"
+},
 "stanleysimmons": {
 "appleUrl": "https://music.apple.com/us/artist/stanley-simmons/1851066844?uo=4",
 "checked": "2026-11-02T06:12:56+00:00",
@@ -16351,6 +16390,15 @@
 "Melvv",
 "Flume"
 ]
+},
+"whitelion": {
+"appleUrl": "https://music.apple.com/us/artist/white-lion/555580?uo=4",
+"checked": "2026-11-02T13:21:01+00:00",
+"fans": 12,
+"genre": "Hard Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/82093f75f39f23fee30e1eba427abe4e/250x250-000000-80-0-0.jpg",
+"name": "White Lion",
+"related": []
 },
 "whitneytai": {
 "appleUrl": "https://music.apple.com/us/artist/whitney-tai/793308404?uo=4",
