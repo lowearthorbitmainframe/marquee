@@ -160,6 +160,15 @@
 "Bryce Fox"
 ]
 },
+"abbeysgarden": {
+"appleUrl": "https://music.apple.com/us/artist/abbeys-garden/1680548237?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 53,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/e03239e8b0b95ad86500cde3226aaf44/250x250-000000-80-0-0.jpg",
+"name": "Abbeys Garden",
+"related": []
+},
 "abstrakkt": {
 "appleUrl": "https://music.apple.com/us/artist/abstrakkt/187403383?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -1428,6 +1437,12 @@
 "image": "https://cdn-images.dzcdn.net/images/artist/5b71b1e0ee80cfc205773f02664f2675/250x250-000000-80-0-0.jpg",
 "name": "The B-69s",
 "related": []
+},
+"bable": {
+"appleUrl": "https://music.apple.com/us/artist/b-able/1489097857?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"genre": "Hip-Hop/Rap",
+"name": "B. Able"
 },
 "babybartier": {
 "appleUrl": "https://music.apple.com/us/artist/babybartier/1790323218?uo=4",
@@ -3368,6 +3383,10 @@
 "Yeah Yeah Yeahs"
 ]
 },
+"cumbiasenelclub": {
+"checked": "2026-11-03T01:16:18+00:00",
+"name": "Cumbias En El Club"
+},
 "cupcakke": {
 "appleUrl": "https://music.apple.com/us/artist/cupcakke/1048655899?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -4308,6 +4327,10 @@
 "genre": "Electronic",
 "name": "DJ Amy"
 },
+"djariespins": {
+"checked": "2026-11-03T01:16:18+00:00",
+"name": "DJ ArieSpins"
+},
 "djcloakman": {
 "appleUrl": "https://music.apple.com/us/artist/dj-cloakman/1863874835?uo=4",
 "checked": "2026-11-02T06:01:51+00:00",
@@ -4924,6 +4947,28 @@
 "Lomiiel"
 ]
 },
+"elcousteau": {
+"appleUrl": "https://music.apple.com/us/artist/el-cousteau/1159385786?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 135,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/02166fa34da8723fd0d354a58a7932d1/250x250-000000-80-0-0.jpg",
+"name": "El Cousteau",
+"related": [
+"Mike",
+"Niontay",
+"A$AP ANT",
+"Papo2oo4",
+"BNYX\u00ae",
+"Westside Gunn",
+"Kenny Mason",
+"Mike Shabb",
+"RxkNephew",
+"Rx Papi",
+"Lil B",
+"Concrete Boys"
+]
+},
 "elianaglass": {
 "appleUrl": "https://music.apple.com/us/artist/eliana-glass/1576659662?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -5424,6 +5469,15 @@
 "Eartheater",
 "Grace Ives"
 ]
+},
+"feathersandarrows": {
+"appleUrl": "https://music.apple.com/us/artist/feathers-arrows/1616931939?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 1,
+"genre": "Worldwide",
+"image": "https://cdn-images.dzcdn.net/images/artist/a5b6aba3edf8012d63a895ecfb55135a/250x250-000000-80-0-0.jpg",
+"name": "Feathers & Arrows",
+"related": []
 },
 "feeblelittlehorse": {
 "appleUrl": "https://music.apple.com/us/artist/feeble-little-horse/1564273208?uo=4",
@@ -6632,6 +6686,12 @@
 "Zand",
 "Cottontail"
 ]
+},
+"hames": {
+"appleUrl": "https://music.apple.com/us/artist/hames/1675602427?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"genre": "Pop",
+"name": "HAMES"
 },
 "hanszimmerlive": {
 "checked": "2026-10-31T03:16:23+00:00",
@@ -9052,6 +9112,28 @@
 "King Hannah"
 ]
 },
+"lagrimas": {
+"appleUrl": "https://music.apple.com/us/artist/lagrimas/1557754129?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 296,
+"genre": "Punk",
+"image": "https://cdn-images.dzcdn.net/images/artist/9fd8ceaa24b51083373706c749fd210a/250x250-000000-80-0-0.jpg",
+"name": "L\u00e1grimas",
+"related": [
+"Da\u00eftro",
+"Catalyst...",
+"Shin Guard",
+"Frail Body",
+"Sed Non Satiata",
+"Foxtails",
+"septemberistheonlytimeidontthinkofyou",
+"Orchid",
+"Roman Candle",
+"Pageninetynine",
+"Saetia",
+"aussitot mort"
+]
+},
 "lakedrive": {
 "appleUrl": "https://music.apple.com/us/artist/lake-drive/1648421398?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -9059,6 +9141,15 @@
 "genre": "Rock",
 "image": "https://cdn-images.dzcdn.net/images/artist/b1b18f88cebffa0601bb161a60bd162a/250x250-000000-80-0-0.jpg",
 "name": "Lake Drive",
+"related": []
+},
+"lakesnake": {
+"appleUrl": "https://music.apple.com/us/artist/lakesnake/1329987910?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 0,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/6034e5712726510931a9e42b90a98e79/250x250-000000-80-0-0.jpg",
+"name": "Lakesnake",
 "related": []
 },
 "landroidandnightjacket": {
@@ -10974,6 +11065,10 @@
 "name": "My Friend Jupiter",
 "related": []
 },
+"myheartisyours": {
+"checked": "2026-11-03T01:16:18+00:00",
+"name": "My Heart Is Yours"
+},
 "mystic100s": {
 "appleUrl": "https://music.apple.com/us/artist/mystic-100s/1670782857?uo=4",
 "checked": "2026-11-02T07:37:57+00:00",
@@ -12160,6 +12255,15 @@
 "name": "Pharoah Chromium",
 "related": []
 },
+"pheonix": {
+"appleUrl": "https://music.apple.com/us/artist/pheonix/294670704?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 361,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/d8f837dcedac7de7403696de84d1be68/250x250-000000-80-0-0.jpg",
+"name": "Pheonix",
+"related": []
+},
 "philthyrych": {
 "checked": "2026-10-31T03:16:23+00:00",
 "name": "Philthy Rych"
@@ -12167,6 +12271,15 @@
 "piaoandbluhour": {
 "checked": "2026-10-31T03:16:23+00:00",
 "name": "PIAO & bluhour"
+},
+"pigthegemini": {
+"appleUrl": "https://music.apple.com/us/artist/pig-the-gemini/1503276294?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 33,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/4aba44169e82dc888d015a1295ab0521/250x250-000000-80-0-0.jpg",
+"name": "Pig the Gemini",
+"related": []
 },
 "pinponpanpon": {
 "appleUrl": "https://music.apple.com/us/artist/pinponpanpon/1718375419?uo=4",
@@ -12995,6 +13108,15 @@
 "rockcitytribe": {
 "checked": "2026-11-02T05:29:36+00:00",
 "name": "Rock City Tribe"
+},
+"rockitneedspace": {
+"appleUrl": "https://music.apple.com/us/artist/rockitneedspace/1741884777?uo=4",
+"checked": "2026-11-03T01:16:18+00:00",
+"fans": 9,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/786d571eba1260203d5635e25e0ef9f9/250x250-000000-80-0-0.jpg",
+"name": "Rockitneedspace",
+"related": []
 },
 "rocknrollfantasycamp": {
 "checked": "2026-10-31T03:16:23+00:00",
