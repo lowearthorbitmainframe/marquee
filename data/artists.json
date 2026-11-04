@@ -4447,6 +4447,10 @@
 "checked": "2026-11-03T01:16:18+00:00",
 "name": "DJ ArieSpins"
 },
+"djbenreddell": {
+"checked": "2026-11-04T01:17:13+00:00",
+"name": "DJ Ben Reddell"
+},
 "djcloakman": {
 "appleUrl": "https://music.apple.com/us/artist/dj-cloakman/1863874835?uo=4",
 "checked": "2026-11-02T06:01:51+00:00",
@@ -6845,6 +6849,15 @@
 "genre": "Pop",
 "name": "HAMES"
 },
+"hamiltonboyce": {
+"appleUrl": "https://music.apple.com/us/artist/hamilton-boyce/1531960262?uo=4",
+"checked": "2026-11-04T01:17:13+00:00",
+"fans": 2,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/c10f94fc1804f1ad2535e6092ba06cf9/250x250-000000-80-0-0.jpg",
+"name": "Hamilton Boyce",
+"related": []
+},
 "hanszimmerlive": {
 "checked": "2026-10-31T03:16:23+00:00",
 "name": "HANS ZIMMER LIVE"
@@ -9053,6 +9066,13 @@
 "The Amity Affliction",
 "Elwood Stray"
 ]
+},
+"kingsofqueen": {
+"checked": "2026-11-04T01:17:13+00:00",
+"fans": 9,
+"image": "https://cdn-images.dzcdn.net/images/artist/aa3d67a7d4ac4db424e92b1a3c586efa/250x250-000000-80-0-0.jpg",
+"name": "The Kings of Queen",
+"related": []
 },
 "kitmajor": {
 "appleUrl": "https://music.apple.com/us/artist/kit-major/1488866051?uo=4",
@@ -12501,6 +12521,28 @@
 "checked": "2026-11-02T06:01:51+00:00",
 "genre": "Alternative",
 "name": "pedro TQM"
+},
+"pee": {
+"appleUrl": "https://music.apple.com/us/artist/p-e-e/6802103?uo=4",
+"checked": "2026-11-04T01:17:13+00:00",
+"fans": 177,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/9c2d83d1672b76221940ec0966a22cd4/250x250-000000-80-0-0.jpg",
+"name": "P.E.E.",
+"related": [
+"Everyone Asked About You",
+"The Lazarus Plot",
+"Ribbon Fix",
+"Nymb",
+"Your Arms Are My Cocoon",
+"Dead Butterflies",
+"Foxtails",
+"Febuary",
+"Jejune",
+"Brave Little Abacus",
+"First Day Back",
+"I Hate Myself"
+]
 },
 "peneloperoad": {
 "appleUrl": "https://music.apple.com/us/artist/penelope-road/1742324131?uo=4",
