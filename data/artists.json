@@ -2922,6 +2922,10 @@
 "checked": "2026-10-31T03:16:23+00:00",
 "name": "Chaffey College Choir"
 },
+"chainwhipandgymshorts": {
+"checked": "2026-11-04T19:09:57+00:00",
+"name": "Chain Whip & Gymshorts"
+},
 "chameleons": {
 "appleUrl": "https://music.apple.com/us/artist/the-chameleons/32354597?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -2980,6 +2984,28 @@
 "Crash Adams",
 "Alexander Rybak",
 "Rose Betts"
+]
+},
+"chats": {
+"appleUrl": "https://music.apple.com/us/artist/the-chats/1321961023?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 11991,
+"genre": "Punk",
+"image": "https://cdn-images.dzcdn.net/images/artist/f278fb49210a3df1a1c94622b19e8120/250x250-000000-80-0-0.jpg",
+"name": "The Chats",
+"related": [
+"Amyl and The Sniffers",
+"Stiff Richards",
+"FIDLAR",
+"Jay Reatard",
+"Johnny Mafia",
+"Drunk Mums",
+"SOFT PLAY",
+"We Hate You Please Die",
+"IDLES",
+"BILK",
+"Thee Oh Sees",
+"Teen Mortgage"
 ]
 },
 "chatterton": {
@@ -3275,6 +3301,28 @@
 "image": "https://cdn-images.dzcdn.net/images/artist/ebd8bb6ef290fc85fbea1fd1467724d0/250x250-000000-80-0-0.jpg",
 "name": "Clinamen",
 "related": []
+},
+"closedtear": {
+"appleUrl": "https://music.apple.com/us/artist/closed-tear/1452977425?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 414,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/fd5067d63c8365e0fdd2d4ba17bec2c7/250x250-000000-80-0-0.jpg",
+"name": "Closed Tear",
+"related": [
+"French Police",
+"BLOOD CLUB",
+"DustBowlChampion",
+"Vestron Vulture",
+"Haunt Me",
+"The Masqs",
+"Sinnerella",
+"moonvampire",
+"Hangwire",
+"Casket Cassette",
+"Flowerbabe",
+"Glaring"
+]
 },
 "cloudnothings": {
 "appleUrl": "https://music.apple.com/us/artist/cloud-nothings/377952839?uo=4",
@@ -5809,6 +5857,28 @@
 "Elyanna"
 ]
 },
+"fenik": {
+"appleUrl": "https://music.apple.com/us/artist/fenik/1732102800?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 26,
+"genre": "Dance",
+"image": "https://cdn-images.dzcdn.net/images/artist/31c00e23155465e06bd97fec1749a1f7/250x250-000000-80-0-0.jpg",
+"name": "FENIK",
+"related": [
+"Adam Sellouk",
+"Kasia",
+"Rafael Cerato",
+"Argy",
+"Script",
+"Max Styler",
+"Zafrir",
+"th;en",
+"Layton Giordani",
+"Massano",
+"Karry G",
+"KREAM"
+]
+},
 "fettywap": {
 "appleUrl": "https://music.apple.com/us/artist/fetty-wap/872900424?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -8108,6 +8178,28 @@
 "image": "https://cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
 "name": "Jay Dee Daugherty",
 "related": []
+},
+"jazzemu": {
+"appleUrl": "https://music.apple.com/us/artist/jazz-emu/1445586448?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 3592,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/59be5bd6e4c9715817a192317c0b04ec/250x250-000000-80-0-0.jpg",
+"name": "Jazz Emu",
+"related": [
+"Bill Wurtz",
+"Tom Cardy",
+"TWRP",
+"Louie Zong",
+"Ken Ashcorp",
+"Ace Of Hearts",
+"Steam Powered Giraffe",
+"Bear Ghost",
+"The Orion Experience",
+"Tally Hall",
+"Ninja Sex Party",
+"Rare Americans"
+]
 },
 "jazzsunday": {
 "appleUrl": "https://music.apple.com/us/artist/jazz-sunday/1444545530?uo=4",
@@ -11076,6 +11168,28 @@
 "CrankDat"
 ]
 },
+"mesto": {
+"appleUrl": "https://music.apple.com/us/artist/mesto/65178713?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 16359,
+"genre": "Dance",
+"image": "https://cdn-images.dzcdn.net/images/artist/9ec0a428329f82d2f65584f26d81562c/250x250-000000-80-0-0.jpg",
+"name": "Mesto",
+"related": [
+"Julian Jordan",
+"Matisse & Sadko",
+"Nicky Romero",
+"Dillon Francis",
+"DubVision",
+"Mike Williams",
+"Laidback Luke",
+"DVBBS",
+"Firebeatz",
+"Cmc$",
+"Thomas Gold",
+"Justin Mylo"
+]
+},
 "metalchurch": {
 "appleUrl": "https://music.apple.com/us/artist/metal-church/612150?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -12197,6 +12311,15 @@
 "name": "OMINESS",
 "related": []
 },
+"omnom": {
+"appleUrl": "https://music.apple.com/us/artist/omnom/1160083701?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 13,
+"genre": "Dance",
+"image": "https://cdn-images.dzcdn.net/images/artist/29bd7518bdf06a61b486ff144c5804d2/250x250-000000-80-0-0.jpg",
+"name": "OMNOM",
+"related": []
+},
 "onlyocean": {
 "appleUrl": "https://music.apple.com/us/artist/the-only-ocean/1015882066?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -12447,6 +12570,28 @@
 "Andy Black",
 "Waterparks",
 "As December Falls"
+]
+},
+"palms": {
+"appleUrl": "https://music.apple.com/us/artist/the-palms/421357282?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 4136,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/3df4c3bc6b7591f09fac6adce1ffa293/250x250-000000-80-0-0.jpg",
+"name": "The Palms",
+"related": [
+"Sticky Fingers",
+"Goth Babe",
+"Lewis Del Mar",
+"Lime Cordiale",
+"NO CIGAR",
+"Chelou",
+"Daily J",
+"Bootleg Rascal",
+"ISLAND",
+"Ocean Alley",
+"slenderbodies",
+"Great Gable"
 ]
 },
 "palomamorphy": {
@@ -13070,6 +13215,10 @@
 "image": "https://cdn-images.dzcdn.net/images/artist/3cfc4db5bccb607b7eaceb67ed13f268/250x250-000000-80-0-0.jpg",
 "name": "POPFREE",
 "related": []
+},
+"popularkidsclub": {
+"checked": "2026-11-04T19:09:57+00:00",
+"name": "Popular Kids Club"
 },
 "portugaltheman": {
 "appleUrl": "https://music.apple.com/us/artist/portugal-the-man/167649475?uo=4",
@@ -15373,6 +15522,28 @@
 "checked": "2026-10-31T03:16:23+00:00",
 "name": "Stateside & Holy Blade"
 },
+"steampoweredgiraffe": {
+"appleUrl": "https://music.apple.com/us/artist/steam-powered-giraffe/316683061?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 8441,
+"genre": "Pop",
+"image": "https://cdn-images.dzcdn.net/images/artist/6f78ae19d946d48c4d51452487eb7914/250x250-000000-80-0-0.jpg",
+"name": "Steam Powered Giraffe",
+"related": [
+"Autoheart",
+"The Orion Experience",
+"Bo Burnham",
+"Bear Ghost",
+"Aurelio Voltaire",
+"Rob Cantor",
+"Dirt Poor Robins",
+"Nick Lutsko",
+"Jonathan Coulton",
+"I DONT KNOW HOW BUT THEY FOUND ME",
+"Will Wood",
+"Tom Cardy"
+]
+},
 "stefanthev": {
 "appleUrl": "https://music.apple.com/us/artist/stefan-thev/1536993354?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -16825,6 +16996,28 @@
 "twosteptuesday": {
 "checked": "2026-11-02T06:01:51+00:00",
 "name": "Two Step Tuesday"
+},
+"twrp": {
+"appleUrl": "https://music.apple.com/us/artist/twrp/410071172?uo=4",
+"checked": "2026-11-04T19:09:57+00:00",
+"fans": 6253,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/93ea4aaa7e4a4f3316c82e28d214c723/250x250-000000-80-0-0.jpg",
+"name": "TWRP",
+"related": [
+"Tom Cardy",
+"Jimmy Urine",
+"That Handsome Devil",
+"Tally Hall",
+"Miracle Musical",
+"Ken Ashcorp",
+"Lemon Demon",
+"Jhariah",
+"Will Wood and the Tapeworms",
+"nelward",
+"Waitress",
+"Fox Szn"
+]
 },
 "tylarodrigues": {
 "appleUrl": "https://music.apple.com/us/artist/tyla-rodrigues/1606749256?uo=4",
