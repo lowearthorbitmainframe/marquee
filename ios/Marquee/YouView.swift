@@ -345,11 +345,14 @@ struct NewShowsSection: View {
 
     var body: some View {
         let events = AlertHistory.recentEvents(in: store.feed)
-        if !events.isEmpty {
-            VStack(alignment: .leading, spacing: 10) {
-                SectionHeader(title: "Newly announced", subtitle: "From your alerts in the last two weeks")
-                ForEach(events) { EventLink(event: $0, showsDate: true) }
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(title: "Newly announced", subtitle: "From your alerts in the last two weeks")
+            if events.isEmpty {
+                Text("Nothing yet. When an alert finds a new show by one of your artists, it lands here.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
             }
+            ForEach(events) { EventLink(event: $0, showsDate: true) }
         }
     }
 }
