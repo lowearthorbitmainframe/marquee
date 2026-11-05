@@ -15,6 +15,8 @@ import json
 import os
 import sys
 import time
+import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -32,12 +34,19 @@ PAUSE_BETWEEN_SOURCES = 2
 NON_MUSIC_GENRES = {"Graphic Novels", "General Nonfiction for Kids", "Self-Development", "Poetry"}
 
 
-def fetch(url):
+def fetch(url, redirects=5):
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept-Encoding": "gzip"})
-    with urllib.request.urlopen(request, timeout=30) as response:
-        body = response.read()
-        if response.headers.get("Content-Encoding") == "gzip":
-            body = gzip.decompress(body)
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            body = response.read()
+            if response.headers.get("Content-Encoding") == "gzip":
+                body = gzip.decompress(body)
+    except urllib.error.HTTPError as error:
+        # Python 3.9 doesn't follow 308 redirects, which DICE uses.
+        location = error.headers.get("Location")
+        if error.code == 308 and location and redirects:
+            return fetch(urllib.parse.urljoin(url, location), redirects - 1)
+        raise
     return body.decode("utf-8", "ignore")
 
 
@@ -55,7 +64,8 @@ def normalize(raw, zone):
     if not title or not raw.get("start"):
         return None
     start = to_local(raw["start"], zone)
-    artists = merge_artists(raw.get("artists") or [], parse_artists(title) if not raw.get("artists") else [])
+    # Sources that give a lineup, even an empty one, are trusted over guessing from the title.
+    artists = merge_artists(raw["artists"]) if "artists" in raw else parse_artists(title)
     event = {
         "id": event_id(raw, start),
         "venueId": raw["venue"],
@@ -101,7 +111,7 @@ def load_json(path, default):
 
 
 def source_label(source):
-    return source.get("venue") or source["url"].split("/")[2]
+    return source.get("label") or source.get("venue") or source["url"].split("/")[2]
 
 
 def scrape_city(city, run_enrich, budget, minutes):
@@ -126,8 +136,10 @@ def scrape_city(city, run_enrich, budget, minutes):
                 raise ValueError("no events found")
             for raw in raws:
                 info = raw.get("venue_info")
-                if info and raw["venue"] not in venues:
+                if info and raw["venue"] not in venues and info.get("name"):
                     venues[raw["venue"]] = {"id": raw["venue"], "name": info["name"]}
+                if raw["venue"] not in venues:
+                    continue
                 for field in ("address", "neighborhood", "lat", "lon"):
                     if info and info.get(field):
                         venues[raw["venue"]].setdefault(field, info[field])
@@ -146,6 +158,12 @@ def scrape_city(city, run_enrich, budget, minutes):
         sources.append(status)
         print("%-30s %s" % (label, status.get("count", "FAILED: %s" % status.get("error"))))
         time.sleep(PAUSE_BETWEEN_SOURCES)
+
+    # A show is only useful if the app can name where it is.
+    unnamed = {e["venueId"] for e in events.values() if e["venueId"] not in venues}
+    if unnamed:
+        print("dropped shows at unnamed venues: " + ", ".join(sorted(unnamed)))
+    events = {k: e for k, e in events.items() if e["venueId"] in venues}
 
     upcoming = sorted(
         remove_duplicates(e for e in events.values() if e["start"][:10] >= today.isoformat()),

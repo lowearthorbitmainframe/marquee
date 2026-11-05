@@ -13,8 +13,12 @@ import time
 import unicodedata
 import urllib.parse
 from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 
 from titles import clean_text, parse_artists
+
+
+LA = ZoneInfo("America/Los_Angeles")
 
 
 class Skip(Exception):
@@ -36,6 +40,17 @@ VENUE_ALIASES = {
     "the-troubadour": "troubadour",
     "hollywood-palladium-los-angeles": "hollywood-palladium",
     "lodge-room-highland-park": "lodge-room",
+    "the-ford": "the-ford",
+    "ford-theatres": "the-ford",
+    "john-anson-ford-amphitheatre": "the-ford",
+    "the-belasco-theater": "the-belasco",
+    "belasco": "the-belasco",
+    "the-observatory-santa-ana": "the-observatory",
+    "observatory": "the-observatory",
+    "moroccan-lounge": "the-moroccan-lounge",
+    "the-masonic-lodge-at-hollywood-forever": "hollywood-forever-masonic-lodge",
+    "garden-amp": "garden-amphitheatre",
+    "the-wayfarer-costa-mesa": "the-wayfarer",
 }
 
 
@@ -117,9 +132,15 @@ def image_url(value):
 
 
 def parse_iso(value):
-    """AEG uses 'TBD' for times it hasn't set, so bad values return None."""
+    """AEG uses 'TBD' for times it hasn't set, so bad values return None.
+    Some JSON-LD uses 'Nov 05, 2026', which has no time."""
+    text = str(value).replace("Z", "+00:00")
     try:
-        return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        return datetime.fromisoformat(text)
+    except ValueError:
+        pass
+    try:
+        return datetime.strptime(text, "%b %d, %Y")
     except ValueError:
         return None
 
@@ -131,13 +152,31 @@ def live_nation(source, fetch, today):
     for item in json_ld_events(fetch(source["url"])):
         events.append({
             "venue": source["venue"],
+            "venue_info": {"address": json_ld_address(item.get("location"))},
             "title": item["name"],
             "start": parse_iso(item["startDate"]),
-            "ticket_url": item.get("url"),
+            "ticket_url": item.get("url") or offer_url(item.get("offers")),
             "image": image_url(item.get("image")),
             "cancelled": "Cancelled" in str(item.get("eventStatus")),
         })
     return events
+
+
+def offer_url(offers):
+    if isinstance(offers, list):
+        offers = offers[0] if offers else None
+    return offers.get("url") if isinstance(offers, dict) else None
+
+
+def json_ld_address(location):
+    address = (location or {}).get("address") if isinstance(location, dict) else None
+    if isinstance(address, str):
+        return address
+    if not isinstance(address, dict):
+        return None
+    region = " ".join(x for x in [address.get("addressRegion"), address.get("postalCode")] if x)
+    parts = [address.get("streetAddress"), address.get("addressLocality"), region]
+    return ", ".join(p for p in parts if p) or None
 
 
 def greek(source, fetch, today):
@@ -199,25 +238,32 @@ def ticketweb_plugin(source, fetch, today):
     chunks = page.split('<div class="tw-name">')
     events = []
     for index, card in enumerate(cards):
-        name = re.search(r"<a[^>]*href=\"([^\"]+)\"[^>]*>(.*?)</a>", card, re.S)
+        # The title is a link on some sites and plain text on others.
+        title_html = card.split("</div>", 1)[0]
+        link = re.search(r'href="([^"]+)"', title_html) or re.search(r'href="([^"]+/(?:tm-event|event)/[^"]+)"', card)
+        name = (link.group(1) if link else source["url"], clean_text(title_html))
         when = re.search(r'tw-event-date">([^<]+)<', card)
-        if not name or not when:
+        if not name[1] or not when:
             continue
         day = parse_month_day(when.group(1), today)
         if not day:
             continue
-        time_match = re.search(r'tw-event-time(?:-complete)?">\s*(?:<span[^>]*>)?([^<]*)<', card)
+        time_match = (re.search(r'tw-event-time">\s*([^<]*\d[^<]*)<', card)
+                      or re.search(r'tw-event-time-complete">\s*([^<]*\d[^<]*)<', card))
         doors_match = re.search(r'tw-event-door-time">([^<]*)<', card)
         tickets = re.search(r'href="(https?://[^"]*(?:ticketweb|ticketmaster)\.com/[^"]+)"', card)
         images = re.findall(r'<img[^>]+src="([^"]+)"', chunks[index])
         doors_clock = parse_clock(doors_match.group(1)) if doors_match else None
+        attractions = re.search(r'class="tw-attractions">(.*?)</div>', card, re.S)
+        support = [clean_text(x) for x in re.findall(r"<span>(.*?)</span>", attractions.group(1))] if attractions else []
         events.append({
             "venue": source["venue"],
-            "title": clean_text(name.group(2)),
+            "title": name[1],
+            "artists": parse_artists(name[1]) + [a for n in support for a in parse_artists(n)],
             "start": combine(day, parse_clock(time_match.group(1)) if time_match else None),
             "doors": combine(day, doors_clock) if doors_clock else None,
-            "url": name.group(1),
-            "ticket_url": tickets.group(1).replace("&amp;", "&") if tickets else name.group(1),
+            "url": name[0],
+            "ticket_url": tickets.group(1).replace("&amp;", "&") if tickets else name[0],
             "image": images[-1] if images else None,
         })
     return events
@@ -339,6 +385,35 @@ def next_data(page):
     return json.loads(match.group(1))["props"]["pageProps"]
 
 
+def dice_event(item):
+    venue = (item.get("venues") or [{}])[0]
+    name = (venue.get("name") or "").strip()
+    dates = item.get("dates") or {}
+    start = parse_iso(dates.get("event_start_date"))
+    if not name or "tba" in name.lower() or not start:
+        return None
+    city = venue.get("city") or {}
+    location = city.get("location") or {}
+    price = (item.get("price") or {}).get("amount_from")
+    return {
+        "venue": slugify(name),
+        "venue_info": {
+            "name": name,
+            "address": (venue.get("address") or "").replace(", United States", ""),
+            "neighborhood": city.get("name"),
+            "lat": location.get("lat"),
+            "lon": location.get("lng"),
+        },
+        "title": item["name"],
+        "start": start,
+        "ticket_url": "https://dice.fm/event/" + item["id"],
+        "image": (item.get("images") or {}).get("square"),
+        "price": "From $%d" % round(price / 100) if price else None,
+        "sold_out": item.get("status") == "sold-out",
+        "cancelled": item.get("status") == "cancelled",
+    }
+
+
 def dice_city(source, fetch, today):
     """DICE's city pages. Their robots rules allow listings that link back.
     Each category shows only its soonest 20 or so shows."""
@@ -347,37 +422,105 @@ def dice_city(source, fetch, today):
         for item in next_data(fetch("%s/%s" % (source["url"], category)))["events"]:
             seen[item["id"]] = item
         time.sleep(1)
+    return [e for e in (dice_event(item) for item in seen.values()) if e]
 
-    events = []
-    for item in seen.values():
-        venue = (item.get("venues") or [{}])[0]
-        name = (venue.get("name") or "").strip()
-        if not name or "tba" in name.lower():
+
+def dice_venues(source, fetch, today):
+    """DICE venue pages, each with that room's own calendar."""
+    seen = {}
+    failures = []
+    for slug in source["venues"]:
+        try:
+            profile = next_data(fetch("https://dice.fm/venue/" + slug))["profile"]
+        except Exception as error:
+            failures.append("%s: %s" % (slug, error))
             continue
-        dates = item.get("dates") or {}
-        start = parse_iso(dates.get("event_start_date"))
+        for section in profile.get("sections") or []:
+            for item in section.get("events") or []:
+                seen[item["id"]] = item
+        time.sleep(1)
+    if failures and not seen:
+        raise ValueError("; ".join(failures)[:200])
+    return [e for e in (dice_event(item) for item in seen.values()) if e]
+
+
+LA_PHIL_SITES = {
+    "Hollywood Bowl": "https://www.hollywoodbowl.com",
+    "The Ford": "https://www.theford.com",
+}
+
+
+def la_phil(source, fetch, today):
+    """One feed covers Walt Disney Concert Hall, the Hollywood Bowl and the Ford."""
+    events = []
+    for item in json.loads(fetch(source["url"]))["docs"]:
+        event = item.get("event") or {}
+        venue = (event.get("venue") or {}).get("title")
+        if venue not in source["venues"]:
+            continue
+        custom = (item.get("attributes") or {}).get("custom") or {}
+        start = parse_iso(item.get("startDate"))
         if not start:
             continue
-        city = venue.get("city") or {}
-        location = city.get("location") or {}
-        price = (item.get("price") or {}).get("amount_from")
+        if item.get("hideStartTime"):
+            start = datetime.combine(start.astimezone(LA).date(), datetime.min.time())
+        names = []
+        # Pop shows bill acts in separate fields; orchestra programs are not lineups.
+        if venue in LA_PHIL_SITES:
+            # Headliners are separated by line breaks in the formatted title.
+            billed = re.sub(r"<br\s*/?>", " / ", event.get("richTitle_html") or "")
+            names = parse_artists(clean_text(billed) or event.get("title") or "")
+            for field in ("second_billing_html", "third_billing_html"):
+                names += parse_artists(clean_text(custom.get(field)))
+        site = LA_PHIL_SITES.get(venue, "https://www.laphil.com")
         events.append({
-            "venue": slugify(name),
-            "venue_info": {
-                "name": name,
-                "address": (venue.get("address") or "").replace(", United States", ""),
-                "neighborhood": city.get("name"),
-                "lat": location.get("lat"),
-                "lon": location.get("lng"),
-            },
-            "title": item["name"],
+            "venue": slugify(venue),
+            "venue_info": {"name": venue},
+            "title": clean_text(item.get("displayTitle") or event.get("title")),
+            "artists": names,
             "start": start,
-            "ticket_url": "https://dice.fm/event/" + item["id"],
-            "image": (item.get("images") or {}).get("square"),
-            "price": "From $%d" % round(price / 100) if price else None,
-            "sold_out": item.get("status") == "sold-out",
-            "cancelled": item.get("status") == "cancelled",
+            "url": site + item["url"],
+            "ticket_url": site + item["url"],
+            "image": (event.get("image") or {}).get("url"),
+            "sold_out": item.get("bookingStatus") == "soldOut",
         })
+    return events
+
+
+def tribe_events(source, fetch, today):
+    """WordPress sites running The Events Calendar, which has a public JSON feed."""
+    events = []
+    url = "%s/wp-json/tribe/events/v1/events?%s" % (source["url"], urllib.parse.urlencode(
+        {"per_page": 50, "start_date": today.isoformat()}))
+    skip = re.compile(source["skip"], re.I) if source.get("skip") else None
+    for _ in range(source.get("pages", 4)):
+        data = json.loads(fetch(url))
+        for item in data.get("events") or []:
+            categories = " ".join(c.get("name", "") for c in item.get("categories") or [])
+            title = clean_text(item.get("title"))
+            if skip and (skip.search(title) or skip.search(categories)):
+                continue
+            venue = item.get("venue") if isinstance(item.get("venue"), dict) else {}
+            name = clean_text(venue.get("venue")) or source["name"]
+            address = ", ".join(x for x in [venue.get("address"), venue.get("city")] if x)
+            image = item.get("image") if isinstance(item.get("image"), dict) else {}
+            start = datetime.strptime(item["start_date"], "%Y-%m-%d %H:%M:%S")
+            if item.get("all_day"):
+                start = start.replace(hour=0, minute=0)
+            events.append({
+                "venue": source.get("venue") or slugify(name),
+                "venue_info": {"name": name, "address": address or None},
+                "title": title,
+                "start": start,
+                "url": item.get("url"),
+                "ticket_url": item.get("website") or item.get("url"),
+                "image": image.get("url"),
+                "price": clean_text(item.get("cost")) or None,
+            })
+        url = data.get("next_rest_url")
+        if not url:
+            break
+        time.sleep(1)
     return events
 
 
@@ -430,7 +573,13 @@ def troubadour(source, fetch, today):
     """The Troubadour's homepage, which gives dates but no times."""
     events = []
     seen = set()
-    for card in re.split(r'class="(?:splide__slide|eventItem)[" ]', fetch(source["url"]))[1:]:
+    # The site sometimes answers with a short placeholder page, so try again.
+    for attempt in range(3):
+        page = fetch(source["url"])
+        if 'class="date"' in page:
+            break
+        time.sleep(5)
+    for card in re.split(r'class="(?:splide__slide|eventItem)[" ]', page)[1:]:
         day_match = re.search(r'class="date">\s*([^<]+?)\s*<', card)
         title = re.search(r'<h3[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', card, re.S)
         if not day_match or not title:

@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from adapters import image_url, parse_ticketmaster, slugify
+from adapters import image_url, parse_iso, parse_ticketmaster, slugify
 from scrape import normalize, remove_duplicates
 from titles import artist_key, classify, display_title, is_sold_out, parse_artists
 
@@ -45,6 +45,12 @@ class ParseArtists(unittest.TestCase):
         self.check("performed by Jimmy Rip", ["Jimmy Rip"])
         self.check("Thee Sacred Souls, Special Guest", ["Thee Sacred Souls"])
         self.check("Camp Flog Gnaw 2026", [])
+
+    def test_fundraiser_text_is_not_an_artist(self):
+        self.check("A Benefit for Mike Roche of TSOL - Please donate to the GoFundMe", [])
+
+    def test_an_evening_with(self):
+        self.check("An Evening With Faouzia", ["Faouzia"])
 
     def test_keeps_ampersand_band_names(self):
         self.check("Simon & Garfunkel", ["Simon & Garfunkel"])
@@ -95,6 +101,18 @@ class Helpers(unittest.TestCase):
         self.assertEqual(event["start"], datetime(2026, 12, 1, 19, 30))
         self.assertEqual(event["venue_info"]["lat"], 34.11)
         self.assertIsNone(parse_ticketmaster(dict(item, name="VIP Parking Pass")))
+
+    def test_empty_lineup_is_not_guessed_from_title(self):
+        zone = ZoneInfo("America/Los_Angeles")
+        raw = {"venue": "walt-disney-concert-hall", "title": "Daniel Harding Leads Bernstein & Brahms",
+               "start": datetime(2026, 11, 6, 20), "artists": []}
+        self.assertEqual(normalize(raw, zone)["artists"], [])
+        del raw["artists"]
+        self.assertTrue(normalize(raw, zone)["artists"])
+
+    def test_written_out_json_ld_date(self):
+        self.assertEqual(parse_iso("Nov 05, 2026"), datetime(2026, 11, 5))
+        self.assertIsNone(parse_iso("TBD"))
 
     def test_image_shapes(self):
         self.assertEqual(image_url("a.jpg"), "a.jpg")

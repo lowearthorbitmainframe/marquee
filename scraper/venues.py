@@ -1,5 +1,12 @@
 """The venues Marquee watches. To add a city, add a new entry to CITIES."""
 
+# Cities that count as greater Los Angeles, including the nearer parts of Orange County.
+GREATER_LA = [
+    "Los Angeles", "Hollywood", "West Hollywood", "Inglewood", "Pasadena", "Long Beach", "Santa Monica",
+    "Burbank", "Glendale", "Culver City", "North Hollywood", "Studio City", "Venice", "Pomona", "Universal City",
+    "Santa Ana", "Anaheim", "Costa Mesa", "Garden Grove", "Fullerton", "Irvine", "Huntington Beach",
+]
+
 # Each source is one fetch. `adapter` names a function in adapters.py.
 LOS_ANGELES = {
     "id": "los-angeles",
@@ -15,7 +22,7 @@ LOS_ANGELES = {
         {
             "adapter": "aeg",
             "url": "https://aegwebprod.blob.core.windows.net/json/events/19/events.json",
-            "cities": ["Los Angeles", "Hollywood", "West Hollywood", "Inglewood", "Pomona", "Pasadena", "Long Beach", "Santa Monica"],
+            "cities": GREATER_LA,
         },
         {"adapter": "ticketweb_plugin", "url": "https://teragramballroom.com/calendar/", "venue": "teragram-ballroom"},
         {"adapter": "ticketweb_plugin", "url": "https://www.whiskyagogo.com/", "venue": "whisky-a-go-go"},
@@ -25,9 +32,39 @@ LOS_ANGELES = {
         {"adapter": "table_listing", "url": "http://roadhouse.permanentrecordsla.com/", "venue": "permanent-records-roadhouse"},
         {"adapter": "eventbrite_organizer", "url": "https://www.eventbrite.com/o/npu-16532911902", "venue": "non-plus-ultra"},
         {"adapter": "squarespace_events", "url": "https://www.thesmell.org/events", "venue": "the-smell"},
+        {"adapter": "squarespace_events", "url": "https://www.vibratogrilljazz.com/music", "venue": "vibrato-grill-jazz"},
+        {"adapter": "live_nation", "url": "https://www.thebelasco.com/shows", "venue": "the-belasco"},
+        {"adapter": "live_nation", "url": "https://www.peppermintclub.com/shows", "venue": "the-peppermint-club"},
+        {"adapter": "live_nation", "url": "https://www.observatoryoc.com/shows", "venue": "the-observatory"},
+        {"adapter": "live_nation", "url": "https://www.theveniceWest.com/", "venue": "the-venice-west"},
+        {"adapter": "ticketweb_plugin", "url": "https://themoroccan.com/", "venue": "the-moroccan-lounge"},
+        {"adapter": "ticketweb_plugin", "url": "https://gardenamp.com/", "venue": "garden-amphitheatre"},
+        {"adapter": "eventbrite_organizer", "url": "https://www.eventbrite.com/o/the-wayfarer-20250596796", "venue": "the-wayfarer"},
+        {"adapter": "tribe_events", "url": "https://www.vermonthollywood.com", "name": "The Vermont Hollywood"},
+        {"adapter": "tribe_events", "url": "https://hollywoodforever.com", "name": "Hollywood Forever"},
+        {
+            "adapter": "la_phil",
+            "label": "la phil",
+            "url": "https://www.hollywoodbowl.com/api/event-instances.json",
+            "venues": ["Hollywood Bowl", "The Ford", "Walt Disney Concert Hall"],
+        },
+        {
+            "adapter": "dice_venues",
+            "label": "dice.fm venues",
+            "url": "https://dice.fm/venue/",
+            "venues": [
+                "zebulon-y8bv", "los-globos-a6w7", "gold-diggers-n2mq", "catch-one-e582", "the-airliner-7r7v",
+                "alexs-bar-mqp9", "el-cid-ven7", "brain-dead-studios-xlna", "the-virgil-39bl", "oblivion-mxobr",
+                "high-tide-6nk3", "sid-the-cat-auditorium-2wr5m", "2220-arts--archives-bdyv", "grand-star-jazz-club-6kx8",
+                "kiss-kiss-bang-bang-la-w79p", "milkys-l8v5b", "the-grayson-bar-yovqr", "townhouse-venice-d8ve",
+                "now-instant-image-hall-bb5wg", "the-vermont-hollywood-35kl", "the-mint-5ggd",
+                "permanent-records-roadhouse-olyg", "1720-mvpw",
+            ],
+        },
         # City-wide sources run last, so a venue's own listing wins any duplicate.
         {
             "adapter": "dice_city",
+            "label": "dice.fm city",
             "url": "https://dice.fm/browse/losangeles-5982e13c613de866017c3e3a",
             "categories": ["music/gig", "music/dj", "music/party"],
         },
@@ -35,12 +72,23 @@ LOS_ANGELES = {
             "adapter": "ticketmaster",
             "url": "https://app.ticketmaster.com/discovery/v2/events.json",
             "dma": 324,
-            "cities": ["Los Angeles", "Hollywood", "West Hollywood", "Inglewood", "Pasadena", "Long Beach", "Santa Monica", "Burbank", "Glendale", "Culver City", "North Hollywood", "Studio City", "Venice"],
+            "cities": GREATER_LA,
         },
     ],
     # Venues the AEG feed adds on its own come with an address but no map pin.
     "venues": {
         "echoplex": {"name": "Echoplex", "neighborhood": "Echo Park", "address": "1154 Glendale Blvd, Los Angeles, CA 90026", "lat": 34.0778, "lon": -118.2600, "url": "https://www.theecho.com/shows/rooms/echoplex"},
+        "the-belasco": {"name": "The Belasco", "neighborhood": "Downtown", "url": "https://www.thebelasco.com/shows"},
+        "the-peppermint-club": {"name": "The Peppermint Club", "neighborhood": "Beverly Grove", "url": "https://www.peppermintclub.com/shows"},
+        "the-observatory": {"name": "The Observatory", "neighborhood": "Santa Ana", "url": "https://www.observatoryoc.com/shows"},
+        "the-venice-west": {"name": "The Venice West", "neighborhood": "Venice", "url": "https://www.theveniceWest.com/"},
+        "the-moroccan-lounge": {"name": "The Moroccan Lounge", "neighborhood": "Arts District", "address": "901 E 1st St, Los Angeles, CA 90012", "url": "https://themoroccan.com/"},
+        "garden-amphitheatre": {"name": "Garden Amphitheatre", "neighborhood": "Garden Grove", "address": "12762 Main St, Garden Grove, CA 92840", "url": "https://gardenamp.com/"},
+        "vibrato-grill-jazz": {"name": "Vibrato Grill Jazz", "neighborhood": "Bel Air", "address": "2930 N Beverly Glen Cir, Los Angeles, CA 90077", "url": "https://www.vibratogrilljazz.com/music"},
+        "the-wayfarer": {"name": "The Wayfarer", "neighborhood": "Costa Mesa", "address": "843 W 19th St, Costa Mesa, CA 92627", "url": "https://wayfarercm.com/"},
+        "hollywood-bowl": {"name": "Hollywood Bowl", "neighborhood": "Hollywood Hills", "address": "2301 N Highland Ave, Los Angeles, CA 90068", "lat": 34.1122, "lon": -118.3391, "url": "https://www.hollywoodbowl.com/"},
+        "the-ford": {"name": "The Ford", "neighborhood": "Cahuenga Pass", "address": "2580 Cahuenga Blvd E, Los Angeles, CA 90068", "url": "https://www.theford.com/"},
+        "walt-disney-concert-hall": {"name": "Walt Disney Concert Hall", "neighborhood": "Downtown", "address": "111 S Grand Ave, Los Angeles, CA 90012", "lat": 34.0553, "lon": -118.2498, "url": "https://www.laphil.com/"},
         "troubadour": {"name": "Troubadour", "neighborhood": "West Hollywood", "address": "9081 Santa Monica Blvd, West Hollywood, CA 90069", "lat": 34.0815, "lon": -118.3895, "url": "https://www.troubadour.com/"},
         "non-plus-ultra": {"name": "Non Plus Ultra", "neighborhood": "Address by DM", "url": "https://www.eventbrite.com/o/npu-16532911902"},
         "the-smell": {"name": "The Smell", "neighborhood": "Downtown", "address": "247 S Main St, Los Angeles, CA 90012", "lat": 34.0512, "lon": -118.2470, "url": "https://www.thesmell.org/events"},

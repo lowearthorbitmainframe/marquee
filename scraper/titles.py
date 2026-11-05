@@ -32,7 +32,7 @@ EVENT_WORDS = re.compile(
     r"\b(night|party|tribute|comedy|comedians?|karaoke|trivia|brunch|bingo|drag|"
     r"burlesque|open mic|showcase|festival|fest|rave|dance|workshop|podcast|"
     r"screening|market|halloween|n?ye|nye|new year|emo night|pass|kickoff|"
-    r"tickets?|presents|tour|anniversary|records|residency)\b",
+    r"tickets?|presents|tour|anniversary|records|residency|donate|gofundme|fundraiser)\b",
     re.I,
 )
 # If these appear anywhere in the title, the whole thing is an event, not a lineup.
@@ -86,6 +86,7 @@ def parse_artists(title):
     if WHOLE_EVENT.search(text):
         return []
     text = PRESENTS.sub("", text)
+    text = re.sub(r"^an evening with\s+", "", text, flags=re.I)
     text = re.sub(r"\s+[–—]\s+", " - ", text)
 
     parts = text.split(" - ")
