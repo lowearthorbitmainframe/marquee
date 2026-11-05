@@ -25,6 +25,8 @@ struct YouView: View {
                         ForEach(saved) { EventLink(event: $0, showsDate: true) }
                     }
                     YourArtistsShows()
+                    RegionSection()
+                    AlertsSection()
                     ArtistsEditor()
                     GenresEditor()
                     StatusSection()
@@ -35,6 +37,88 @@ struct YouView: View {
             .navigationTitle("You")
             .marqueeDestinations()
         }
+    }
+}
+
+struct RegionSection: View {
+    @EnvironmentObject private var store: FeedStore
+    @EnvironmentObject private var taste: TasteStore
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            SectionHeader(title: "Browsing", subtitle: "Your artists, venues and saved shows come with you")
+            FlowLayout {
+                ForEach(store.regions) { region in
+                    Chip(title: region.name, isOn: region.id == store.regionId) {
+                        Task { await store.switchRegion(to: region.id) }
+                    }
+                }
+            }
+            HStack {
+                Text("Home area").font(.subheadline.weight(.semibold))
+                Spacer()
+                Menu {
+                    ForEach(store.regions) { region in
+                        Button(region.name) { taste.profile.homeRegion = region.id }
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Text(store.regions.first { $0.id == taste.profile.alertRegion }?.name ?? "Los Angeles")
+                        Image(systemName: "chevron.up.chevron.down").font(.caption2)
+                    }
+                    .font(.subheadline.weight(.medium))
+                    .frame(minHeight: 44)
+                }
+            }
+            Text("New show alerts only cover your home area.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+struct AlertsSection: View {
+    @EnvironmentObject private var taste: TasteStore
+
+    @State private var denied = false
+
+    private var isOn: Binding<Bool> {
+        Binding(
+            get: { taste.profile.alertsEnabled == true },
+            set: { wantsAlerts in
+                if !wantsAlerts {
+                    taste.profile.alertsEnabled = false
+                    return
+                }
+                Task {
+                    let allowed = await Alerts.requestPermission()
+                    taste.profile.alertsEnabled = allowed
+                    denied = !allowed
+                }
+            }
+        )
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Toggle(isOn: isOn) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("New show alerts").font(.headline)
+                    let count = taste.profile.watchedArtistKeys.count
+                    Text("Watching \(count) \(count == 1 ? "artist" : "artists") from your library, follows and hearted shows")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .tint(Theme.accent)
+            if denied {
+                Text("Notifications are off for Marquee. Turn them on in Settings to get alerts.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(12)
+        .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
     }
 }
 

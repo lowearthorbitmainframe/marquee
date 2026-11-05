@@ -14,12 +14,12 @@ struct VenuesView: View {
                 && (term.isEmpty || $0.name.localizedCaseInsensitiveContains(term)
                     || ($0.neighborhood ?? "").localizedCaseInsensitiveContains(term))
         }
-        return matching.sorted { first, second in
-            let firstFollowed = taste.profile.followedVenues.contains(first.id)
-            let secondFollowed = taste.profile.followedVenues.contains(second.id)
-            if firstFollowed != secondFollowed { return firstFollowed }
-            return showCount(first) > showCount(second)
-        }
+        // Alphabetical, filing "The Echo" under E.
+        return matching.sorted { sortName($0).localizedStandardCompare(sortName($1)) == .orderedAscending }
+    }
+
+    private func sortName(_ venue: Venue) -> String {
+        venue.name.hasPrefix("The ") ? String(venue.name.dropFirst(4)) : venue.name
     }
 
     private func showCount(_ venue: Venue) -> Int {
@@ -63,10 +63,19 @@ struct VenueRow: View {
     private var zone: TimeZone { store.city?.timeZone ?? .current }
     private var isFollowed: Bool { taste.profile.followedVenues.contains(venue.id) }
 
+    /// Every kind of event the venue hosts, its main one first.
+    private var kinds: [EventCategory] { store.venueKindOrder[venue.id] ?? [] }
+    private var mainKind: EventCategory { kinds.first ?? .other }
+
     var body: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(venue.name).font(.headline)
+                HStack(spacing: 6) {
+                    Text(venue.name).font(.headline)
+                    ForEach(kinds, id: \.self) { kind in
+                        Circle().fill(kind.color).frame(width: 7, height: 7)
+                    }
+                }
                 Text(summary).font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
                 if let nextShow {
                     Text("Next: \(nextShow.title), \(Format.monthDay(nextShow.start, zone))")
@@ -89,7 +98,14 @@ struct VenueRow: View {
             .accessibilityLabel(isFollowed ? "Unfollow \(venue.name)" : "Follow \(venue.name)")
         }
         .padding(12)
-        .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+        .padding(.leading, 4)
+        .background(Theme.card.overlay(mainKind.wash))
+        .overlay(alignment: .leading) {
+            Rectangle().fill(mainKind.color.opacity(0.55)).frame(width: 4)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("\(venue.name), \(kinds.map(\.label).joined(separator: ", "))")
     }
 
     private var summary: String {

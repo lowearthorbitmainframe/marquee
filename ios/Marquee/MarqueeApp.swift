@@ -1,9 +1,15 @@
+import BackgroundTasks
 import SwiftUI
+import UserNotifications
 
 @main
 struct MarqueeApp: App {
     @StateObject private var store = FeedStore()
     @StateObject private var taste = TasteStore()
+
+    init() {
+        UNUserNotificationCenter.current().delegate = NotificationPresenter.shared
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -14,9 +20,35 @@ struct MarqueeApp: App {
                 .preferredColorScheme(.dark)
                 .task {
                     store.loadLocal()
-                    await store.refreshIfNeeded()
+                    await refreshAndAlert()
                 }
         }
+        // iOS wakes the app now and then to look for newly announced shows.
+        .backgroundTask(.appRefresh(Alerts.refreshTaskID)) {
+            await MainActor.run { Self.scheduleRefresh() }
+            await Self.backgroundCheck()
+        }
+    }
+
+    @MainActor private func refreshAndAlert() async {
+        if await store.refreshIfNeeded() {
+            await Alerts.check(feed: store.feed, region: store.regionId, taste: taste.profile)
+        }
+    }
+
+    @MainActor static func backgroundCheck() async {
+        let taste = TasteStore()
+        let store = FeedStore(region: taste.profile.alertRegion)
+        store.loadLocal()
+        if await store.refresh() {
+            await Alerts.check(feed: store.feed, region: store.regionId, taste: taste.profile)
+        }
+    }
+
+    @MainActor static func scheduleRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: Alerts.refreshTaskID)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 3 * 60 * 60)
+        try? BGTaskScheduler.shared.submit(request)
     }
 }
 
@@ -38,7 +70,13 @@ struct RootView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
-                Task { await store.refreshIfNeeded() }
+                Task {
+                    if await store.refreshIfNeeded() {
+                        await Alerts.check(feed: store.feed, region: store.regionId, taste: taste.profile)
+                    }
+                }
+            } else if phase == .background {
+                MarqueeApp.scheduleRefresh()
             }
         }
         .sheet(isPresented: setupBinding) {

@@ -4,10 +4,13 @@ struct Poster: View {
     var url: String?
     var title: String
     var symbol = "music.mic"
+    /// When set, the placeholder takes the event type's color.
+    var tint: Color?
 
     var body: some View {
         // The overlay keeps a filled image from widening whatever layout holds it.
-        LinearGradient(colors: Self.colors(for: title), startPoint: .topLeading, endPoint: .bottomTrailing)
+        LinearGradient(colors: tint.map { [$0.opacity(0.55), $0.opacity(0.18)] } ?? Self.colors(for: title),
+                       startPoint: .topLeading, endPoint: .bottomTrailing)
             .overlay {
                 Image(systemName: symbol).font(.title2).foregroundStyle(.white.opacity(0.5))
             }
@@ -42,7 +45,7 @@ struct EventRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Poster(url: event.image, title: event.title, symbol: event.kind.symbol)
+            Poster(url: event.image, title: event.title, symbol: event.kind.symbol, tint: event.kind.color)
                 .frame(width: 84, height: 84)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
 
@@ -65,7 +68,7 @@ struct EventRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             Button {
-                taste.toggleSaved(event.id)
+                taste.toggleSaved(event)
             } label: {
                 Image(systemName: isSaved ? "heart.fill" : "heart")
                     .font(.body)
@@ -77,7 +80,14 @@ struct EventRow: View {
             .accessibilityLabel(isSaved ? "Remove from saved" : "Save show")
         }
         .padding(10)
-        .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+        .padding(.leading, 4)
+        .background(Theme.card.overlay(event.kind.wash))
+        .overlay(alignment: .leading) {
+            Rectangle().fill(event.kind.color.opacity(0.55)).frame(width: 4)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("\(event.kind.label): \(event.title)")
     }
 
     private var isSaved: Bool { taste.profile.savedEvents.contains(event.id) }
@@ -95,7 +105,7 @@ struct EventRow: View {
         if event.soldOut { return ("Sold out", .orange) }
         if let reason { return (reason, Theme.accent) }
         if event.kind.hasMusicLinks, let genre = store.genres(for: event).first { return (genre, .secondary) }
-        if event.kind != .music { return (event.kind.label, .secondary) }
+        if event.kind != .music { return (event.kind.label, event.kind.color) }
         return nil
     }
 }
@@ -127,12 +137,13 @@ struct EventDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Poster(url: event.image, title: event.title, symbol: event.kind.symbol)
+                Poster(url: event.image, title: event.title, symbol: event.kind.symbol, tint: event.kind.color)
                     .frame(height: 220)
                     .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
 
                 VStack(alignment: .leading, spacing: 6) {
+                    CategoryTag(category: event.kind)
                     Text(event.title).font(.title2.weight(.bold))
                     if let tour = event.tour {
                         Text(tour).font(.subheadline).foregroundStyle(.secondary)
@@ -177,7 +188,7 @@ struct EventDetailView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
-                    taste.toggleSaved(event.id)
+                    taste.toggleSaved(event)
                 } label: {
                     Image(systemName: isSaved ? "heart.fill" : "heart")
                 }
@@ -217,7 +228,7 @@ struct ArtistCard: View {
                     .frame(width: 52, height: 52)
                     .clipShape(Circle())
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(name).font(.headline).lineLimit(2)
+                    ArtistNameButton(name: name, info: info, searchHint: "band")
                     if let genre = info?.genre {
                         Text(genre).font(.subheadline).foregroundStyle(.secondary)
                     }
@@ -233,6 +244,26 @@ struct ArtistCard: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(taste.isFavorite(name) ? "Unfollow \(name)" : "Follow \(name)")
+            }
+
+            let pages = ArtistLink.available(info)
+            if !pages.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(pages, id: \.0) { kind, url in
+                            Button {
+                                openURL(url)
+                            } label: {
+                                Label(kind.label, systemImage: kind.symbol)
+                                    .font(.caption.weight(.semibold))
+                                    .padding(.horizontal, 12)
+                                    .frame(minHeight: 36)
+                                    .background(Color.white.opacity(0.08), in: Capsule())
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
             }
 
             HStack(spacing: 8) {
@@ -258,13 +289,14 @@ struct ArtistCard: View {
 
 /// A comedian or other performer: followable, but no music links.
 struct PerformerRow: View {
+    @EnvironmentObject private var store: FeedStore
     @EnvironmentObject private var taste: TasteStore
 
     var name: String
 
     var body: some View {
         HStack(spacing: 12) {
-            Text(name).font(.headline).lineLimit(2)
+            ArtistNameButton(name: name, info: store.info(forArtist: name), searchHint: "comedian")
             Spacer(minLength: 0)
             Button {
                 taste.toggleFavorite(name)
@@ -280,6 +312,33 @@ struct PerformerRow: View {
         .padding(.leading, 12)
         .padding(.vertical, 4)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+/// An artist's name that opens their website, Instagram or TikTok.
+struct ArtistNameButton: View {
+    @Environment(\.openURL) private var openURL
+
+    var name: String
+    var info: ArtistInfo?
+    var searchHint: String
+
+    private var knowsAPage: Bool { !ArtistLink.available(info).isEmpty }
+
+    var body: some View {
+        Button {
+            if let url = ArtistLink.primary(for: name, info: info, searchHint: searchHint) { openURL(url) }
+        } label: {
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text(name).font(.headline).lineLimit(2).multilineTextAlignment(.leading)
+                Image(systemName: knowsAPage ? "arrow.up.right" : "magnifyingglass")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint(knowsAPage ? "Opens their page" : "Searches the web for them")
     }
 }
 

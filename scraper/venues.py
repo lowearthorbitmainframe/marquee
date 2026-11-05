@@ -42,6 +42,17 @@ LOS_ANGELES = {
         {"adapter": "eventbrite_organizer", "url": "https://www.eventbrite.com/o/the-wayfarer-20250596796", "venue": "the-wayfarer"},
         {"adapter": "tribe_events", "url": "https://www.vermonthollywood.com", "name": "The Vermont Hollywood"},
         {"adapter": "tribe_events", "url": "https://hollywoodforever.com", "name": "Hollywood Forever"},
+        # Nightlife
+        {"adapter": "club_events", "url": "https://exchangela.com/events/", "venue": "exchange-la", "category": "party"},
+        {"adapter": "club_events", "url": "https://academy.la/events/", "venue": "academy-la", "category": "party"},
+        {"adapter": "club_events", "url": "https://avalonhollywood.com/events/", "venue": "avalon-hollywood", "category": "party"},
+        {
+            "adapter": "dice_venues",
+            "label": "dice.fm clubs",
+            "url": "https://dice.fm/venue/",
+            "venues": ["sound-nightclub-kxeo", "catch-one-e582"],
+            "category": "party",
+        },
         # Comedy
         {"adapter": "improv", "url": "https://improv.com/hollywood/calendar/", "venue": "hollywood-improv", "category": "comedy"},
         {"adapter": "improv", "url": "https://improv.com/brea/calendar/", "venue": "brea-improv", "category": "comedy"},
@@ -49,6 +60,9 @@ LOS_ANGELES = {
         {"adapter": "laugh_factory", "url": "https://www.laughfactory.com/hollywood", "venue": "laugh-factory-hollywood", "category": "comedy"},
         # Film
         {"adapter": "new_beverly", "url": "https://thenewbev.com/schedule/", "venue": "new-beverly-cinema", "category": "film"},
+        {"adapter": "nightjar_cinema", "url": "https://vidiotsfoundation.org/coming-soon/", "venue": "vidiots", "category": "film"},
+        {"adapter": "nightjar_cinema", "url": "https://thefridacinema.org/coming-soon/", "venue": "the-frida-cinema", "category": "film"},
+        {"adapter": "alamo", "url": "https://drafthouse.com/s/mother/v2/schedule/market/los-angeles", "venue": "alamo-drafthouse-dtla", "category": "film"},
         {"adapter": "cinematheque", "label": "american cinematheque", "url": "https://www.americancinematheque.com/wp-json/wp/v2/event", "category": "film"},
         # Theater
         {"adapter": "live_nation", "url": "https://www.broadwayinhollywood.com/events", "venue": "pantages-theatre", "category": "theater"},
@@ -64,7 +78,7 @@ LOS_ANGELES = {
             "label": "dice.fm venues",
             "url": "https://dice.fm/venue/",
             "venues": [
-                "zebulon-y8bv", "los-globos-a6w7", "gold-diggers-n2mq", "catch-one-e582", "the-airliner-7r7v",
+                "zebulon-y8bv", "los-globos-a6w7", "gold-diggers-n2mq", "the-airliner-7r7v",
                 "alexs-bar-mqp9", "el-cid-ven7", "brain-dead-studios-xlna", "the-virgil-39bl", "oblivion-mxobr",
                 "high-tide-6nk3", "sid-the-cat-auditorium-2wr5m", "2220-arts--archives-bdyv", "grand-star-jazz-club-6kx8",
                 "kiss-kiss-bang-bang-la-w79p", "milkys-l8v5b", "the-grayson-bar-yovqr", "townhouse-venice-d8ve",
@@ -100,10 +114,16 @@ LOS_ANGELES = {
         "garden-amphitheatre": {"name": "Garden Amphitheatre", "neighborhood": "Garden Grove", "address": "12762 Main St, Garden Grove, CA 92840", "url": "https://gardenamp.com/"},
         "vibrato-grill-jazz": {"name": "Vibrato Grill Jazz", "neighborhood": "Bel Air", "address": "2930 N Beverly Glen Cir, Los Angeles, CA 90077", "url": "https://www.vibratogrilljazz.com/music"},
         "the-wayfarer": {"name": "The Wayfarer", "neighborhood": "Costa Mesa", "address": "843 W 19th St, Costa Mesa, CA 92627", "url": "https://wayfarercm.com/"},
+        "exchange-la": {"name": "Exchange LA", "neighborhood": "Downtown", "address": "618 S Spring St, Los Angeles, CA 90014", "url": "https://exchangela.com/events/"},
+        "academy-la": {"name": "Academy LA", "neighborhood": "Hollywood", "address": "6021 Hollywood Blvd, Los Angeles, CA 90028", "url": "https://academy.la/events/"},
+        "avalon-hollywood": {"name": "Avalon Hollywood", "neighborhood": "Hollywood", "address": "1735 Vine St, Los Angeles, CA 90028", "url": "https://avalonhollywood.com/events/"},
         "hollywood-improv": {"name": "Hollywood Improv", "neighborhood": "Hollywood", "address": "8162 Melrose Ave, Los Angeles, CA 90046", "url": "https://improv.com/hollywood/"},
         "brea-improv": {"name": "Brea Improv", "neighborhood": "Brea", "address": "120 S Brea Blvd, Brea, CA 92821", "url": "https://improv.com/brea/"},
         "irvine-improv": {"name": "Irvine Improv", "neighborhood": "Irvine", "address": "527 Spectrum Center Dr, Irvine, CA 92618", "url": "https://improv.com/irvine/"},
         "laugh-factory-hollywood": {"name": "Laugh Factory", "neighborhood": "West Hollywood", "address": "8001 W Sunset Blvd, Los Angeles, CA 90046", "url": "https://www.laughfactory.com/hollywood"},
+        "vidiots": {"name": "Vidiots", "neighborhood": "Eagle Rock", "address": "4884 Eagle Rock Blvd, Los Angeles, CA 90041", "url": "https://vidiotsfoundation.org/"},
+        "the-frida-cinema": {"name": "The Frida Cinema", "neighborhood": "Santa Ana", "address": "305 E 4th St, Santa Ana, CA 92701", "url": "https://thefridacinema.org/"},
+        "alamo-drafthouse-dtla": {"name": "Alamo Drafthouse DTLA", "neighborhood": "Downtown", "address": "700 W 7th St, Los Angeles, CA 90017", "url": "https://drafthouse.com/los-angeles"},
         "new-beverly-cinema": {"name": "New Beverly Cinema", "neighborhood": "Fairfax", "address": "7165 Beverly Blvd, Los Angeles, CA 90036", "url": "https://thenewbev.com/schedule/"},
         "los-feliz-3": {"name": "Los Feliz 3", "neighborhood": "Los Feliz", "address": "1822 N Vermont Ave, Los Angeles, CA 90027", "url": "https://www.americancinematheque.com/"},
         "aero-theatre": {"name": "Aero Theatre", "neighborhood": "Santa Monica", "address": "1328 Montana Ave, Santa Monica, CA 90403", "url": "https://www.americancinematheque.com/"},
@@ -135,4 +155,78 @@ LOS_ANGELES = {
     },
 }
 
-CITIES = [LOS_ANGELES]
+# San Francisco down through the Peninsula and South Bay to Santa Cruz.
+BAY_AREA_CITIES = [
+    "San Francisco", "Oakland", "Berkeley", "Emeryville", "Richmond", "Alameda", "Concord", "Walnut Creek",
+    "San Mateo", "Redwood City", "Palo Alto", "Menlo Park", "Mountain View", "Sunnyvale", "Santa Clara",
+    "San Jose", "Saratoga", "Los Gatos", "Campbell", "Santa Cruz", "Felton", "Capitola", "Soquel", "Aptos",
+]
+
+BAY_AREA = {
+    "id": "bay-area",
+    "name": "Bay Area",
+    # Off until its venues have been researched as thoroughly as LA's.
+    "ready": False,
+    "timezone": "America/Los_Angeles",
+    "sources": [
+        {"adapter": "live_nation", "url": "https://www.thefillmore.com/shows", "venue": "the-fillmore"},
+        {"adapter": "ticketweb_plugin", "url": "https://www.theindependentsf.com/", "venue": "the-independent"},
+        {
+            "adapter": "aeg",
+            "url": "https://aegwebprod.blob.core.windows.net/json/events/19/events.json",
+            "cities": BAY_AREA_CITIES,
+        },
+        {
+            "adapter": "dice_city",
+            "label": "dice.fm city",
+            "url": "https://dice.fm/browse/sanfrancisco-60dee10ce5e339918757f0db",
+            "categories": {
+                "music/gig": "music", "music/dj": "party", "music/party": "party",
+                "culture/comedy": "comedy", "culture/film": "film", "culture/theatre": "theater",
+            },
+        },
+        {
+            "adapter": "ticketmaster",
+            "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+            "dma": 382,
+            "cities": BAY_AREA_CITIES,
+        },
+    ],
+    "venues": {
+        "the-fillmore": {"name": "The Fillmore", "neighborhood": "Western Addition", "address": "1805 Geary Blvd, San Francisco, CA 94115", "url": "https://www.thefillmore.com/shows"},
+        "the-independent": {"name": "The Independent", "neighborhood": "NoPa", "address": "628 Divisadero St, San Francisco, CA 94117", "url": "https://www.theindependentsf.com/"},
+        "bimbos-365-club": {"name": "Bimbo's 365 Club", "neighborhood": "North Beach", "address": "1025 Columbus Ave, San Francisco, CA 94133", "url": "https://www.bimbos365club.com/"},
+    },
+}
+
+SAN_DIEGO = {
+    "id": "san-diego",
+    "name": "San Diego",
+    "ready": False,
+    "timezone": "America/Los_Angeles",
+    "sources": [
+        {"adapter": "live_nation", "url": "https://www.observatorysd.com/shows", "venue": "observatory-north-park"},
+        {"adapter": "live_nation", "url": "https://www.houseofblues.com/sandiego", "venue": "house-of-blues-san-diego"},
+        {"adapter": "ticketweb_index", "url": "https://bellyup.com/events/", "venue": "belly-up-tavern"},
+        {
+            "adapter": "aeg",
+            "url": "https://aegwebprod.blob.core.windows.net/json/events/19/events.json",
+            "cities": ["San Diego", "Solana Beach", "Del Mar", "Chula Vista", "Escondido", "Oceanside"],
+        },
+        {
+            "adapter": "ticketmaster",
+            "url": "https://app.ticketmaster.com/discovery/v2/events.json",
+            "dma": 381,
+            "cities": ["San Diego", "Solana Beach", "Del Mar", "Chula Vista", "Escondido", "Oceanside", "La Jolla", "Carlsbad"],
+        },
+    ],
+    "venues": {
+        "observatory-north-park": {"name": "Observatory North Park", "neighborhood": "North Park", "address": "2891 University Ave, San Diego, CA 92104", "url": "https://www.observatorysd.com/shows"},
+        "house-of-blues-san-diego": {"name": "House of Blues San Diego", "neighborhood": "Gaslamp", "address": "1055 5th Ave, San Diego, CA 92101", "url": "https://www.houseofblues.com/sandiego"},
+        "belly-up-tavern": {"name": "Belly Up Tavern", "neighborhood": "Solana Beach", "address": "143 S Cedros Ave, Solana Beach, CA 92075", "url": "https://bellyup.com/"},
+        "music-box": {"name": "Music Box", "neighborhood": "Little Italy", "address": "1337 India St, San Diego, CA 92101", "url": "https://www.musicboxsd.com/"},
+        "the-sound": {"name": "The Sound", "neighborhood": "Del Mar", "address": "2260 Jimmy Durante Blvd, Del Mar, CA 92014", "url": "https://www.thesoundsd.com/"},
+    },
+}
+
+CITIES = [LOS_ANGELES, BAY_AREA, SAN_DIEGO]

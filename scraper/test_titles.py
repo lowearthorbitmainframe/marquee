@@ -3,6 +3,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from adapters import image_url, parse_iso, parse_ticketmaster, slugify, ticketmaster_category
+from links import apple_id, collect_links
 from scrape import normalize, remove_duplicates
 from titles import artist_key, classify, display_title, is_sold_out, parse_artists
 
@@ -136,6 +137,26 @@ class Helpers(unittest.TestCase):
         self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7na", "Comedy")), "comedy")
         self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7na", "Theatre")), "theater")
         self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7nn", "Drama")), "film")
+        self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7nJ", "Dance/Electronic")), "party")
+
+    def test_rave_titles_are_nightlife(self):
+        self.assertEqual(classify("Basstripper: Dieselboy b2b Craze"), "party")
+        self.assertEqual(classify("Carl Cox All Night Long"), "party")
+        self.assertEqual(classify("Gilla Band"), "music")
+
+    def test_links_from_musicbrainz_relations(self):
+        relations = [
+            {"type": "social network", "url": {"resource": "https://twitter.com/slowpulpband"}},
+            {"type": "official homepage", "url": {"resource": "https://www.slowpulp.com/"}},
+            {"type": "social network", "url": {"resource": "https://www.instagram.com/slowpulp/"}},
+            {"type": "bandcamp", "url": {"resource": "https://slowpulp.bandcamp.com/"}},
+        ]
+        self.assertEqual(collect_links(relations), {
+            "website": "https://www.slowpulp.com/",
+            "instagram": "https://www.instagram.com/slowpulp/",
+            "bandcamp": "https://slowpulp.bandcamp.com/",
+        })
+        self.assertEqual(apple_id("https://music.apple.com/us/artist/slow-pulp/1180495553?uo=4"), "1180495553")
 
     def test_image_shapes(self):
         self.assertEqual(image_url("a.jpg"), "a.jpg")

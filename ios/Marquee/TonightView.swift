@@ -57,7 +57,7 @@ struct TonightView: View {
     }
 
     private var title: String {
-        if store.calendar.isDate(day, inSameDayAs: store.today) { return "Tonight in \(store.city?.name ?? "LA")" }
+        if store.calendar.isDate(day, inSameDayAs: store.today) { return "Tonight in \(store.regionName)" }
         return Format.fullDay(day, zone)
     }
 

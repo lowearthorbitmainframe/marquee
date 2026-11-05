@@ -56,6 +56,38 @@ struct SectionHeader: View {
     }
 }
 
+extension EventCategory {
+    /// Each kind of event keeps one muted color everywhere. Amber stays reserved
+    /// for your own selections and "For you" reasons, so none of these use it.
+    var color: Color {
+        switch self {
+        case .music: Color(red: 0.45, green: 0.58, blue: 0.80)
+        case .comedy: Color(red: 0.78, green: 0.47, blue: 0.60)
+        case .film: Color(red: 0.60, green: 0.52, blue: 0.80)
+        case .theater: Color(red: 0.80, green: 0.52, blue: 0.44)
+        case .party: Color(red: 0.42, green: 0.70, blue: 0.56)
+        case .other: Color(white: 0.55)
+        }
+    }
+
+    /// A dark, see-through wash of the color for card backgrounds.
+    var wash: Color { color.opacity(0.14) }
+}
+
+/// The small colored tag that names an event's kind.
+struct CategoryTag: View {
+    var category: EventCategory
+
+    var body: some View {
+        Label(category.label, systemImage: category.symbol)
+            .font(.caption.weight(.bold))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(category.color.opacity(0.16), in: Capsule())
+            .foregroundStyle(category.color)
+    }
+}
+
 /// A scrolling row of category chips, with "All" first.
 struct CategoryChips: View {
     @Binding var selection: EventCategory?
@@ -65,7 +97,7 @@ struct CategoryChips: View {
             HStack(spacing: 8) {
                 Chip(title: "All", isOn: selection == nil) { selection = nil }
                 ForEach(EventCategory.filters) { category in
-                    Chip(title: category.label, isOn: selection == category) {
+                    Chip(title: category.label, isOn: selection == category, dot: category.color) {
                         selection = selection == category ? nil : category
                     }
                 }
@@ -77,17 +109,31 @@ struct CategoryChips: View {
 struct Chip: View {
     var title: String
     var isOn: Bool
+    /// A category's color, shown as a dot so the chips double as a legend.
+    var dot: Color?
     var action: () -> Void
+
+    init(title: String, isOn: Bool, dot: Color? = nil, action: @escaping () -> Void) {
+        self.title = title
+        self.isOn = isOn
+        self.dot = dot
+        self.action = action
+    }
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(.subheadline.weight(.medium))
-                .lineLimit(1)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(isOn ? Theme.accent : Theme.card, in: Capsule())
-                .foregroundStyle(isOn ? Color.black : Color.primary)
+            HStack(spacing: 6) {
+                if let dot {
+                    Circle().fill(dot).frame(width: 8, height: 8)
+                }
+                Text(title).lineLimit(1)
+            }
+            .font(.subheadline.weight(.medium))
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(isOn ? (dot.map { $0.opacity(0.38) } ?? Theme.accent) : Theme.card, in: Capsule())
+            .overlay { if isOn, let dot { Capsule().strokeBorder(dot.opacity(0.6), lineWidth: 1) } }
+            .foregroundStyle(isOn && dot == nil ? Color.black : Color.primary)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isOn ? .isSelected : [])

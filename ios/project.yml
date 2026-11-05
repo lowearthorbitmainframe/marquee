@@ -30,3 +30,5 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSAppleMusicUsageDescription: Marquee reads the artists in your library to find their shows and similar bands near you.
+        UIBackgroundModes: [fetch]
+        BGTaskSchedulerPermittedIdentifiers: [com.bryanstage.marquee.refresh]

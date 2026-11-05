@@ -9,6 +9,19 @@ struct TasteProfile: Codable, Equatable {
     var savedEvents: Set<String> = []
     var dismissedEvents: Set<String> = []
     var finishedSetup = false
+    /// Everyone on a show you've hearted, kept after the show is over.
+    /// Optional so profiles saved before this existed still load.
+    var savedArtists: [String]?
+    var alertsEnabled: Bool?
+    /// Alerts only cover this region, whichever one you're browsing.
+    var homeRegion: String?
+
+    var alertRegion: String { homeRegion ?? FeedConfig.defaultRegion.id }
+
+    /// The artists whose new shows trigger an alert.
+    var watchedArtistKeys: Set<String> {
+        Set((favoriteArtists + libraryArtists + (savedArtists ?? [])).map(ArtistKey.make))
+    }
 
     var isEmpty: Bool {
         followedVenues.isEmpty && favoriteArtists.isEmpty && libraryArtists.isEmpty && genres.isEmpty
@@ -41,7 +54,16 @@ final class TasteStore: ObservableObject {
     }
 
     func toggleVenue(_ id: String) { profile.followedVenues.toggle(id) }
-    func toggleSaved(_ id: String) { profile.savedEvents.toggle(id) }
+    func toggleSaved(_ event: Event) {
+        profile.savedEvents.toggle(event.id)
+        if profile.savedEvents.contains(event.id) && (event.kind.hasMusicLinks || event.kind == .comedy) {
+            var artists = profile.savedArtists ?? []
+            for name in event.artists where !artists.contains(where: { ArtistKey.make($0) == ArtistKey.make(name) }) {
+                artists.append(name)
+            }
+            profile.savedArtists = artists
+        }
+    }
     func toggleGenre(_ genre: String) { profile.genres.toggle(genre) }
 
     func isFavorite(_ artist: String) -> Bool {

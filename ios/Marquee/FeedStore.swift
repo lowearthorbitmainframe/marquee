@@ -1,10 +1,19 @@
 import Foundation
 
 enum FeedConfig {
-    /// Where the scraper publishes the feed. The app falls back to the snapshot
-    /// bundled at build time until the first download succeeds.
-    static let remoteURL = URL(string: "https://raw.githubusercontent.com/lowearthorbitmainframe/marquee/main/data/los-angeles.json")
+    /// Where the scraper publishes each region's feed and the list of regions.
+    /// The app falls back to the Los Angeles snapshot bundled at build time.
+    static let baseURL = "https://raw.githubusercontent.com/lowearthorbitmainframe/marquee/main/data/"
     static let refreshInterval: TimeInterval = 60 * 60
+    static let defaultRegion = Region(id: "los-angeles", name: "Los Angeles")
+
+    static func feedURL(for region: String) -> URL? { URL(string: baseURL + region + ".json") }
+    static var regionsURL: URL? { URL(string: baseURL + "regions.json") }
+}
+
+struct Region: Codable, Hashable, Identifiable {
+    var id: String
+    var name: String
 }
 
 @MainActor
@@ -12,12 +21,27 @@ final class FeedStore: ObservableObject {
     @Published private(set) var feed: Feed?
     @Published private(set) var isRefreshing = false
     @Published private(set) var lastError: String?
+    @Published private(set) var regions: [Region] = [FeedConfig.defaultRegion]
+    @Published private(set) var regionId: String
+
+    private let defaults: UserDefaults
+
+    /// `region` loads a specific region, as background alert checks do for your home area.
+    init(defaults: UserDefaults = .standard, region: String? = nil) {
+        self.defaults = defaults
+        regionId = region ?? defaults.string(forKey: "region") ?? FeedConfig.defaultRegion.id
+        if let data = defaults.data(forKey: "regions"), let saved = try? JSONDecoder().decode([Region].self, from: data) {
+            regions = saved
+        }
+    }
 
     private(set) var venuesById: [String: Venue] = [:]
     private(set) var eventsByDay: [Date: [Event]] = [:]
     /// Worked out once per feed, so lists of venues stay fast.
     private(set) var showCounts: [String: Int] = [:]
     private(set) var venueKinds: [String: Set<EventCategory>] = [:]
+    /// Each venue's kinds of events, most frequent first.
+    private(set) var venueKindOrder: [String: [EventCategory]] = [:]
     private(set) var calendar = Calendar(identifier: .gregorian)
     private var lastChecked: Date?
 
@@ -27,10 +51,12 @@ final class FeedStore: ObservableObject {
         return decoder
     }()
 
-    private static var cacheURL: URL {
+    private var cacheURL: URL {
         FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("feed.json")
+            .appendingPathComponent("feed-\(regionId).json")
     }
+
+    var regionName: String { regions.first { $0.id == regionId }?.name ?? feed?.city.name ?? "LA" }
 
     var city: City? { feed?.city }
     var venues: [Venue] { feed?.venues ?? [] }
@@ -44,9 +70,9 @@ final class FeedStore: ObservableObject {
     }
 
     func loadLocal() {
-        if let data = try? Data(contentsOf: Self.cacheURL), let cached = try? Self.decoder.decode(Feed.self, from: data) {
+        if let data = try? Data(contentsOf: cacheURL), let cached = try? Self.decoder.decode(Feed.self, from: data) {
             install(cached)
-        } else if let url = Bundle.main.url(forResource: "los-angeles", withExtension: "json"),
+        } else if let url = Bundle.main.url(forResource: regionId, withExtension: "json"),
                   let data = try? Data(contentsOf: url) {
             do {
                 install(try Self.decoder.decode(Feed.self, from: data))
@@ -56,25 +82,49 @@ final class FeedStore: ObservableObject {
         }
     }
 
-    func refreshIfNeeded() async {
-        if let lastChecked, Date().timeIntervalSince(lastChecked) < FeedConfig.refreshInterval { return }
-        await refresh()
+    @discardableResult
+    func refreshIfNeeded() async -> Bool {
+        if let lastChecked, Date().timeIntervalSince(lastChecked) < FeedConfig.refreshInterval { return false }
+        return await refresh()
     }
 
-    func refresh() async {
-        guard let url = FeedConfig.remoteURL else { return }
+    /// Returns true when a newer feed was installed.
+    @discardableResult
+    func refresh() async -> Bool {
+        guard let url = FeedConfig.feedURL(for: regionId) else { return false }
         isRefreshing = true
         defer { isRefreshing = false }
+        await refreshRegions()
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let fresh = try Self.decoder.decode(Feed.self, from: data)
-            try? data.write(to: Self.cacheURL, options: .atomic)
+            try? data.write(to: cacheURL, options: .atomic)
             install(fresh)
             lastChecked = Date()
             lastError = nil
+            return true
         } catch {
             lastError = "Couldn't update. Showing the last saved list."
+            return false
         }
+    }
+
+    private func refreshRegions() async {
+        guard let url = FeedConfig.regionsURL,
+              let (data, _) = try? await URLSession.shared.data(from: url),
+              let fresh = try? JSONDecoder().decode([Region].self, from: data), !fresh.isEmpty else { return }
+        regions = fresh
+        defaults.set(data, forKey: "regions")
+    }
+
+    func switchRegion(to id: String) async {
+        guard id != regionId else { return }
+        regionId = id
+        defaults.set(id, forKey: "region")
+        feed = nil
+        lastChecked = nil
+        loadLocal()
+        await refresh()
     }
 
     func install(_ feed: Feed) {
@@ -85,6 +135,8 @@ final class FeedStore: ObservableObject {
         eventsByDay = Dictionary(grouping: feed.events) { calendar.startOfDay(for: $0.start) }
         showCounts = feed.events.reduce(into: [:]) { $0[$1.venueId, default: 0] += 1 }
         venueKinds = feed.events.reduce(into: [:]) { $0[$1.venueId, default: []].insert($1.kind) }
+        let kindCounts = feed.events.reduce(into: [String: [EventCategory: Int]]()) { $0[$1.venueId, default: [:]][$1.kind, default: 0] += 1 }
+        venueKindOrder = kindCounts.mapValues { counts in counts.sorted { $0.value > $1.value }.map(\.key) }
         self.feed = feed
     }
 

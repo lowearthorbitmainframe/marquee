@@ -24,6 +24,7 @@ from zoneinfo import ZoneInfo
 
 import adapters
 import enrich as enricher
+import links as linker
 from titles import artist_key, classify, display_title, is_cancelled, is_sold_out, merge_artists, parse_artists
 from venues import CITIES
 
@@ -121,7 +122,7 @@ def source_label(source):
     return source.get("label") or source.get("venue") or source["url"].split("/")[2]
 
 
-def scrape_city(city, run_enrich, budget, minutes):
+def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
     zone = ZoneInfo(city["timezone"])
     today = datetime.now(zone).date()
     feed_path = DATA_DIR / (city["id"] + ".json")
@@ -194,6 +195,10 @@ def scrape_city(city, run_enrich, budget, minutes):
         done = enricher.enrich(names, cache, fetch, budget, deadline, save)
         save()
         print("looked up %d new artists; %d cached" % (done, len(cache)))
+        if link_minutes:
+            checked = linker.add_links(names, cache, time.time() + link_minutes * 60, save)
+            save()
+            print("checked links for %d artists; %d have links" % (checked, sum(1 for r in cache.values() if r.get("links"))))
 
     # Only ship artist records this feed actually uses.
     used = {}
@@ -201,8 +206,8 @@ def scrape_city(city, run_enrich, budget, minutes):
         for name in event["artists"]:
             key = artist_key(name)
             record = cache.get(key)
-            if record and (record.get("genre") or record.get("related")):
-                used[key] = {k: v for k, v in record.items() if k != "checked"}
+            if record and (record.get("genre") or record.get("related") or record.get("links")):
+                used[key] = {k: v for k, v in record.items() if k not in ("checked", "linksChecked", "linksMatch")}
                 if used[key].get("genre") in NON_MUSIC_GENRES:
                     del used[key]["genre"]
 
@@ -229,10 +234,20 @@ def main():
     parser.add_argument("--no-enrich", action="store_true")
     parser.add_argument("--budget", type=int, default=int(os.environ.get("ENRICH_BUDGET", "150")))
     parser.add_argument("--minutes", type=float, default=15, help="time limit for artist lookups")
+    parser.add_argument("--link-minutes", type=float, default=8, help="time limit for website and social lookups")
+    parser.add_argument("--city", action="append", help="only scrape these region ids, even ones not marked ready")
     options = parser.parse_args()
     DATA_DIR.mkdir(exist_ok=True)
-    for city in CITIES:
-        scrape_city(city, not options.no_enrich, options.budget, options.minutes)
+    cities = [c for c in CITIES if (c["id"] in options.city if options.city else c.get("ready", True))]
+    for index, city in enumerate(cities):
+        # The first region gets the full lookup time; the rest get a share, so a
+        # run fits GitHub's limit. Artist lookups are shared, so they add up.
+        share = 1 if index == 0 else 0.3
+        scrape_city(city, not options.no_enrich, options.budget, options.minutes * share, options.link_minutes * share)
+    # The app reads this to offer a region picker.
+    regions = [{"id": c["id"], "name": c["name"]} for c in CITIES
+               if c.get("ready", True) and (DATA_DIR / (c["id"] + ".json")).exists()]
+    (DATA_DIR / "regions.json").write_text(json.dumps(regions, indent=1))
     return 0
 
 

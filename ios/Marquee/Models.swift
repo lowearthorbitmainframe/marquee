@@ -53,6 +53,7 @@ struct ArtistInfo: Codable, Hashable {
     var image: String?
     var fans: Int?
     var related: [String]?
+    var links: [String: String]?
 }
 
 struct Event: Codable, Identifiable, Hashable {

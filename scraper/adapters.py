@@ -12,7 +12,7 @@ import re
 import time
 import unicodedata
 import urllib.parse
-from datetime import date, datetime, timezone
+from datetime import date, date as date_type, datetime, timezone
 from zoneinfo import ZoneInfo
 
 from titles import clean_text, parse_artists
@@ -52,6 +52,7 @@ VENUE_ALIASES = {
     "garden-amp": "garden-amphitheatre",
     "the-wayfarer-costa-mesa": "the-wayfarer",
     # Ticketmaster's spellings.
+    "academy-nightclub": "academy-la",
     "catch-one-disco": "catch-one",
     "el-rey-theatre-los-angeles": "el-rey-theatre",
     "glass-house": "the-glass-house",
@@ -102,7 +103,12 @@ def parse_month_day(text, today):
         r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?\b(?:,?\s*(\d{4}))?",
         text, re.I)
     if not match:
-        return None
+        # Some calendars write dates as "11.4" or "11/4".
+        numeric = re.search(r"\b(\d{1,2})[./](\d{1,2})\b(?![./]\d)", text)
+        if not numeric or not (1 <= int(numeric.group(1)) <= 12 and 1 <= int(numeric.group(2)) <= 31):
+            return None
+        month, day = int(numeric.group(1)), int(numeric.group(2))
+        return date(infer_year(month, day, today), month, day)
     month = MONTHS[match.group(1).lower()]
     day = int(match.group(2))
     year = int(match.group(3)) if match.group(3) else infer_year(month, day, today)
@@ -644,6 +650,8 @@ def ticketmaster_category(item):
     genre = ((classification.get("genre") or {}).get("name") or "").lower()
     if segment == "theater" and "comedy" in genre:
         return "comedy"
+    if segment == "music" and genre in ("dance/electronic", "electronic", "house", "techno"):
+        return "party"
     if segment == "theater" and genre not in ("theatre", "musical", "opera", "dance", "classical", "performance art", "children's theatre", "magic & illusion", "cultural", "spectacular", "circus & specialty acts", "puppetry", "variety"):
         return "theater" if "theat" in genre or "music" in genre else "other"
     return segment
@@ -837,4 +845,102 @@ def cinematheque(source, fetch, today):
         if len(items) < 100:
             break
         time.sleep(1)
+    return events
+
+
+def club_events(source, fetch, today):
+    """The Exchange LA, Academy, Avalon and Bardot sites, which share one template."""
+    events = []
+    for card in fetch(source["url"]).split('class="events__item"')[1:]:
+        date = re.search(r"(\d{1,2})\.(\d{1,2})\.(\d{2})\b", card)
+        link = re.search(r'href="(https://[^"]+/event/[^"]+)"', card)
+        title = re.search(r'event__content-title[^>]*>(.*?)</', card, re.S)
+        if not (date and link and title):
+            continue
+        month, day, year = (int(x) for x in date.groups())
+        image = re.search(r'data-lazy-srcset="([^" ]+)', card)
+        tickets = re.search(r'href="(https://[^"]*(?:ticketweb|eventbrite|tixr|seetickets)[^"]+)"', card)
+        clock = re.search(r"\b(\d{1,2}(?::\d{2})?\s*[ap]\.?m)\b", clean_text(card), re.I)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(1)),
+            "start": combine(date_type(2000 + year, month, day), parse_clock(clock.group(1)) if clock else None),
+            "url": link.group(1),
+            "ticket_url": tickets.group(1).replace("&amp;", "&") if tickets else link.group(1),
+            "image": image.group(1) if image else None,
+        })
+    return events
+
+
+def nightjar_cinema(source, fetch, today):
+    """Vidiots and the Frida run on the same cinema platform, whose 'coming soon'
+    page lists every upcoming screening as JSON-LD."""
+    events = []
+    for item in json_ld_events(fetch(source["url"])):
+        start = parse_iso(item.get("startDate"))
+        if not start:
+            continue
+        # Names arrive as "Primetime - 11/4/26 @ 7:30 pm".
+        title = re.sub(r"\s+-\s+\d{1,2}/\d{1,2}/\d{2}\s+@.*$", "", clean_text(item.get("name")))
+        offers = item.get("offers") if isinstance(item.get("offers"), list) else [item.get("offers") or {}]
+        events.append({
+            "venue": source["venue"],
+            "title": title,
+            "start": start,
+            "ticket_url": item.get("url"),
+            "url": item.get("url"),
+            "image": image_url(item.get("image")),
+            "sold_out": any("SoldOut" in str((o or {}).get("availability")) for o in offers),
+        })
+    return events
+
+
+def alamo(source, fetch, today):
+    """Alamo Drafthouse's schedule. Only special screenings and repertory
+    series are kept, so new releases don't crowd out everything else."""
+    data = json.loads(fetch(source["url"]))["data"]
+    special = {}
+    for presentation in data.get("presentations") or []:
+        if presentation.get("event") or presentation.get("primaryCollectionSlug"):
+            special[presentation["slug"]] = presentation
+    cinemas = {c["id"]: c.get("name") for c in (data.get("market") or [{}])[0].get("cinemas") or []}
+    events = []
+    for session in data.get("sessions") or []:
+        presentation = special.get(session.get("presentationSlug"))
+        if not presentation or session.get("isHidden") or session.get("status") not in (None, "ONSALE", "SOLDOUT"):
+            continue
+        show = presentation.get("show") or {}
+        event = presentation.get("event") or {}
+        series = (presentation.get("primaryCollectionSlug") or "").replace("-", " ").title()
+        hero = (show.get("landscapeHeroImage") or {}).get("uri")
+        url = "https://drafthouse.com/los-angeles/show/%s" % show.get("slug", presentation["slug"])
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(event.get("title") or show.get("title")),
+            "tour": series or None,
+            "start": datetime.fromisoformat(session["showTimeClt"]),
+            "url": url,
+            "ticket_url": url,
+            "image": hero,
+            "sold_out": session.get("status") == "SOLDOUT",
+        })
+    return events
+
+
+def ticketweb_index(source, fetch, today):
+    """Some TicketWeb sites list every upcoming show in their search box data,
+    as "Title MM/DD" with a link. There are no times, so they show as TBA."""
+    events = []
+    pattern = re.compile(r'EventData\.events\.push\(\{"value"\s*:\s*"(.*?)\s+(\d{1,2})/(\d{1,2})"\s*,.*?"url"\s*:\s*"([^"]+)"', re.S)
+    for title, month, day, url in pattern.findall(fetch(source["url"])):
+        month, day = int(month), int(day)
+        if not (1 <= month <= 12 and 1 <= day <= 31):
+            continue
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.encode().decode("unicode_escape", "ignore") if "\\u" in title else title),
+            "start": combine(date(infer_year(month, day, today), month, day), None),
+            "url": url,
+            "ticket_url": url,
+        })
     return events

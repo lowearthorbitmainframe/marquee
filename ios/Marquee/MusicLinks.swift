@@ -1,5 +1,46 @@
 import Foundation
 
+/// An artist's own pages, in the order a tap on their name tries them.
+enum ArtistLink: String, CaseIterable, Identifiable {
+    case website, instagram, tiktok, bandcamp, soundcloud
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .website: "Website"
+        case .instagram: "Instagram"
+        case .tiktok: "TikTok"
+        case .bandcamp: "Bandcamp"
+        case .soundcloud: "SoundCloud"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .website: "globe"
+        case .instagram: "camera"
+        case .tiktok: "music.note.tv"
+        case .bandcamp: "opticaldisc"
+        case .soundcloud: "cloud"
+        }
+    }
+
+    static func available(_ info: ArtistInfo?) -> [(ArtistLink, URL)] {
+        allCases.compactMap { kind in
+            guard let text = info?.links?[kind.rawValue], let url = URL(string: text) else { return nil }
+            return (kind, url)
+        }
+    }
+
+    /// Their first known page, or a web search when we don't know any.
+    static func primary(for name: String, info: ArtistInfo?, searchHint: String) -> URL? {
+        if let first = available(info).first { return first.1 }
+        let query = "\(name) \(searchHint)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? name
+        return URL(string: "https://www.google.com/search?q=\(query)")
+    }
+}
+
 enum MusicService: String, CaseIterable, Identifiable {
     case spotify = "Spotify"
     case appleMusic = "Apple Music"
