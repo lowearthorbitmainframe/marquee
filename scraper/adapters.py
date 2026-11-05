@@ -271,9 +271,11 @@ def ticketweb_plugin(source, fetch, today):
         link = re.search(r'href="([^"]+)"', title_html) or re.search(r'href="([^"]+/(?:tm-event|event)/[^"]+)"', card)
         name = (link.group(1) if link else source["url"], clean_text(title_html))
         when = re.search(r'tw-event-date">([^<]+)<', card)
-        if not name[1] or not when:
+        # Catalina leaves that empty and shows the month and day beside the image.
+        beside = re.findall(r'name-of-month">\s*(\w+)\s*</div>\s*<div class="date-of-month">\s*(\d+)', chunks[index])
+        if not name[1] or not (when or beside):
             continue
-        day = parse_month_day(when.group(1), today)
+        day = parse_month_day(when.group(1) if when else "%s %s" % beside[-1], today)
         if not day:
             continue
         time_match = (re.search(r'tw-event-time">\s*([^<]*\d[^<]*)<', card)
@@ -793,6 +795,46 @@ def improv(source, fetch, today):
     return events
 
 
+def comedy_store(source, fetch, today):
+    """The Comedy Store's month calendar, this month and next. Each show names
+    its room (Main, Original, Belly) and links each comic on the lineup."""
+    events = []
+    base = source["url"].rstrip("/")
+    following = date(today.year + (today.month == 12), today.month % 12 + 1, 1)
+    for url in (base + "/", "%s/%d-%02d" % (base, following.year, following.month)):
+        try:
+            page = fetch(url)
+        except Exception:
+            if events:
+                continue
+            raise
+        for card in page.split("show-item")[1:]:
+            link = re.search(r'href="(/calendar/show/[^"]+)"', card)
+            title = re.search(r'show-title">\s*<a[^>]*>(.*?)</a>', card, re.S)
+            when = re.search(r"fa-calendar\"></i>&nbsp;\w+, (\w+ \d{1,2})", card)
+            clock = re.search(r"fa-clock\"></i>&nbsp;([^<]+)<", card)
+            if not (link and title and when):
+                continue
+            day = parse_month_day(when.group(1), today)
+            room = re.search(r'pe-1 me-1">\w+</span>([^<]+)</h3>', card)
+            lineup = re.findall(r'lineup-item[^>]*><a[^>]*>(?:<img[^>]*>)?([^<]+)</a>', card)
+            image = re.search(r'<img src="(//[^"]+)"', card)
+            show_url = urllib.parse.urljoin(base, link.group(1))
+            tickets = re.search(r'href="(https?://[^"]+)"[^>]*the-ticket btn-store', card)
+            events.append({
+                "venue": source["venue"],
+                "title": clean_text(title.group(1)),
+                "tour": clean_text(room.group(1)) if room else None,
+                "artists": list(dict.fromkeys(clean_text(n) for n in lineup if clean_text(n))),
+                "start": combine(day, parse_clock(clock.group(1)) if clock else None),
+                "url": show_url,
+                "ticket_url": tickets.group(1) if tickets else show_url,
+                "image": "https:" + image.group(1) if image else None,
+                "sold_out": "sold out" in card.lower(),
+            })
+    return events
+
+
 def laugh_factory(source, fetch, today):
     """Laugh Factory sells through Eventbrite but lists shows with real timestamps."""
     page = fetch(source["url"])
@@ -1164,5 +1206,193 @@ def yoshis(source, fetch, today):
             "url": title.group(1),
             "ticket_url": ticket.group(1),
             "image": urllib.parse.urljoin(source["url"], image.group(1)) if image else None,
+        })
+    return events
+
+
+def la_opera(source, fetch, today):
+    """LA Opera lists its productions on the calendar page; each production's
+    page carries JSON-LD for every performance."""
+    calendar = fetch(source["url"])
+    paths = list(dict.fromkeys(re.findall(r'"(/performances/\d{4}-\d{2}/[^"]+)"', calendar)))
+    if not paths:
+        raise ValueError("no productions found")
+    events = []
+    for path in paths:
+        page_url = urllib.parse.urljoin(source["url"], path)
+        for item in json_ld_events(fetch(page_url)):
+            start = parse_iso(item.get("startDate"))
+            if not start:
+                continue
+            events.append({
+                "venue": source["venue"],
+                "title": clean_text(item["name"]),
+                "start": start,
+                "url": page_url,
+                "ticket_url": page_url,
+                "image": "https:" + item["image"] if str(item.get("image", "")).startswith("//") else image_url(item.get("image")),
+            })
+        time.sleep(1)
+    return events
+
+
+def geffen(source, fetch, today):
+    """The Geffen Playhouse month calendar: each day lists its plays and showtimes.
+    This month and next are fetched."""
+    events = []
+    following = date(today.year + (today.month == 12), today.month % 12 + 1, 1)
+    pages = [source["url"], "%s?year=%d&month=%d" % (source["url"], following.year, following.month)]
+    for url in pages:
+        page = fetch(url)
+        for day_html in page.split("class='visuallyhidden'>")[1:]:
+            when = re.match(r"\w+, (\w+ \d{1,2}, \d{4})", day_html)
+            if not when:
+                continue
+            day = datetime.strptime(when.group(1), "%B %d, %Y").date()
+            body = day_html.split("</li>", 1)[0]
+            for block in body.split("performance-title'>")[1:]:
+                title = clean_text(block.split("<", 1)[0])
+                for link, clock in re.findall(r"performance-showtime[^']*' href='([^']+)'>([^<]+)<", block):
+                    events.append({
+                        "venue": source["venue"],
+                        "title": title,
+                        "start": combine(day, parse_clock(clock)),
+                        "url": link,
+                        "ticket_url": link,
+                    })
+    if not events:
+        raise ValueError("no performances found")
+    unique = {(e["title"], e["start"]): e for e in events}
+    return list(unique.values())
+
+
+CAP_UCLA_VENUES = {"Royce Hall": "royce-hall", "The Nimoy": "the-nimoy", "Freud Playhouse": "freud-playhouse"}
+
+
+def cap_ucla(source, fetch, today):
+    """UCLA's Center for the Art of Performance. A short run (Nov 12 - Nov 14)
+    becomes one show per night at the listed time."""
+    events = []
+    for row in fetch(source["url"]).split('class="views-row')[1:]:
+        link = re.search(r'href="(/event/[^"]+)"', row) or re.search(r'href="(/event/[^"]+)"', row)
+        times = re.findall(r'<time datetime="([^"]+)">', row)
+        artist = re.search(r'event-artist"><div class="field-content">(.*?)</div>', row, re.S)
+        venue = re.search(r'event-venue"><div class="field-content">(.*?)</div>', row, re.S)
+        kind = re.search(r'event-type"><div class="field-content">(.*?)</div>', row, re.S)
+        genre = re.search(r'event-genre"><div class="field-content">(.*?)</div>', row, re.S)
+        clock = re.search(r"\|\s*(\d{1,2}(?::\d{2})?\s*[ap]m)", row)
+        if not (times and artist and venue):
+            continue
+        kind_text = clean_text(kind.group(1)) if kind else ""
+        if "K–12" in kind_text or "K-12" in kind_text:
+            continue
+        venue_name = clean_text(venue.group(1))
+        first = datetime.fromisoformat(times[0].rstrip("Z")).date()
+        last = datetime.fromisoformat(times[-1].rstrip("Z")).date()
+        # Times are written in UTC; a 4:00 UTC stamp is the evening before in LA.
+        if times[0].endswith("T04:00:00"):
+            first = date.fromordinal(first.toordinal() - 1)
+            last = date.fromordinal(last.toordinal() - 1)
+        genres = clean_text(genre.group(1)) if genre else ""
+        category = "theater" if re.search(r"theater|dance|opera", genres, re.I) else "music" if re.search(r"music|jazz|classical", genres, re.I) else None
+        url = urllib.parse.urljoin(source["url"], link.group(1)) if link else source["url"]
+        image = re.search(r'<img[^>]+src="([^"]+)"', row)
+        for offset in range(min((last - first).days, 14) + 1):
+            day = date.fromordinal(first.toordinal() + offset)
+            events.append({
+                "venue": CAP_UCLA_VENUES.get(venue_name, slugify(venue_name)),
+                "venue_info": {"name": venue_name},
+                "category": category,
+                "title": clean_text(artist.group(1)),
+                "start": combine(day, parse_clock(clock.group(1)) if clock else None),
+                "url": url,
+                "ticket_url": url,
+                "image": urllib.parse.urljoin(source["url"], image.group(1)) if image else None,
+            })
+    return events
+
+
+def wix_events(source, fetch, today):
+    """Wix sites' event list widget (Sam First)."""
+    events = []
+    for item in fetch(source["url"]).split('data-hook="event-list-item"')[1:]:
+        title = re.search(r'data-hook="ev-list-item-title"[^>]*>([^<]+)<', item)
+        when = re.search(r'data-hook="date"[^>]*>([^<]+)<', item)
+        link = re.search(r'href="(https?://[^"]+/events?/[^"]+)"', item)
+        if not (title and when):
+            continue
+        day = parse_month_day(when.group(1), today)
+        if not day:
+            continue
+        image = re.search(r'<img src="([^"]+)"', item)
+        url = link.group(1) if link else source["url"]
+        name = clean_text(title.group(1))
+        events.append({
+            "venue": source["venue"],
+            "title": name,
+            "start": combine(day, parse_clock(when.group(1))),
+            "url": url,
+            "ticket_url": url,
+            "image": image.group(1) if image else None,
+        })
+    if not events:
+        raise ValueError("no Wix events found")
+    return events
+
+
+COLBURN_SKIP = re.compile(r"master class|forum|audition|rehearsal|recital hour|jury|studio class|open house|lecture", re.I)
+
+
+def colburn(source, fetch, today):
+    """Colburn School's month calendar (Zipper Hall and friends), concerts only."""
+    events = []
+    for day_html in fetch(source["url"]).split('em-cal-day-date')[1:]:
+        when = re.search(r'data-date="(\d{4}-\d{2}-\d{2})"', day_html)
+        if not when:
+            continue
+        day = date.fromisoformat(when.group(1))
+        for clock, url, title in re.findall(r'<div>([^<-]+?)\s*-\s*<a href="([^"]+)">([^<]+)</a>', day_html):
+            name = clean_text(title)
+            if COLBURN_SKIP.search(name):
+                continue
+            events.append({
+                "venue": source["venue"],
+                "title": name,
+                "start": combine(day, parse_clock(clock)),
+                "url": url,
+                "ticket_url": url,
+            })
+    return events
+
+
+def spektrix(source, fetch, today):
+    """Spektrix's public API: every performance, and which hall's seating plan
+    it uses (Los Angeles Ballet tours the Dolby, Royce Hall, the Wallis...)."""
+    base = "https://system.spektrix.com/%s/api/v3/" % source["client"]
+    names = {e["id"]: e["name"] for e in json.loads(fetch(base + "events"))}
+    halls = {}
+    events = []
+    for item in json.loads(fetch(base + "instances?startFrom=" + today.isoformat())):
+        if item.get("cancelled") or item["event"]["id"] not in names:
+            continue
+        plan = item.get("planId")
+        if plan and plan not in halls:
+            try:
+                halls[plan] = json.loads(fetch(base + "plans/" + plan))["name"]
+            except Exception:
+                halls[plan] = None
+        hall = re.sub(r"^The Wallis\s*:\s*", "", halls.get(plan) or "") or None
+        # Plans named after a company's own rooms ("Theater 3") mean its home venue.
+        if hall and source.get("rooms") and re.match(source["rooms"], hall, re.I):
+            hall = None
+        hall_slug = slugify(hall) if hall else source["venue"]
+        title = re.sub(r"\s+20\d\d$", "", names[item["event"]["id"]])
+        events.append({
+            "venue": hall_slug,
+            "venue_info": {"name": hall} if hall else None,
+            "title": "%s: %s" % (source["presenter"], title) if source.get("presenter") else title,
+            "start": parse_iso(item["start"]),
+            "url": source.get("site"),
+            "ticket_url": source.get("site"),
         })
     return events

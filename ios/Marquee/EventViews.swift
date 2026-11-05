@@ -111,6 +111,8 @@ struct EventRow: View {
 }
 
 struct EventLink: View {
+    @EnvironmentObject private var taste: TasteStore
+
     var event: Event
     var reason: String?
     var showsDate = false
@@ -120,6 +122,15 @@ struct EventLink: View {
             EventRow(event: event, reason: reason, showsDate: showsDate)
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            if let headliner = event.artists.first {
+                Button(role: .destructive) {
+                    taste.toggleDisliked(headliner)
+                } label: {
+                    Label("Hide shows by \(headliner)", systemImage: "hand.thumbsdown")
+                }
+            }
+        }
     }
 }
 
@@ -234,16 +245,7 @@ struct ArtistCard: View {
                     }
                 }
                 Spacer(minLength: 0)
-                Button {
-                    taste.toggleFavorite(name)
-                } label: {
-                    Image(systemName: taste.isFavorite(name) ? "star.fill" : "star")
-                        .foregroundStyle(taste.isFavorite(name) ? Theme.accent : Color.secondary)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(taste.isFavorite(name) ? "Unfollow \(name)" : "Follow \(name)")
+                ArtistOpinionButtons(name: name)
             }
 
             let pages = ArtistLink.available(info)
@@ -298,7 +300,24 @@ struct PerformerRow: View {
         HStack(spacing: 12) {
             ArtistNameButton(name: name, info: store.info(forArtist: name), searchHint: "comedian")
             Spacer(minLength: 0)
+            ArtistOpinionButtons(name: name)
+        }
+        .padding(.leading, 12)
+        .padding(.vertical, 4)
+        .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+/// Follow (star) or never see again (thumbs down).
+struct ArtistOpinionButtons: View {
+    @EnvironmentObject private var taste: TasteStore
+
+    var name: String
+
+    var body: some View {
+        HStack(spacing: 0) {
             Button {
+                if taste.isDisliked(name) { taste.toggleDisliked(name) }
                 taste.toggleFavorite(name)
             } label: {
                 Image(systemName: taste.isFavorite(name) ? "star.fill" : "star")
@@ -308,10 +327,18 @@ struct PerformerRow: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel(taste.isFavorite(name) ? "Unfollow \(name)" : "Follow \(name)")
+
+            Button {
+                taste.toggleDisliked(name)
+            } label: {
+                Image(systemName: taste.isDisliked(name) ? "hand.thumbsdown.fill" : "hand.thumbsdown")
+                    .foregroundStyle(taste.isDisliked(name) ? Color.red.opacity(0.8) : Color.secondary)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(taste.isDisliked(name) ? "Show \(name) again" : "Hide shows by \(name)")
         }
-        .padding(.leading, 12)
-        .padding(.vertical, 4)
-        .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
     }
 }
 

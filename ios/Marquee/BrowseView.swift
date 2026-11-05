@@ -131,11 +131,29 @@ struct BrowseView: View {
                 Chip(title: "My venues", isOn: query.myVenuesOnly) { query.myVenuesOnly.toggle() }
                 Menu {
                     Button("All genres") { query.genre = nil }
-                    ForEach(store.genres, id: \.self) { genre in
-                        Button(genre) { query.genre = genre }
+                    if query.category == nil || query.category == .music || query.category == .party {
+                        Section("Music") {
+                            ForEach(store.genres, id: \.self) { genre in
+                                Button(genre) { query.genre = genre }
+                            }
+                        }
+                    }
+                    if query.category == nil || query.category == .film {
+                        Section("Film") {
+                            ForEach(EventTags.filmTags, id: \.self) { tag in
+                                Button(EventTags.label(tag)) { query.genre = tag }
+                            }
+                        }
+                    }
+                    if query.category == nil || query.category == .comedy {
+                        Section("Comedy") {
+                            ForEach(EventTags.comedyTags, id: \.self) { tag in
+                                Button(EventTags.label(tag)) { query.genre = tag }
+                            }
+                        }
                     }
                 } label: {
-                    filterMenuLabel(query.genre ?? "Genre", isOn: query.genre != nil)
+                    filterMenuLabel(query.genre.map(EventTags.label) ?? "Genre", isOn: query.genre != nil)
                 }
                 Menu {
                     Button("All venues") { query.venueId = nil }

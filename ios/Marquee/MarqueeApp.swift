@@ -56,6 +56,7 @@ struct RootView: View {
     @EnvironmentObject private var taste: TasteStore
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var store: FeedStore
+    @ObservedObject private var router = AlertRouter.shared
 
     var body: some View {
         TabView {
@@ -82,6 +83,18 @@ struct RootView: View {
         .sheet(isPresented: setupBinding) {
             SetupView()
         }
+        .sheet(item: $router.opened) { opened in
+            NewShowsView(eventIds: opened.eventIds)
+        }
+        .onChange(of: router.opened?.id) { _, _ in
+            // Alerts are about your home area; show it so the new shows are there.
+            if router.opened != nil, store.regionId != taste.profile.alertRegion {
+                Task { await store.switchRegion(to: taste.profile.alertRegion) }
+            }
+        }
+        .onChange(of: taste.profile.dislikedKeys, initial: true) { _, keys in
+            store.hiddenArtistKeys = keys
+        }
     }
 
     private var setupBinding: Binding<Bool> {
@@ -89,5 +102,53 @@ struct RootView: View {
             get: { !taste.profile.finishedSetup && store.feed != nil },
             set: { if !$0 { taste.profile.finishedSetup = true } }
         )
+    }
+}
+
+/// What a tapped alert opens: the shows it announced, then anything else alerts found lately.
+struct NewShowsView: View {
+    @EnvironmentObject private var store: FeedStore
+    @Environment(\.dismiss) private var dismiss
+
+    var eventIds: [String]
+
+    private var announced: [Event] {
+        let wanted = Set(eventIds)
+        return store.events.filter { wanted.contains($0.id) }.sorted { $0.start < $1.start }
+    }
+
+    private var earlier: [Event] {
+        let wanted = Set(eventIds)
+        return AlertHistory.recentEvents(in: store.feed).filter { !wanted.contains($0.id) }
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 10) {
+                    if !announced.isEmpty {
+                        SectionHeader(title: announced.count == 1 ? "Just announced" : "\(announced.count) just announced")
+                        ForEach(announced) { EventLink(event: $0, showsDate: true) }
+                    }
+                    if !earlier.isEmpty {
+                        SectionHeader(title: "Earlier alerts").padding(.top, announced.isEmpty ? 0 : 14)
+                        ForEach(earlier) { EventLink(event: $0, showsDate: true) }
+                    }
+                    if announced.isEmpty && earlier.isEmpty {
+                        Text(store.isRefreshing ? "Loading the latest listings…" : "These shows aren't in the listings anymore.")
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, minHeight: 120)
+                    }
+                }
+                .padding(16)
+            }
+            .screenBackground()
+            .navigationTitle("New shows")
+            .inlineTitle()
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
+            }
+            .marqueeDestinations()
+        }
     }
 }

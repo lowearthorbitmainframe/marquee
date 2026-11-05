@@ -147,10 +147,16 @@ final class FeedStore: ObservableObject {
     func genres(for event: Event) -> [String] {
         var seen = Set<String>()
         return event.artists.compactMap { info(forArtist: $0)?.genre }.filter { seen.insert($0).inserted }
+            + EventTags.tags(for: event)
     }
 
+    /// Artists you disliked, kept in step with your taste by RootView.
+    @Published var hiddenArtistKeys: Set<String> = []
+
+    func isHidden(_ event: Event) -> Bool { Hidden.hides(event, disliked: hiddenArtistKeys) }
+
     func events(on day: Date) -> [Event] {
-        eventsByDay[calendar.startOfDay(for: day)] ?? []
+        (eventsByDay[calendar.startOfDay(for: day)] ?? []).filter { !isHidden($0) }
     }
 
     var today: Date { calendar.startOfDay(for: Date()) }

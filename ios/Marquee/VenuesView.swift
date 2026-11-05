@@ -120,7 +120,7 @@ struct VenueDetailView: View {
 
     var venue: Venue
 
-    private var shows: [Event] { store.events.filter { $0.venueId == venue.id } }
+    private var shows: [Event] { store.events.filter { $0.venueId == venue.id && !store.isHidden($0) } }
     private var isFollowed: Bool { taste.profile.followedVenues.contains(venue.id) }
 
     var body: some View {

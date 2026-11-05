@@ -24,11 +24,13 @@ struct YouView: View {
                         }
                         ForEach(saved) { EventLink(event: $0, showsDate: true) }
                     }
+                    NewShowsSection()
                     YourArtistsShows()
                     RegionSection()
                     AlertsSection()
                     ArtistsEditor()
                     GenresEditor()
+                    HiddenArtistsSection()
                     StatusSection()
                 }
                 .padding(16)
@@ -283,13 +285,70 @@ struct GenresEditor: View {
     @EnvironmentObject private var store: FeedStore
     @EnvironmentObject private var taste: TasteStore
 
+    private var groups: [(title: String, genres: [String])] {
+        [("Music", store.genres), ("Film", EventTags.filmTags), ("Comedy", EventTags.comedyTags)]
+    }
+
+    private var everyGenre: Set<String> { Set(groups.flatMap(\.genres)) }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(title: "Genres")
-            FlowLayout {
-                ForEach(store.genres, id: \.self) { genre in
-                    Chip(title: genre, isOn: taste.profile.genres.contains(genre)) { taste.toggleGenre(genre) }
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                SectionHeader(title: "Genres")
+                Spacer()
+                Button("Select all") { taste.profile.genres.formUnion(everyGenre) }
+                    .disabled(everyGenre.isSubset(of: taste.profile.genres))
+                Button("Clear") { taste.profile.genres.removeAll() }
+                    .disabled(taste.profile.genres.isEmpty)
+                    .padding(.leading, 12)
+            }
+            .font(.subheadline.weight(.medium))
+            ForEach(groups, id: \.title) { group in
+                if !group.genres.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(group.title).font(.subheadline.weight(.semibold)).foregroundStyle(.secondary)
+                        FlowLayout {
+                            ForEach(group.genres, id: \.self) { genre in
+                                Chip(title: EventTags.label(genre), isOn: taste.profile.genres.contains(genre)) { taste.toggleGenre(genre) }
+                            }
+                        }
+                    }
                 }
+            }
+        }
+    }
+}
+
+/// Artists you gave a thumbs down. Tap one to see their shows again.
+struct HiddenArtistsSection: View {
+    @EnvironmentObject private var taste: TasteStore
+
+    var body: some View {
+        let hidden = taste.profile.dislikedArtists ?? []
+        if !hidden.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                SectionHeader(title: "Hidden artists", subtitle: "Their shows don't appear. Tap one to bring them back.")
+                FlowLayout {
+                    ForEach(hidden, id: \.self) { artist in
+                        Chip(title: artist, isOn: false) { taste.toggleDisliked(artist) }
+                            .accessibilityHint("Shows this artist again")
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Shows that alerts told you about, newest first.
+struct NewShowsSection: View {
+    @EnvironmentObject private var store: FeedStore
+
+    var body: some View {
+        let events = AlertHistory.recentEvents(in: store.feed)
+        if !events.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                SectionHeader(title: "Newly announced", subtitle: "From your alerts in the last two weeks")
+                ForEach(events) { EventLink(event: $0, showsDate: true) }
             }
         }
     }

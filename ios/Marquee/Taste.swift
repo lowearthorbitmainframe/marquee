@@ -15,6 +15,8 @@ struct TasteProfile: Codable, Equatable {
     var alertsEnabled: Bool?
     /// Alerts only cover this region, whichever one you're browsing.
     var homeRegion: String?
+    /// Artists you never want to see. Their shows are hidden.
+    var dislikedArtists: [String]?
 
     var alertRegion: String { homeRegion ?? FeedConfig.defaultRegion.id }
 
@@ -22,6 +24,8 @@ struct TasteProfile: Codable, Equatable {
     var watchedArtistKeys: Set<String> {
         Set((favoriteArtists + libraryArtists + (savedArtists ?? [])).map(ArtistKey.make))
     }
+
+    var dislikedKeys: Set<String> { Set((dislikedArtists ?? []).map(ArtistKey.make)) }
 
     var isEmpty: Bool {
         followedVenues.isEmpty && favoriteArtists.isEmpty && libraryArtists.isEmpty && genres.isEmpty
@@ -66,6 +70,21 @@ final class TasteStore: ObservableObject {
     }
     func toggleGenre(_ genre: String) { profile.genres.toggle(genre) }
 
+    func isDisliked(_ artist: String) -> Bool { profile.dislikedKeys.contains(ArtistKey.make(artist)) }
+
+    /// Hides their shows and stops following them.
+    func toggleDisliked(_ artist: String) {
+        let key = ArtistKey.make(artist)
+        var disliked = profile.dislikedArtists ?? []
+        if isDisliked(artist) {
+            disliked.removeAll { ArtistKey.make($0) == key }
+        } else {
+            disliked.insert(artist, at: 0)
+            profile.favoriteArtists.removeAll { ArtistKey.make($0) == key }
+        }
+        profile.dislikedArtists = disliked
+    }
+
     func isFavorite(_ artist: String) -> Bool {
         let key = ArtistKey.make(artist)
         return profile.favoriteArtists.contains { ArtistKey.make($0) == key }
@@ -101,6 +120,16 @@ extension TasteProfile {
     }
 }
 
+enum Hidden {
+    /// A show is hidden when its headliner (or, with no lineup, its title) is
+    /// someone you disliked. A disliked opener doesn't hide a show you might want.
+    static func hides(_ event: Event, disliked: Set<String>) -> Bool {
+        guard !disliked.isEmpty else { return false }
+        if let headliner = event.artists.first { return disliked.contains(ArtistKey.make(headliner)) }
+        return disliked.contains(ArtistKey.make(event.title))
+    }
+}
+
 struct Recommendation {
     var score: Int
     var reason: String?
@@ -117,6 +146,7 @@ struct Recommender {
     private let genres: Set<String>
     private let followed: Set<String>
     private let dismissed: Set<String>
+    private let disliked: Set<String>
     private let artists: [String: ArtistInfo]
 
     init(taste: TasteProfile, feed: Feed?) {
@@ -125,13 +155,20 @@ struct Recommender {
         genres = taste.genres
         followed = taste.followedVenues
         dismissed = taste.dismissedEvents
+        disliked = taste.dislikedKeys
         artists = feed?.artists ?? [:]
     }
 
     func recommend(_ event: Event) -> Recommendation {
-        if dismissed.contains(event.id) { return Recommendation(score: -1, reason: nil) }
+        if dismissed.contains(event.id) || Hidden.hides(event, disliked: disliked) { return Recommendation(score: -1, reason: nil) }
         var score = 0
         var reasons: [(Int, String)] = []
+
+        // Film and comedy genres come from the show itself, not an artist.
+        if let tag = EventTags.tags(for: event).first(where: genres.contains) {
+            score += 25
+            reasons.append((25, EventTags.label(tag)))
+        }
 
         for name in event.artists {
             let key = ArtistKey.make(name)

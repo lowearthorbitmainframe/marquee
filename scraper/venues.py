@@ -7,6 +7,20 @@ GREATER_LA = [
     "Santa Ana", "Anaheim", "Costa Mesa", "Garden Grove", "Fullerton", "Irvine", "Huntington Beach",
 ]
 
+# DICE city pages show only the soonest 20 or so shows per page, so genre pages
+# reach further into raves, after-hours, hip hop, jazz and classical.
+DICE_CATEGORIES = {
+    "music/gig": "music", "music/dj": "party", "music/party": "party",
+    "culture/comedy": "comedy", "culture/film": "film", "culture/theatre": "theater",
+    "music/gig/hiphop": "music", "music/gig/rap": "music", "music/gig/jazz": "music",
+    "music/gig/classical": "music", "music/gig/chamber": "music", "music/gig/experimental": "music",
+    "music/dj/techno": "party", "music/dj/hard_techno": "party", "music/dj/house": "party",
+    "music/dj/tech-house": "party", "music/dj/drumnbass": "party", "music/dj/bass": "party",
+    "music/dj/hiphop": "party", "music/dj/afrohouse": "party", "music/dj/ukg": "party",
+    "music/party/techno": "party", "music/party/house": "party", "music/party/hiphop": "party",
+    "music/party/lgbtq+": "party",
+}
+
 # Each source is one fetch. `adapter` names a function in adapters.py.
 LOS_ANGELES = {
     "id": "los-angeles",
@@ -58,6 +72,15 @@ LOS_ANGELES = {
         {"adapter": "improv", "url": "https://improv.com/brea/calendar/", "venue": "brea-improv", "category": "comedy"},
         {"adapter": "improv", "url": "https://improv.com/irvine/calendar/", "venue": "irvine-improv", "category": "comedy"},
         {"adapter": "laugh_factory", "url": "https://www.laughfactory.com/hollywood", "venue": "laugh-factory-hollywood", "category": "comedy"},
+        {"adapter": "comedy_store", "url": "https://thecomedystore.com/calendar/by-month", "venue": "the-comedy-store", "category": "comedy"},
+        {
+            "adapter": "webflow_shows", "url": "https://calendar.dynastytypewriter.com/", "venue": "dynasty-typewriter",
+            "card": "w-dyn-item", "title": "uui-heading-xxsmall-2", "category": "comedy",
+        },
+        # Jazz and classical
+        {"adapter": "ticketweb_plugin", "url": "https://catalinajazzclub.com/", "venue": "catalina-jazz-club"},
+        {"adapter": "wix_events", "url": "https://www.samfirstbar.com/", "venue": "sam-first"},
+        {"adapter": "colburn", "url": "https://colburnschool.edu/calendar/", "venue": "colburn-school", "category": "music"},
         # Film
         {"adapter": "new_beverly", "url": "https://thenewbev.com/schedule/", "venue": "new-beverly-cinema", "category": "film"},
         {"adapter": "nightjar_cinema", "url": "https://vidiotsfoundation.org/coming-soon/", "venue": "vidiots", "category": "film"},
@@ -67,6 +90,17 @@ LOS_ANGELES = {
         # Theater
         {"adapter": "live_nation", "url": "https://www.broadwayinhollywood.com/events", "venue": "pantages-theatre", "category": "theater"},
         {"adapter": "tribe_events", "url": "https://www.pasadenaplayhouse.org", "venue": "pasadena-playhouse", "name": "Pasadena Playhouse", "category": "theater"},
+        {"adapter": "la_opera", "url": "https://www.laopera.org/whats-on/by-date", "venue": "dorothy-chandler-pavilion", "category": "theater"},
+        {"adapter": "geffen", "url": "https://www.geffenplayhouse.org/tickets/", "venue": "geffen-playhouse", "category": "theater"},
+        {"adapter": "cap_ucla", "label": "cap ucla", "url": "https://cap.ucla.edu/calendar", "category": "theater"},
+        {
+            "adapter": "spektrix", "label": "los angeles ballet", "client": "laballet", "presenter": "Los Angeles Ballet",
+            "site": "https://www.losangelesballet.org/", "venue": "los-angeles-ballet-center", "category": "theater",
+        },
+        {
+            "adapter": "spektrix", "label": "latino theater company", "client": "latinotheater", "rooms": r"^theat(er|re) \d",
+            "site": "https://www.latinotheaterco.org/", "venue": "los-angeles-theatre-center", "category": "theater",
+        },
         {
             "adapter": "la_phil",
             "label": "la phil",
@@ -91,10 +125,7 @@ LOS_ANGELES = {
             "adapter": "dice_city",
             "label": "dice.fm city",
             "url": "https://dice.fm/browse/losangeles-5982e13c613de866017c3e3a",
-            "categories": {
-                "music/gig": "music", "music/dj": "party", "music/party": "party",
-                "culture/comedy": "comedy", "culture/film": "film", "culture/theatre": "theater",
-            },
+            "categories": DICE_CATEGORIES,
         },
         {
             "adapter": "ticketmaster",
@@ -120,6 +151,18 @@ LOS_ANGELES = {
         "hollywood-improv": {"name": "Hollywood Improv", "neighborhood": "Hollywood", "address": "8162 Melrose Ave, Los Angeles, CA 90046", "url": "https://improv.com/hollywood/"},
         "brea-improv": {"name": "Brea Improv", "neighborhood": "Brea", "address": "120 S Brea Blvd, Brea, CA 92821", "url": "https://improv.com/brea/"},
         "irvine-improv": {"name": "Irvine Improv", "neighborhood": "Irvine", "address": "527 Spectrum Center Dr, Irvine, CA 92618", "url": "https://improv.com/irvine/"},
+        "the-comedy-store": {"name": "The Comedy Store", "neighborhood": "West Hollywood", "address": "8433 W Sunset Blvd, West Hollywood, CA 90069", "url": "https://thecomedystore.com/calendar"},
+        "dynasty-typewriter": {"name": "Dynasty Typewriter", "neighborhood": "Westlake", "address": "2511 Wilshire Blvd, Los Angeles, CA 90057", "url": "https://www.dynastytypewriter.com/"},
+        "catalina-jazz-club": {"name": "Catalina Jazz Club", "neighborhood": "Hollywood", "address": "6725 Sunset Blvd, Los Angeles, CA 90028", "url": "https://catalinajazzclub.com/"},
+        "sam-first": {"name": "Sam First", "neighborhood": "Westchester", "address": "6171 W Century Blvd, Los Angeles, CA 90045", "url": "https://www.samfirstbar.com/"},
+        "colburn-school": {"name": "Colburn School", "neighborhood": "Downtown", "address": "200 S Grand Ave, Los Angeles, CA 90012", "url": "https://colburnschool.edu/calendar/"},
+        "dorothy-chandler-pavilion": {"name": "Dorothy Chandler Pavilion", "neighborhood": "Downtown", "address": "135 N Grand Ave, Los Angeles, CA 90012", "url": "https://www.laopera.org/"},
+        "geffen-playhouse": {"name": "Geffen Playhouse", "neighborhood": "Westwood", "address": "10886 Le Conte Ave, Los Angeles, CA 90024", "url": "https://www.geffenplayhouse.org/"},
+        "royce-hall": {"name": "Royce Hall", "neighborhood": "Westwood", "address": "340 Royce Dr, Los Angeles, CA 90095", "url": "https://cap.ucla.edu/"},
+        "the-nimoy": {"name": "The Nimoy", "neighborhood": "Westwood", "address": "1262 Westwood Blvd, Los Angeles, CA 90024", "url": "https://cap.ucla.edu/"},
+        "freud-playhouse": {"name": "Freud Playhouse", "neighborhood": "Westwood", "address": "245 Charles E Young Dr E, Los Angeles, CA 90095", "url": "https://cap.ucla.edu/"},
+        "los-angeles-ballet-center": {"name": "Los Angeles Ballet Center", "neighborhood": "West LA", "url": "https://www.losangelesballet.org/"},
+        "los-angeles-theatre-center": {"name": "Los Angeles Theatre Center", "neighborhood": "Downtown", "address": "514 S Spring St, Los Angeles, CA 90013", "url": "https://www.latinotheaterco.org/"},
         "laugh-factory-hollywood": {"name": "Laugh Factory", "neighborhood": "West Hollywood", "address": "8001 W Sunset Blvd, Los Angeles, CA 90046", "url": "https://www.laughfactory.com/hollywood"},
         "vidiots": {"name": "Vidiots", "neighborhood": "Eagle Rock", "address": "4884 Eagle Rock Blvd, Los Angeles, CA 90041", "url": "https://vidiotsfoundation.org/"},
         "the-frida-cinema": {"name": "The Frida Cinema", "neighborhood": "Santa Ana", "address": "305 E 4th St, Santa Ana, CA 92701", "url": "https://thefridacinema.org/"},
@@ -228,10 +271,7 @@ BAY_AREA = {
             "adapter": "dice_city",
             "label": "dice.fm city",
             "url": "https://dice.fm/browse/sanfrancisco-60dee10ce5e339918757f0db",
-            "categories": {
-                "music/gig": "music", "music/dj": "party", "music/party": "party",
-                "culture/comedy": "comedy", "culture/film": "film", "culture/theatre": "theater",
-            },
+            "categories": DICE_CATEGORIES,
         },
         {
             "adapter": "ticketmaster",

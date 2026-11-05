@@ -47,7 +47,7 @@ CATEGORIES = [
     ("film", re.compile(r"\b(screening|film festival|movie night|in 35mm|in 70mm|double feature)\b", re.I)),
     ("theater", re.compile(r"\b(the musical|a new play|broadway)\b", re.I)),
     ("party", re.compile(r"\b(dance party|rave|dj night|emo night|karaoke|club night|drag|burlesque|b2b|"
-                         r"all night long|open to close|extended set|afters|warehouse party|day party|"
+                         r"all night long|open to close|extended set|afters|after[- ]?hours|after[- ]?party|warehouse party|day party|"
                          r"techno|house music|drum (?:&|and) bass|dnb)\b", re.I)),
     ("other", re.compile(r"\b(podcast|market|bingo|trivia|workshop|brunch|in conversation)\b", re.I)),
 ]
