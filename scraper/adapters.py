@@ -152,6 +152,7 @@ def live_nation(source, fetch, today):
     for item in json_ld_events(fetch(source["url"])):
         events.append({
             "venue": source["venue"],
+            "category": JSON_LD_CATEGORIES.get(item.get("@type")),
             "venue_info": {"address": json_ld_address(item.get("location"))},
             "title": item["name"],
             "start": parse_iso(item["startDate"]),
@@ -166,6 +167,13 @@ def offer_url(offers):
     if isinstance(offers, list):
         offers = offers[0] if offers else None
     return offers.get("url") if isinstance(offers, dict) else None
+
+
+# A venue's own JSON-LD says what kind of show each one is.
+JSON_LD_CATEGORIES = {
+    "MusicEvent": "music", "ComedyEvent": "comedy", "TheaterEvent": "theater",
+    "ScreeningEvent": "film", "DanceEvent": "theater",
+}
 
 
 def json_ld_address(location):
@@ -418,11 +426,19 @@ def dice_city(source, fetch, today):
     """DICE's city pages. Their robots rules allow listings that link back.
     Each category shows only its soonest 20 or so shows."""
     seen = {}
-    for category in source["categories"]:
-        for item in next_data(fetch("%s/%s" % (source["url"], category)))["events"]:
+    categories = {}
+    for path, category in source["categories"].items():
+        for item in next_data(fetch("%s/%s" % (source["url"], path)))["events"]:
             seen[item["id"]] = item
+            categories.setdefault(item["id"], category)
         time.sleep(1)
-    return [e for e in (dice_event(item) for item in seen.values()) if e]
+    events = []
+    for item_id, item in seen.items():
+        event = dice_event(item)
+        if event:
+            event["category"] = categories[item_id]
+            events.append(event)
+    return events
 
 
 def dice_venues(source, fetch, today):
@@ -497,7 +513,7 @@ def tribe_events(source, fetch, today):
         data = json.loads(fetch(url))
         for item in data.get("events") or []:
             categories = " ".join(c.get("name", "") for c in item.get("categories") or [])
-            title = clean_text(item.get("title"))
+            title = clean_text(re.split(r"<\s*/?br\s*/?>", item.get("title") or "")[0])
             if skip and (skip.search(title) or skip.search(categories)):
                 continue
             venue = item.get("venue") if isinstance(item.get("venue"), dict) else {}
@@ -604,6 +620,21 @@ def troubadour(source, fetch, today):
     return events
 
 
+# Music, Arts & Theatre, and Film.
+TICKETMASTER_SEGMENTS = {"KZFzniwnSyZfZ7v7nJ": "music", "KZFzniwnSyZfZ7v7na": "theater", "KZFzniwnSyZfZ7v7nn": "film"}
+
+
+def ticketmaster_category(item):
+    classification = (item.get("classifications") or [{}])[0]
+    segment = TICKETMASTER_SEGMENTS.get((classification.get("segment") or {}).get("id"), "other")
+    genre = ((classification.get("genre") or {}).get("name") or "").lower()
+    if segment == "theater" and "comedy" in genre:
+        return "comedy"
+    if segment == "theater" and genre not in ("theatre", "musical", "opera", "dance", "classical", "performance art", "children's theatre", "magic & illusion", "cultural", "spectacular", "circus & specialty acts", "puppetry", "variety"):
+        return "theater" if "theat" in genre or "music" in genre else "other"
+    return segment
+
+
 TICKETMASTER_NOT_SHOWS = re.compile(r"\b(parking|vip|package|suite|premium|shuttle|upgrade|voucher|gift card|add-?on)\b", re.I)
 
 
@@ -636,6 +667,7 @@ def parse_ticketmaster(item):
         "image": images[-1].get("url") if images else None,
         "price": "From $%d" % round(prices[0]["min"]) if prices and prices[0].get("min") else None,
         "cancelled": status in ("cancelled", "postponed"),
+        "category": ticketmaster_category(item),
     }
 
 
@@ -648,7 +680,7 @@ def ticketmaster(source, fetch, today):
     events = []
     for page in range(source.get("pages", 5)):
         query = urllib.parse.urlencode({
-            "apikey": key, "dmaId": source["dma"], "classificationName": "music",
+            "apikey": key, "dmaId": source["dma"], "segmentId": ",".join(TICKETMASTER_SEGMENTS),
             "size": 200, "page": page, "sort": "date,asc", "locale": "en-us",
         })
         try:
@@ -663,4 +695,132 @@ def ticketmaster(source, fetch, today):
         if page + 1 >= (info.get("totalPages") or 0):
             break
         time.sleep(0.3)
+    return events
+
+
+def new_beverly(source, fetch, today):
+    """Quentin Tarantino's New Beverly Cinema."""
+    events = []
+    for card in fetch(source["url"]).split('<article class="event-card')[1:]:
+        link = re.search(r'href="([^"]+)"', card)
+        title = re.search(r'event-card__title">\s*(.*?)\s*</h4>', card, re.S)
+        month = re.search(r'event-card__month">([^<]+)<', card)
+        number = re.search(r'event-card__numb">(\d+)<', card)
+        if not (link and title and month and number):
+            continue
+        day = parse_month_day("%s %s" % (month.group(1), number.group(1)), today)
+        clock = re.search(r'event-card__time">([^<]+)<', card)
+        note = re.search(r'event-card__link">\s*([^<]+?)\s*<', card)
+        image = re.search(r'<img src="([^"]+)"', card)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(1)),
+            "start": combine(day, parse_clock(clock.group(1)) if clock else None),
+            "url": link.group(1),
+            "ticket_url": link.group(1),
+            "image": image.group(1) if image else None,
+            "sold_out": bool(note and "sold out" in note.group(1).lower() and "door" not in note.group(1).lower()),
+        })
+    return events
+
+
+def improv(source, fetch, today):
+    """Improv comedy clubs. Lineups follow 'ft.' in the title."""
+    events = []
+    for card in re.split(r'<a class="item[ "]', fetch(source["url"]))[1:]:
+        link = re.search(r'href="([^"]+)"', card)
+        month = re.search(r"<dt>(\w+)</dt>\s*<dd>(\d+)", card)
+        main = re.search(r'lt-main">(.*?)</span>', card, re.S) or re.search(r"<h3>(.*?)</h3>", card, re.S)
+        if not (link and month and main):
+            continue
+        day = parse_month_day("%s %s" % month.groups(), today)
+        rest = re.search(r'lt-rest">(.*?)</span>', card, re.S)
+        times = re.search(r'class="times">(.*?)</div>', card, re.S)
+        clocks = [parse_clock(t) for t in re.findall(r"<span>([^<]+)</span>", times.group(1))] if times else []
+        room = re.search(r'class="city">\s*@?\s*([^<]+?)\s*<', card)
+        image = re.search(r'data-src="([^"]+)"', card)
+        lineup = clean_text(rest.group(1)) if rest else ""
+        lineup = re.sub(r"^\s*(ft\.?|feat\.?|featuring|with|w/)\s*", "", lineup, flags=re.I)
+        url = urllib.parse.urljoin(source["url"], link.group(1))
+        # One card can list several showtimes on the same day.
+        for clock in [c for c in clocks if c] or [None]:
+            events.append({
+                "venue": source["venue"],
+                "title": clean_text(main.group(1)),
+                "tour": room.group(1) if room else None,
+                "artists": [n.strip() for n in re.split(r",\s*|\s+and\s+|\s*&\s*", lineup) if 2 <= len(n.strip()) <= 40],
+                "start": combine(day, clock),
+                "url": url,
+                "ticket_url": url,
+                "image": image.group(1) if image else None,
+                "sold_out": "soldout" in card.replace(" ", "").lower(),
+            })
+    return events
+
+
+def laugh_factory(source, fetch, today):
+    """Laugh Factory sells through Eventbrite but lists shows with real timestamps."""
+    page = fetch(source["url"])
+    events = []
+    for card in page.split('<time class="')[1:]:
+        stamp = re.search(r'dateTime="([^"]+)"', card)
+        title = re.search(r'_title">(.*?)</h3>', card, re.S)
+        if not (stamp and title):
+            continue
+        lineup = re.search(r'_description">(.*?)</p>', card, re.S)
+        ticket = re.search(r"eventbrite-checkout-(\d+)", card)
+        names = re.split(r",\s*|\s+and\s+", clean_text(lineup.group(1)).rstrip("!.")) if lineup else []
+        events.append({
+            "venue": source["venue"],
+            "title": re.sub(r"\s+\d{1,2}:\d{2}\s*[AP]M$", "", clean_text(title.group(1))),
+            "artists": [n.strip() for n in names if 2 <= len(n.strip()) <= 40],
+            "start": parse_iso(stamp.group(1)),
+            "ticket_url": "https://www.eventbrite.com/e/%s" % ticket.group(1) if ticket else source["url"],
+            "url": source["url"],
+        })
+    return events
+
+
+CINEMATHEQUE_VENUES = {"Los Feliz Theatre": "los-feliz-3", "Aero Theatre": "aero-theatre", "Egyptian Theatre": "egyptian-theatre"}
+
+
+def cinematheque(source, fetch, today):
+    """American Cinematheque runs the Egyptian, the Aero and the Los Feliz 3."""
+    events = []
+    fields = "id,title,link,acf"
+    for page in range(1, source.get("pages", 4) + 1):
+        url = "%s?per_page=100&page=%d&orderby=date&order=desc&_fields=%s" % (source["url"], page, fields)
+        try:
+            items = json.loads(fetch(url))
+        except Exception:
+            break
+        for item in items:
+            acf = item.get("acf") or {}
+            hero = acf.get("event_hero") or {}
+            locations = (acf.get("location_section") or {}).get("locations") or [{}]
+            place = (locations[0].get("location_select") or {}).get("name")
+            if place not in CINEMATHEQUE_VENUES or not hero.get("dates"):
+                continue
+            try:
+                day = datetime.strptime(hero["dates"].title(), "%a %b %d, %Y").date()
+            except ValueError:
+                continue
+            if day < today:
+                continue
+            details = acf.get("event_details") or {}
+            director = clean_text(details.get("director"))
+            events.append({
+                "venue": CINEMATHEQUE_VENUES[place],
+                "title": clean_text(hero.get("hero_title") or (item.get("title") or {}).get("rendered")),
+                "tour": "Directed by " + director if director else None,
+                "start": combine(day, parse_clock(hero.get("times"))),
+                "url": item.get("link"),
+                "ticket_url": item.get("link"),
+                "image": hero.get("image_url"),
+                "price": clean_text(hero.get("pricing")) or None,
+                "sold_out": bool(hero.get("sold_out")),
+            })
+        if len(items) < 100:
+            break
+        time.sleep(1)
     return events

@@ -81,6 +81,44 @@ struct SourceStatus: Codable, Hashable {
     var error: String?
 }
 
+enum EventCategory: String, CaseIterable, Identifiable {
+    case music, comedy, film, theater, party, other
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .music: "Music"
+        case .comedy: "Comedy"
+        case .film: "Film"
+        case .theater: "Theater"
+        case .party: "Nightlife"
+        case .other: "Other"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .music: "music.mic"
+        case .comedy: "face.smiling"
+        case .film: "film"
+        case .theater: "theatermasks"
+        case .party: "sparkles"
+        case .other: "star"
+        }
+    }
+
+    /// The filters people pick from; "Other" is only ever part of "All".
+    static let filters: [EventCategory] = [.music, .comedy, .film, .theater, .party]
+
+    /// Music and nightlife acts have Apple Music pages; comedians and films don't.
+    var hasMusicLinks: Bool { self == .music || self == .party }
+}
+
+extension Event {
+    var kind: EventCategory { EventCategory(rawValue: category) ?? .other }
+}
+
 enum ArtistKey {
     /// Must stay in step with `artist_key` in scraper/titles.py.
     static func make(_ name: String) -> String {

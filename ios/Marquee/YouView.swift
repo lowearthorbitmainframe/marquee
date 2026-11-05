@@ -76,6 +76,14 @@ struct SetupView: View {
     @EnvironmentObject private var taste: TasteStore
     @Environment(\.dismiss) private var dismiss
 
+    @State private var showsAllVenues = false
+
+    /// The busiest rooms first; the long tail waits behind "Show all".
+    private var venues: [Venue] {
+        let sorted = store.venues.sorted { (store.showCounts[$0.id] ?? 0) > (store.showCounts[$1.id] ?? 0) }
+        return showsAllVenues ? sorted : Array(sorted.prefix(24))
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -83,11 +91,15 @@ struct SetupView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         SectionHeader(title: "Your venues", subtitle: "Their shows come first")
                         FlowLayout {
-                            ForEach(store.venues) { venue in
+                            ForEach(venues) { venue in
                                 Chip(title: venue.name, isOn: taste.profile.followedVenues.contains(venue.id)) {
                                     taste.toggleVenue(venue.id)
                                 }
                             }
+                        }
+                        if store.venues.count > 24 {
+                            Button(showsAllVenues ? "Show fewer" : "Show all \(store.venues.count) venues") { showsAllVenues.toggle() }
+                                .frame(minHeight: 44)
                         }
                     }
                     ArtistsEditor()

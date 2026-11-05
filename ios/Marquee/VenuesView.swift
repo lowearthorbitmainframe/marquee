@@ -5,12 +5,14 @@ struct VenuesView: View {
     @EnvironmentObject private var taste: TasteStore
 
     @State private var search = ""
+    @State private var category: EventCategory?
 
     private var filtered: [Venue] {
         let term = search.trimmingCharacters(in: .whitespaces)
         let matching = store.venues.filter {
-            term.isEmpty || $0.name.localizedCaseInsensitiveContains(term)
-                || ($0.neighborhood ?? "").localizedCaseInsensitiveContains(term)
+            (category == nil || store.venueKinds[$0.id]?.contains(category!) == true)
+                && (term.isEmpty || $0.name.localizedCaseInsensitiveContains(term)
+                    || ($0.neighborhood ?? "").localizedCaseInsensitiveContains(term))
         }
         return matching.sorted { first, second in
             let firstFollowed = taste.profile.followedVenues.contains(first.id)
@@ -21,13 +23,14 @@ struct VenuesView: View {
     }
 
     private func showCount(_ venue: Venue) -> Int {
-        store.events.lazy.filter { $0.venueId == venue.id }.count
+        store.showCounts[venue.id] ?? 0
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 10) {
+                    CategoryChips(selection: $category)
                     ForEach(filtered) { venue in
                         NavigationLink(value: venue) {
                             VenueRow(venue: venue, nextShow: nextShow(at: venue), showCount: showCount(venue))

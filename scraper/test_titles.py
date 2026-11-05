@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from adapters import image_url, parse_iso, parse_ticketmaster, slugify
+from adapters import image_url, parse_iso, parse_ticketmaster, slugify, ticketmaster_category
 from scrape import normalize, remove_duplicates
 from titles import artist_key, classify, display_title, is_sold_out, parse_artists
 
@@ -73,10 +73,15 @@ class Helpers(unittest.TestCase):
         self.assertNotIn("timeTBA", normalize(raw, zone))
 
     def test_same_show_from_two_sources_is_kept_once(self):
-        first = {"venueId": "1720", "start": "2026-11-07T20:00:00-08:00", "artists": ["Gutalax"], "title": "Gutalax"}
-        second = dict(first, title="GUTALAX with Friends", artists=["Gutalax", "Spasm"])
+        first = {"venueId": "1720", "start": "2026-11-07T20:00:00-08:00", "artists": ["Gutalax"], "title": "Gutalax", "source": "1720"}
+        second = dict(first, title="GUTALAX with Friends", artists=["Gutalax", "Spasm"], source="dice.fm venues")
         other_day = dict(first, start="2026-11-08T20:00:00-08:00")
         self.assertEqual(remove_duplicates([first, second, other_day]), [first, other_day])
+
+    def test_early_and_late_shows_from_one_source_both_stay(self):
+        early = {"venueId": "laugh-factory-hollywood", "start": "2026-11-06T19:30:00-08:00", "artists": ["Earthquake"], "title": "All-Star Comedy", "source": "laugh-factory-hollywood"}
+        late = dict(early, start="2026-11-06T22:00:00-08:00")
+        self.assertEqual(remove_duplicates([early, late]), [early, late])
 
     def test_venue_spellings_merge(self):
         self.assertEqual(slugify("The Roxy Theatre"), "the-roxy")
@@ -113,6 +118,22 @@ class Helpers(unittest.TestCase):
     def test_written_out_json_ld_date(self):
         self.assertEqual(parse_iso("Nov 05, 2026"), datetime(2026, 11, 5))
         self.assertIsNone(parse_iso("TBD"))
+
+    def test_film_titles_are_not_artists(self):
+        zone = ZoneInfo("America/Los_Angeles")
+        raw = {"venue": "new-beverly-cinema", "title": "Double Harness / Peter Ibbetson",
+               "start": datetime(2026, 11, 5, 19, 30), "category": "film"}
+        event = normalize(raw, zone)
+        self.assertEqual(event["category"], "film")
+        self.assertEqual(event["artists"], [])
+
+    def test_ticketmaster_categories(self):
+        def item(segment, genre):
+            return {"classifications": [{"segment": {"id": segment}, "genre": {"name": genre}}]}
+        self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7nJ", "Rock")), "music")
+        self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7na", "Comedy")), "comedy")
+        self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7na", "Theatre")), "theater")
+        self.assertEqual(ticketmaster_category(item("KZFzniwnSyZfZ7v7nn", "Drama")), "film")
 
     def test_image_shapes(self):
         self.assertEqual(image_url("a.jpg"), "a.jpg")

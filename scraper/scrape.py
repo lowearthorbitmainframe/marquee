@@ -64,15 +64,20 @@ def normalize(raw, zone):
     if not title or not raw.get("start"):
         return None
     start = to_local(raw["start"], zone)
+    category = raw.get("category") or classify(title)
     # Sources that give a lineup, even an empty one, are trusted over guessing from the title.
-    artists = merge_artists(raw["artists"]) if "artists" in raw else parse_artists(title)
+    # Film and theater titles are never band names.
+    if "artists" in raw:
+        artists = merge_artists(raw["artists"])
+    else:
+        artists = parse_artists(title) if category in ("music", "party", "comedy") else []
     event = {
         "id": event_id(raw, start),
         "venueId": raw["venue"],
         "title": display_title(title),
         "artists": artists,
         "start": start.isoformat(),
-        "category": classify(title),
+        "category": category,
         "soldOut": bool(raw.get("sold_out")) or is_sold_out(title),
         "cancelled": bool(raw.get("cancelled")) or is_cancelled(title),
     }
@@ -90,15 +95,17 @@ def normalize(raw, zone):
 
 
 def remove_duplicates(events):
-    """Sources can list the same show. The first source to list it wins."""
+    """Sources can list the same show. The first source to list it wins.
+    Two listings from one source are separate shows, like an early and a late set."""
     kept = []
-    seen = set()
+    seen = {}
     for event in events:
         names = event["artists"] or [event["title"]]
         keys = {(event["venueId"], event["start"][:10], artist_key(name)) for name in names}
-        if keys & seen:
+        if any(seen.get(key, event.get("source")) != event.get("source") for key in keys):
             continue
-        seen |= keys
+        for key in keys:
+            seen.setdefault(key, event.get("source"))
         kept.append(event)
     return kept
 
@@ -131,6 +138,9 @@ def scrape_city(city, run_enrich, budget, minutes):
         status = {"source": label, "adapter": source["adapter"]}
         try:
             raws = adapter(source, fetch, today)
+            for raw in raws:
+                if source.get("category") and not raw.get("category"):
+                    raw["category"] = source["category"]
             normalized = [dict(e, source=label) for e in (normalize(r, zone) for r in raws) if e]
             if not normalized:
                 raise ValueError("no events found")
@@ -144,6 +154,11 @@ def scrape_city(city, run_enrich, budget, minutes):
                     if info and info.get(field):
                         venues[raw["venue"]].setdefault(field, info[field])
             for event in normalized:
+                # Early and late sets share a title, so tell them apart by time.
+                # Other shows keep their plain ID, which the app uses for saved shows.
+                clash = events.get(event["id"])
+                if clash and clash["start"] != event["start"] and clash.get("source") == event["source"]:
+                    event["id"] += "-" + event["start"][11:16].replace(":", "")
                 events[event["id"]] = event
             status.update(ok=True, count=len(normalized))
         except adapters.Skip:
@@ -172,7 +187,8 @@ def scrape_city(city, run_enrich, budget, minutes):
 
     cache = load_json(artist_path, {})
     if run_enrich:
-        names = [name for event in upcoming for name in event["artists"]]
+        # Only musicians have Apple Music pages and similar artists worth looking up.
+        names = [name for event in upcoming if event["category"] in ("music", "party") for name in event["artists"]]
         deadline = time.time() + minutes * 60
         save = lambda: artist_path.write_text(json.dumps(cache, indent=0, sort_keys=True))
         done = enricher.enrich(names, cache, fetch, budget, deadline, save)

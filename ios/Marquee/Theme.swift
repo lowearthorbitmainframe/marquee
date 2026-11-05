@@ -56,6 +56,24 @@ struct SectionHeader: View {
     }
 }
 
+/// A scrolling row of category chips, with "All" first.
+struct CategoryChips: View {
+    @Binding var selection: EventCategory?
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                Chip(title: "All", isOn: selection == nil) { selection = nil }
+                ForEach(EventCategory.filters) { category in
+                    Chip(title: category.label, isOn: selection == category) {
+                        selection = selection == category ? nil : category
+                    }
+                }
+            }
+        }
+    }
+}
+
 struct Chip: View {
     var title: String
     var isOn: Bool

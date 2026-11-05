@@ -15,6 +15,9 @@ final class FeedStore: ObservableObject {
 
     private(set) var venuesById: [String: Venue] = [:]
     private(set) var eventsByDay: [Date: [Event]] = [:]
+    /// Worked out once per feed, so lists of venues stay fast.
+    private(set) var showCounts: [String: Int] = [:]
+    private(set) var venueKinds: [String: Set<EventCategory>] = [:]
     private(set) var calendar = Calendar(identifier: .gregorian)
     private var lastChecked: Date?
 
@@ -80,6 +83,8 @@ final class FeedStore: ObservableObject {
         self.calendar = calendar
         venuesById = Dictionary(feed.venues.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         eventsByDay = Dictionary(grouping: feed.events) { calendar.startOfDay(for: $0.start) }
+        showCounts = feed.events.reduce(into: [:]) { $0[$1.venueId, default: 0] += 1 }
+        venueKinds = feed.events.reduce(into: [:]) { $0[$1.venueId, default: []].insert($1.kind) }
         self.feed = feed
     }
 

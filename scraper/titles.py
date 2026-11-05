@@ -40,10 +40,14 @@ WHOLE_EVENT = re.compile(
     r"\b(dance party|emo night|karaoke|trivia|bingo|open mic|comedy night)\b",
     re.I,
 )
+# The categories the app filters by. Sources can set one; otherwise the title decides.
+CATEGORY_NAMES = ("music", "comedy", "film", "theater", "party", "other")
 CATEGORIES = [
     ("comedy", re.compile(r"\b(comedy|comedians?|stand[- ]?up|improv)\b", re.I)),
+    ("film", re.compile(r"\b(screening|film festival|movie night|in 35mm|in 70mm|double feature)\b", re.I)),
+    ("theater", re.compile(r"\b(the musical|a new play|broadway)\b", re.I)),
     ("party", re.compile(r"\b(dance party|rave|dj night|emo night|karaoke|club night|drag|burlesque)\b", re.I)),
-    ("other", re.compile(r"\b(podcast|screening|market|bingo|trivia|workshop|brunch|in conversation)\b", re.I)),
+    ("other", re.compile(r"\b(podcast|market|bingo|trivia|workshop|brunch|in conversation)\b", re.I)),
 ]
 
 

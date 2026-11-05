@@ -42,6 +42,17 @@ LOS_ANGELES = {
         {"adapter": "eventbrite_organizer", "url": "https://www.eventbrite.com/o/the-wayfarer-20250596796", "venue": "the-wayfarer"},
         {"adapter": "tribe_events", "url": "https://www.vermonthollywood.com", "name": "The Vermont Hollywood"},
         {"adapter": "tribe_events", "url": "https://hollywoodforever.com", "name": "Hollywood Forever"},
+        # Comedy
+        {"adapter": "improv", "url": "https://improv.com/hollywood/calendar/", "venue": "hollywood-improv", "category": "comedy"},
+        {"adapter": "improv", "url": "https://improv.com/brea/calendar/", "venue": "brea-improv", "category": "comedy"},
+        {"adapter": "improv", "url": "https://improv.com/irvine/calendar/", "venue": "irvine-improv", "category": "comedy"},
+        {"adapter": "laugh_factory", "url": "https://www.laughfactory.com/hollywood", "venue": "laugh-factory-hollywood", "category": "comedy"},
+        # Film
+        {"adapter": "new_beverly", "url": "https://thenewbev.com/schedule/", "venue": "new-beverly-cinema", "category": "film"},
+        {"adapter": "cinematheque", "label": "american cinematheque", "url": "https://www.americancinematheque.com/wp-json/wp/v2/event", "category": "film"},
+        # Theater
+        {"adapter": "live_nation", "url": "https://www.broadwayinhollywood.com/events", "venue": "pantages-theatre", "category": "theater"},
+        {"adapter": "tribe_events", "url": "https://www.pasadenaplayhouse.org", "venue": "pasadena-playhouse", "name": "Pasadena Playhouse", "category": "theater"},
         {
             "adapter": "la_phil",
             "label": "la phil",
@@ -66,7 +77,10 @@ LOS_ANGELES = {
             "adapter": "dice_city",
             "label": "dice.fm city",
             "url": "https://dice.fm/browse/losangeles-5982e13c613de866017c3e3a",
-            "categories": ["music/gig", "music/dj", "music/party"],
+            "categories": {
+                "music/gig": "music", "music/dj": "party", "music/party": "party",
+                "culture/comedy": "comedy", "culture/film": "film", "culture/theatre": "theater",
+            },
         },
         {
             "adapter": "ticketmaster",
@@ -86,6 +100,16 @@ LOS_ANGELES = {
         "garden-amphitheatre": {"name": "Garden Amphitheatre", "neighborhood": "Garden Grove", "address": "12762 Main St, Garden Grove, CA 92840", "url": "https://gardenamp.com/"},
         "vibrato-grill-jazz": {"name": "Vibrato Grill Jazz", "neighborhood": "Bel Air", "address": "2930 N Beverly Glen Cir, Los Angeles, CA 90077", "url": "https://www.vibratogrilljazz.com/music"},
         "the-wayfarer": {"name": "The Wayfarer", "neighborhood": "Costa Mesa", "address": "843 W 19th St, Costa Mesa, CA 92627", "url": "https://wayfarercm.com/"},
+        "hollywood-improv": {"name": "Hollywood Improv", "neighborhood": "Hollywood", "address": "8162 Melrose Ave, Los Angeles, CA 90046", "url": "https://improv.com/hollywood/"},
+        "brea-improv": {"name": "Brea Improv", "neighborhood": "Brea", "address": "120 S Brea Blvd, Brea, CA 92821", "url": "https://improv.com/brea/"},
+        "irvine-improv": {"name": "Irvine Improv", "neighborhood": "Irvine", "address": "527 Spectrum Center Dr, Irvine, CA 92618", "url": "https://improv.com/irvine/"},
+        "laugh-factory-hollywood": {"name": "Laugh Factory", "neighborhood": "West Hollywood", "address": "8001 W Sunset Blvd, Los Angeles, CA 90046", "url": "https://www.laughfactory.com/hollywood"},
+        "new-beverly-cinema": {"name": "New Beverly Cinema", "neighborhood": "Fairfax", "address": "7165 Beverly Blvd, Los Angeles, CA 90036", "url": "https://thenewbev.com/schedule/"},
+        "los-feliz-3": {"name": "Los Feliz 3", "neighborhood": "Los Feliz", "address": "1822 N Vermont Ave, Los Angeles, CA 90027", "url": "https://www.americancinematheque.com/"},
+        "aero-theatre": {"name": "Aero Theatre", "neighborhood": "Santa Monica", "address": "1328 Montana Ave, Santa Monica, CA 90403", "url": "https://www.americancinematheque.com/"},
+        "egyptian-theatre": {"name": "Egyptian Theatre", "neighborhood": "Hollywood", "address": "6712 Hollywood Blvd, Los Angeles, CA 90028", "url": "https://www.americancinematheque.com/"},
+        "pantages-theatre": {"name": "Hollywood Pantages", "neighborhood": "Hollywood", "address": "6233 Hollywood Blvd, Los Angeles, CA 90028", "url": "https://www.broadwayinhollywood.com/"},
+        "pasadena-playhouse": {"name": "Pasadena Playhouse", "neighborhood": "Pasadena", "address": "39 S El Molino Ave, Pasadena, CA 91101", "url": "https://www.pasadenaplayhouse.org/"},
         "hollywood-bowl": {"name": "Hollywood Bowl", "neighborhood": "Hollywood Hills", "address": "2301 N Highland Ave, Los Angeles, CA 90068", "lat": 34.1122, "lon": -118.3391, "url": "https://www.hollywoodbowl.com/"},
         "the-ford": {"name": "The Ford", "neighborhood": "Cahuenga Pass", "address": "2580 Cahuenga Blvd E, Los Angeles, CA 90068", "url": "https://www.theford.com/"},
         "walt-disney-concert-hall": {"name": "Walt Disney Concert Hall", "neighborhood": "Downtown", "address": "111 S Grand Ave, Los Angeles, CA 90012", "lat": 34.0553, "lon": -118.2498, "url": "https://www.laphil.com/"},

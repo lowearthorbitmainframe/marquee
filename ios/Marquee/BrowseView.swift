@@ -20,14 +20,14 @@ enum BrowseRange: String, CaseIterable, Identifiable {
 struct EventQuery {
     var search = ""
     var myVenuesOnly = false
-    var musicOnly = false
+    var category: EventCategory?
     var genre: String?
     var venueId: String?
 
     @MainActor func matches(_ event: Event, store: FeedStore, followed: Set<String>) -> Bool {
         if myVenuesOnly, !followed.contains(event.venueId) { return false }
         if let venueId, event.venueId != venueId { return false }
-        if musicOnly, event.category != "music" { return false }
+        if let category, event.kind != category { return false }
         if let genre, !store.genres(for: event).contains(genre) { return false }
         let term = search.trimmingCharacters(in: .whitespaces)
         guard !term.isEmpty else { return true }
@@ -99,7 +99,7 @@ struct BrowseView: View {
             .refreshable { await store.refresh() }
             .screenBackground()
             .navigationTitle("Browse")
-            .searchable(text: $query.search, prompt: "Artist, venue or genre")
+            .searchable(text: $query.search, prompt: "Artist, show, venue or genre")
             .marqueeDestinations()
         }
     }
@@ -124,10 +124,11 @@ struct BrowseView: View {
             }
         }
 
+        CategoryChips(selection: $query.category)
+
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 Chip(title: "My venues", isOn: query.myVenuesOnly) { query.myVenuesOnly.toggle() }
-                Chip(title: "Music only", isOn: query.musicOnly) { query.musicOnly.toggle() }
                 Menu {
                     Button("All genres") { query.genre = nil }
                     ForEach(store.genres, id: \.self) { genre in

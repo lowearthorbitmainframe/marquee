@@ -5,6 +5,11 @@ struct TonightView: View {
     @EnvironmentObject private var taste: TasteStore
 
     @State private var selectedDay: Date?
+    @AppStorage("tonight.category") private var savedCategory = ""
+
+    private var category: Binding<EventCategory?> {
+        Binding(get: { EventCategory(rawValue: savedCategory) }, set: { savedCategory = $0?.rawValue ?? "" })
+    }
 
     private var zone: TimeZone { store.city?.timeZone ?? .current }
     private var day: Date { selectedDay ?? store.today }
@@ -17,6 +22,7 @@ struct TonightView: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 12) {
                     DayStrip(days: upcomingDays, selected: day) { selectedDay = $0 }
+                    CategoryChips(selection: category)
 
                     if taste.profile.isEmpty {
                         PersonalizeCard()
@@ -27,7 +33,7 @@ struct TonightView: View {
                         ContentUnavailableView("Couldn't load shows", systemImage: "exclamationmark.triangle", description: Text("Pull down to try again."))
                             .padding(.top, 40)
                     } else if lists.isEmpty {
-                        ContentUnavailableView("Nothing listed", systemImage: "moon.zzz", description: Text("No shows found for this day yet."))
+                        ContentUnavailableView("Nothing listed", systemImage: "moon.zzz", description: Text(category.wrappedValue == nil ? "No shows found for this day yet." : "Nothing in \(category.wrappedValue!.label.lowercased()) this day. Try All."))
                             .padding(.top, 40)
                     }
                     ForEach(lists, id: \.title) { section in
@@ -70,6 +76,7 @@ struct TonightView: View {
     private var sections: [DaySection] {
         let recommender = Recommender(taste: taste.profile, feed: store.feed)
         let scored = store.events(on: day)
+            .filter { category.wrappedValue == nil || $0.kind == category.wrappedValue }
             .map { (event: $0, match: recommender.recommend($0)) }
             .filter { $0.match.score >= 0 }
 
@@ -140,7 +147,7 @@ struct PersonalizeCard: View {
                 Image(systemName: "wand.and.stars").font(.title2).foregroundStyle(Theme.accent)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Make this yours").font(.headline)
-                    Text("Pick your venues and the music you like").font(.subheadline).foregroundStyle(.secondary)
+                    Text("Pick your venues and what you're into").font(.subheadline).foregroundStyle(.secondary)
                 }
                 Spacer(minLength: 0)
             }

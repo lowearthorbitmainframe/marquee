@@ -3,12 +3,13 @@ import SwiftUI
 struct Poster: View {
     var url: String?
     var title: String
+    var symbol = "music.mic"
 
     var body: some View {
         // The overlay keeps a filled image from widening whatever layout holds it.
         LinearGradient(colors: Self.colors(for: title), startPoint: .topLeading, endPoint: .bottomTrailing)
             .overlay {
-                Image(systemName: "music.mic").font(.title2).foregroundStyle(.white.opacity(0.5))
+                Image(systemName: symbol).font(.title2).foregroundStyle(.white.opacity(0.5))
             }
             .overlay {
                 if let url, let imageURL = URL(string: url) {
@@ -41,7 +42,7 @@ struct EventRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Poster(url: event.image, title: event.title)
+            Poster(url: event.image, title: event.title, symbol: event.kind.symbol)
                 .frame(width: 84, height: 84)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
 
@@ -93,7 +94,8 @@ struct EventRow: View {
         if event.cancelled { return ("Cancelled", .red) }
         if event.soldOut { return ("Sold out", .orange) }
         if let reason { return (reason, Theme.accent) }
-        if let genre = store.genres(for: event).first { return (genre, .secondary) }
+        if event.kind.hasMusicLinks, let genre = store.genres(for: event).first { return (genre, .secondary) }
+        if event.kind != .music { return (event.kind.label, .secondary) }
         return nil
     }
 }
@@ -125,7 +127,7 @@ struct EventDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Poster(url: event.image, title: event.title)
+                Poster(url: event.image, title: event.title, symbol: event.kind.symbol)
                     .frame(height: 220)
                     .frame(maxWidth: .infinity)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -154,8 +156,13 @@ struct EventDetailView: View {
 
                 if !event.artists.isEmpty {
                     VStack(alignment: .leading, spacing: 10) {
-                        SectionHeader(title: "Lineup", subtitle: "Tap a service to hear them")
-                        ForEach(event.artists, id: \.self) { ArtistCard(name: $0) }
+                        if event.kind.hasMusicLinks {
+                            SectionHeader(title: "Lineup", subtitle: "Tap a service to hear them")
+                            ForEach(event.artists, id: \.self) { ArtistCard(name: $0) }
+                        } else {
+                            SectionHeader(title: "Featuring")
+                            ForEach(event.artists, id: \.self) { PerformerRow(name: $0) }
+                        }
                     }
                 }
 
@@ -245,6 +252,33 @@ struct ArtistCard: View {
             }
         }
         .padding(12)
+        .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+/// A comedian or other performer: followable, but no music links.
+struct PerformerRow: View {
+    @EnvironmentObject private var taste: TasteStore
+
+    var name: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Text(name).font(.headline).lineLimit(2)
+            Spacer(minLength: 0)
+            Button {
+                taste.toggleFavorite(name)
+            } label: {
+                Image(systemName: taste.isFavorite(name) ? "star.fill" : "star")
+                    .foregroundStyle(taste.isFavorite(name) ? Theme.accent : Color.secondary)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(taste.isFavorite(name) ? "Unfollow \(name)" : "Follow \(name)")
+        }
+        .padding(.leading, 12)
+        .padding(.vertical, 4)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
     }
 }
