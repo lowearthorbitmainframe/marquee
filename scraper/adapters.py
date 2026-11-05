@@ -51,6 +51,20 @@ VENUE_ALIASES = {
     "the-masonic-lodge-at-hollywood-forever": "hollywood-forever-masonic-lodge",
     "garden-amp": "garden-amphitheatre",
     "the-wayfarer-costa-mesa": "the-wayfarer",
+    # Ticketmaster's spellings.
+    "catch-one-disco": "catch-one",
+    "el-rey-theatre-los-angeles": "el-rey-theatre",
+    "glass-house": "the-glass-house",
+    "orpheum-theatre": "the-orpheum-theatre",
+    "peacock-theater-la": "peacock-theater",
+    "roxy-theatre-ca": "the-roxy",
+    "shrine-auditorium-ca": "shrine-auditorium",
+    "the-fox-theater-pomona": "fox-theater-pomona",
+    "the-novo-by-microsoft": "the-novo",
+    "hollywood-pantages-theatre": "pantages-theatre",
+    "improv-comedy-club-irvine": "irvine-improv",
+    "improv-comedy-club-hollywood": "hollywood-improv",
+    "brea-improv-comedy-club": "brea-improv",
 }
 
 

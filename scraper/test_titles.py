@@ -86,6 +86,8 @@ class Helpers(unittest.TestCase):
     def test_venue_spellings_merge(self):
         self.assertEqual(slugify("The Roxy Theatre"), "the-roxy")
         self.assertEqual(slugify("The Mint "), "the-mint")
+        self.assertEqual(slugify("The Novo by Microsoft"), "the-novo")
+        self.assertEqual(slugify("Hollywood Pantages Theatre"), "pantages-theatre")
 
     def test_ticketmaster_event(self):
         item = {
