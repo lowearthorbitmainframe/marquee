@@ -87,9 +87,12 @@ def add_links(names, cache, deadline, save=None):
     now = datetime.now(timezone.utc)
     done = 0
     for name in dict.fromkeys(names):
-        record = cache.get(artist_key(name))
-        if not record:
+        key = artist_key(name)
+        if not key:
             continue
+        # Artists Apple hasn't been asked about yet still get links. The old
+        # "checked" date makes the Apple lookup try them on its next pass.
+        record = cache.setdefault(key, {"name": name, "checked": "1970-01-01T00:00:00+00:00"})
         checked = record.get("linksChecked")
         if checked and now - datetime.fromisoformat(checked) < RETRY_AFTER:
             continue
