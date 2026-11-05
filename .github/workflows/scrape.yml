@@ -29,4 +29,6 @@ jobs:
           git config user.email "marquee-bot@users.noreply.github.com"
           git add data/los-angeles.json data/artists.json
           git diff --cached --quiet || git commit -m "Refresh listings"
+          # Code may have been pushed during the run; keep this run's fresh listings.
+          git pull --rebase -X theirs origin main
           git push
