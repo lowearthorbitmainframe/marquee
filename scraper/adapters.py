@@ -1085,11 +1085,13 @@ def bampfa(source, fetch, today):
             continue
         image = re.search(r"<img src='([^']+)'", card)
         url = urllib.parse.urljoin(source["url"], title.group(1))
-        is_film = "/event/" in title.group(1) and ("director" in card or "cb_person" in card)
+        # The museum's tours and talks share this calendar; only films are kept.
+        if not ("director" in card or "cb_person" in card):
+            continue
         events.append({
             "venue": source["venue"],
             "title": clean_text(title.group(2)),
-            "category": "film" if is_film else "other",
+            "category": "film",
             "start": combine(when, parse_clock(clock.group(1)) if clock else None),
             "url": url,
             "ticket_url": url,

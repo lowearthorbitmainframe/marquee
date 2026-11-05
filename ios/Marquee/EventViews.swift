@@ -246,22 +246,22 @@ struct ArtistCard: View {
                 .accessibilityLabel(taste.isFavorite(name) ? "Unfollow \(name)" : "Follow \(name)")
             }
 
-            // Their own pages when known; otherwise a search on Instagram and TikTok.
-            let pages = ArtistLink.available(info).map { (label: $0.0.label, symbol: $0.0.symbol, url: $0.1) }
-            let buttons = pages.isEmpty ? ArtistLink.socialSearches(for: name) : pages
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(buttons, id: \.label) { item in
-                        Button {
-                            openURL(item.url)
-                        } label: {
-                            Label(item.label, systemImage: item.symbol)
-                                .font(.caption.weight(.semibold))
-                                .padding(.horizontal, 12)
-                                .frame(minHeight: 36)
-                                .background(Color.white.opacity(0.08), in: Capsule())
+            let pages = ArtistLink.available(info)
+            if !pages.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(pages, id: \.0) { kind, url in
+                            Button {
+                                openURL(url)
+                            } label: {
+                                Label(kind.label, systemImage: kind.symbol)
+                                    .font(.caption.weight(.semibold))
+                                    .padding(.horizontal, 12)
+                                    .frame(minHeight: 36)
+                                    .background(Color.white.opacity(0.08), in: Capsule())
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -338,7 +338,7 @@ struct ArtistNameButton: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityHint(knowsAPage ? "Opens their page" : "Searches Instagram for them")
+        .accessibilityHint(knowsAPage ? "Opens their page" : "Searches the web for them")
     }
 }
 
