@@ -165,12 +165,60 @@ BAY_AREA_CITIES = [
 BAY_AREA = {
     "id": "bay-area",
     "name": "Bay Area",
-    # Off until its venues have been researched as thoroughly as LA's.
-    "ready": False,
     "timezone": "America/Los_Angeles",
+    "ready": True,
     "sources": [
+        # Music: San Francisco
         {"adapter": "live_nation", "url": "https://www.thefillmore.com/shows", "venue": "the-fillmore"},
+        {"adapter": "live_nation", "url": "https://sfmasonic.com/", "venue": "the-masonic"},
         {"adapter": "ticketweb_plugin", "url": "https://www.theindependentsf.com/", "venue": "the-independent"},
+        {"adapter": "ticketweb_plugin", "url": "https://www.augusthallsf.com/", "venue": "august-hall"},
+        {"adapter": "ticketweb_plugin", "url": "https://www.neckofthewoodssf.com/", "venue": "neck-of-the-woods"},
+        {"adapter": "ticketweb_plugin", "url": "https://www.brickandmortarmusic.com/", "venue": "brick-mortar-music-hall"},
+        {"adapter": "seetickets_list", "url": "https://thechapelsf.com/music/", "venue": "the-chapel"},
+        {"adapter": "seetickets_list", "url": "https://www.hotelutah.com/", "venue": "hotel-utah"},
+        {"adapter": "rockhouse", "url": "https://boomboomroom.com/", "venue": "boom-boom-room"},
+        {
+            "adapter": "dated_cards", "url": "https://www.cafedunord.com/", "venue": "cafe-du-nord",
+            "card": r'<li class="show-row', "title": "show-row__headliner",
+            "rooms": {"Cafe du Nord": "cafe-du-nord", "Swedish American Hall": "swedish-american-hall"},
+        },
+        {"adapter": "dated_cards", "url": "https://www.thecastro.com/", "venue": "the-castro", "card": r"wp-block-post-featured-image", "title": "show-title"},
+        # Music: East Bay, Marin and the South Bay
+        {"adapter": "seetickets_list", "url": "https://www.theestorkclub.com/", "venue": "thee-stork-club"},
+        {"adapter": "webflow_shows", "url": "https://www.theuctheatre.org/events", "venue": "uc-theatre", "card": "shows-collection-item"},
+        {"adapter": "webflow_shows", "url": "https://www.cornerstoneberkeley.com/", "venue": "cornerstone", "card": 'class="event-card', "title": "main-title-hover"},
+        {"adapter": "yoshis", "url": "https://yoshis.com/", "venue": "yoshis"},
+        {"adapter": "rockhouse", "url": "https://www.sweetwatermusichall.com/", "venue": "sweetwater-music-hall"},
+        # Santa Cruz
+        {"adapter": "rockhouse", "url": "https://www.catalystclub.com/", "venue": "the-catalyst"},
+        {"adapter": "ticketweb_plugin", "url": "https://www.moesalley.com/", "venue": "moes-alley"},
+        {"adapter": "tribe_events", "url": "https://kuumbwajazz.org", "venue": "kuumbwa-jazz", "name": "Kuumbwa Jazz"},
+        # Comedy
+        {"adapter": "live_nation", "url": "https://www.cobbscomedy.com/", "venue": "cobbs-comedy-club", "category": "comedy"},
+        {"adapter": "live_nation", "url": "https://www.punchlinecomedyclub.com/", "venue": "punch-line", "category": "comedy"},
+        {"adapter": "improv", "url": "https://improv.com/sanjose/calendar/", "venue": "san-jose-improv", "category": "comedy"},
+        # Film
+        {"adapter": "roxie", "url": "https://roxie.com/calendar/", "venue": "roxie-theater", "category": "film"},
+        {"adapter": "bampfa", "url": "https://bampfa.org/visit/calendar", "venue": "bampfa"},
+        {"adapter": "tribe_events", "url": "https://www.artiststelevisionaccess.org", "venue": "artists-television-access", "name": "Artists' Television Access", "category": "film"},
+        {
+            "adapter": "alamo", "label": "alamo bay area", "category": "film",
+            "url": "https://drafthouse.com/s/mother/v2/schedule/market/sf", "site": "https://drafthouse.com/sf",
+            "cinemas": {"San Francisco": "alamo-new-mission", "Mountain View": "alamo-mountain-view", "Valley Fair": "alamo-valley-fair"},
+        },
+        # Theater
+        {"adapter": "squarespace_events", "url": "https://www.magictheatre.org/calendar", "venue": "magic-theatre", "category": "theater"},
+        # Nightlife and DICE rooms
+        {
+            "adapter": "dice_venues", "label": "dice.fm venues", "url": "https://dice.fm/venue/",
+            "venues": ["the-knockout-3neg", "kilowatt-v9v6", "bottom-of-the-hill-dk9eo", "the-lab-bogk"],
+        },
+        {
+            "adapter": "dice_venues", "label": "dice.fm clubs", "url": "https://dice.fm/venue/", "category": "party",
+            "venues": ["halcyon-sf-mabv", "cat-club-l88vl"],
+        },
+        # Region-wide
         {
             "adapter": "aeg",
             "url": "https://aegwebprod.blob.core.windows.net/json/events/19/events.json",
@@ -194,38 +242,82 @@ BAY_AREA = {
     ],
     "venues": {
         "the-fillmore": {"name": "The Fillmore", "neighborhood": "Western Addition", "address": "1805 Geary Blvd, San Francisco, CA 94115", "url": "https://www.thefillmore.com/shows"},
+        "the-masonic": {"name": "The Masonic", "neighborhood": "Nob Hill", "address": "1111 California St, San Francisco, CA 94108", "url": "https://sfmasonic.com/"},
         "the-independent": {"name": "The Independent", "neighborhood": "NoPa", "address": "628 Divisadero St, San Francisco, CA 94117", "url": "https://www.theindependentsf.com/"},
-        "bimbos-365-club": {"name": "Bimbo's 365 Club", "neighborhood": "North Beach", "address": "1025 Columbus Ave, San Francisco, CA 94133", "url": "https://www.bimbos365club.com/"},
+        "august-hall": {"name": "August Hall", "neighborhood": "Union Square", "address": "420 Mason St, San Francisco, CA 94102", "url": "https://www.augusthallsf.com/"},
+        "neck-of-the-woods": {"name": "Neck of the Woods", "neighborhood": "Inner Richmond", "address": "406 Clement St, San Francisco, CA 94118", "url": "https://www.neckofthewoodssf.com/"},
+        "brick-mortar-music-hall": {"name": "Brick & Mortar Music Hall", "neighborhood": "Mission", "address": "1710 Mission St, San Francisco, CA 94103", "url": "https://www.brickandmortarmusic.com/"},
+        "the-chapel": {"name": "The Chapel", "neighborhood": "Mission", "address": "777 Valencia St, San Francisco, CA 94110", "url": "https://thechapelsf.com/music/"},
+        "hotel-utah": {"name": "Hotel Utah Saloon", "neighborhood": "SoMa", "address": "500 4th St, San Francisco, CA 94107", "url": "https://www.hotelutah.com/"},
+        "boom-boom-room": {"name": "Boom Boom Room", "neighborhood": "Fillmore", "address": "1601 Fillmore St, San Francisco, CA 94115", "url": "https://boomboomroom.com/"},
+        "cafe-du-nord": {"name": "Cafe du Nord", "neighborhood": "Castro", "address": "2174 Market St, San Francisco, CA 94114", "url": "https://www.cafedunord.com/"},
+        "swedish-american-hall": {"name": "Swedish American Hall", "neighborhood": "Castro", "address": "2174 Market St, San Francisco, CA 94114", "url": "https://www.cafedunord.com/"},
+        "the-castro": {"name": "The Castro Theatre", "neighborhood": "Castro", "address": "429 Castro St, San Francisco, CA 94114", "url": "https://www.thecastro.com/"},
+        "thee-stork-club": {"name": "Thee Stork Club", "neighborhood": "Oakland", "address": "2330 Telegraph Ave, Oakland, CA 94612", "url": "https://www.theestorkclub.com/"},
+        "uc-theatre": {"name": "The UC Theatre", "neighborhood": "Berkeley", "address": "2036 University Ave, Berkeley, CA 94704", "url": "https://www.theuctheatre.org/"},
+        "cornerstone": {"name": "Cornerstone", "neighborhood": "Berkeley", "address": "2367 Shattuck Ave, Berkeley, CA 94704", "url": "https://www.cornerstoneberkeley.com/"},
+        "yoshis": {"name": "Yoshi's", "neighborhood": "Oakland", "address": "510 Embarcadero W, Oakland, CA 94607", "url": "https://yoshis.com/"},
+        "sweetwater-music-hall": {"name": "Sweetwater Music Hall", "neighborhood": "Mill Valley", "address": "19 Corte Madera Ave, Mill Valley, CA 94941", "url": "https://www.sweetwatermusichall.com/"},
+        "the-catalyst": {"name": "The Catalyst", "neighborhood": "Santa Cruz", "address": "1011 Pacific Ave, Santa Cruz, CA 95060", "url": "https://www.catalystclub.com/"},
+        "moes-alley": {"name": "Moe's Alley", "neighborhood": "Santa Cruz", "address": "1535 Commercial Way, Santa Cruz, CA 95065", "url": "https://www.moesalley.com/"},
+        "kuumbwa-jazz": {"name": "Kuumbwa Jazz Center", "neighborhood": "Santa Cruz", "address": "320 Cedar St, Santa Cruz, CA 95060", "url": "https://kuumbwajazz.org/"},
+        "cobbs-comedy-club": {"name": "Cobb's Comedy Club", "neighborhood": "North Beach", "address": "915 Columbus Ave, San Francisco, CA 94133", "url": "https://www.cobbscomedy.com/"},
+        "punch-line": {"name": "Punch Line", "neighborhood": "Financial District", "address": "444 Battery St, San Francisco, CA 94111", "url": "https://www.punchlinecomedyclub.com/"},
+        "san-jose-improv": {"name": "San Jose Improv", "neighborhood": "San Jose", "address": "62 S 2nd St, San Jose, CA 95113", "url": "https://improv.com/sanjose/"},
+        "roxie-theater": {"name": "Roxie Theater", "neighborhood": "Mission", "address": "3117 16th St, San Francisco, CA 94103", "url": "https://roxie.com/"},
+        "bampfa": {"name": "BAMPFA", "neighborhood": "Berkeley", "address": "2155 Center St, Berkeley, CA 94704", "url": "https://bampfa.org/"},
+        "artists-television-access": {"name": "Artists' Television Access", "neighborhood": "Mission", "address": "992 Valencia St, San Francisco, CA 94110", "url": "https://www.artiststelevisionaccess.org/"},
+        "alamo-new-mission": {"name": "Alamo Drafthouse New Mission", "neighborhood": "Mission", "address": "2550 Mission St, San Francisco, CA 94110", "url": "https://drafthouse.com/sf"},
+        "alamo-mountain-view": {"name": "Alamo Drafthouse Mountain View", "neighborhood": "Mountain View", "address": "2306 Charleston Rd, Mountain View, CA 94043", "url": "https://drafthouse.com/sf"},
+        "alamo-valley-fair": {"name": "Alamo Drafthouse Valley Fair", "neighborhood": "San Jose", "address": "2855 Stevens Creek Blvd, Santa Clara, CA 95050", "url": "https://drafthouse.com/sf"},
+        "magic-theatre": {"name": "Magic Theatre", "neighborhood": "Fort Mason", "address": "2 Marina Blvd, San Francisco, CA 94123", "url": "https://www.magictheatre.org/"},
     },
 }
+
+SAN_DIEGO_CITIES = ["San Diego", "Solana Beach", "Del Mar", "Chula Vista", "Escondido", "Oceanside", "La Jolla", "Carlsbad", "Encinitas", "La Mesa", "El Cajon", "Coronado"]
 
 SAN_DIEGO = {
     "id": "san-diego",
     "name": "San Diego",
-    "ready": False,
     "timezone": "America/Los_Angeles",
+    "ready": True,
     "sources": [
+        # Music
         {"adapter": "live_nation", "url": "https://www.observatorysd.com/shows", "venue": "observatory-north-park"},
         {"adapter": "live_nation", "url": "https://www.houseofblues.com/sandiego", "venue": "house-of-blues-san-diego"},
         {"adapter": "ticketweb_index", "url": "https://bellyup.com/events/", "venue": "belly-up-tavern"},
+        {"adapter": "tribe_events", "url": "https://www.theholdingcompanyob.com", "venue": "the-holding-company", "name": "The Holding Company"},
+        {"adapter": "tribe_events", "url": "https://www.whistlestopbar.com", "venue": "whistle-stop", "name": "Whistle Stop"},
+        # Comedy
+        {"adapter": "live_nation", "url": "https://micdropcomedy.com/", "venue": "mic-drop-comedy", "category": "comedy"},
+        {"adapter": "live_nation", "url": "https://www.madhousecomedyclub.com/", "venue": "mad-house-comedy", "category": "comedy"},
+        # Film
+        {"adapter": "nightjar_cinema", "url": "https://digitalgym.org/coming-soon/", "venue": "digital-gym-cinema", "category": "film"},
+        # Nightlife
+        {"adapter": "club_events", "url": "https://www.novasd.com/events/", "venue": "nova-sd", "category": "party"},
+        # Region-wide
         {
             "adapter": "aeg",
             "url": "https://aegwebprod.blob.core.windows.net/json/events/19/events.json",
-            "cities": ["San Diego", "Solana Beach", "Del Mar", "Chula Vista", "Escondido", "Oceanside"],
+            "cities": SAN_DIEGO_CITIES,
         },
         {
             "adapter": "ticketmaster",
             "url": "https://app.ticketmaster.com/discovery/v2/events.json",
             "dma": 381,
-            "cities": ["San Diego", "Solana Beach", "Del Mar", "Chula Vista", "Escondido", "Oceanside", "La Jolla", "Carlsbad"],
+            "cities": SAN_DIEGO_CITIES,
         },
     ],
     "venues": {
         "observatory-north-park": {"name": "Observatory North Park", "neighborhood": "North Park", "address": "2891 University Ave, San Diego, CA 92104", "url": "https://www.observatorysd.com/shows"},
         "house-of-blues-san-diego": {"name": "House of Blues San Diego", "neighborhood": "Gaslamp", "address": "1055 5th Ave, San Diego, CA 92101", "url": "https://www.houseofblues.com/sandiego"},
         "belly-up-tavern": {"name": "Belly Up Tavern", "neighborhood": "Solana Beach", "address": "143 S Cedros Ave, Solana Beach, CA 92075", "url": "https://bellyup.com/"},
-        "music-box": {"name": "Music Box", "neighborhood": "Little Italy", "address": "1337 India St, San Diego, CA 92101", "url": "https://www.musicboxsd.com/"},
-        "the-sound": {"name": "The Sound", "neighborhood": "Del Mar", "address": "2260 Jimmy Durante Blvd, Del Mar, CA 92014", "url": "https://www.thesoundsd.com/"},
+        "the-holding-company": {"name": "The Holding Company", "neighborhood": "Ocean Beach", "address": "5046 Newport Ave, San Diego, CA 92107", "url": "https://www.theholdingcompanyob.com/"},
+        "whistle-stop": {"name": "Whistle Stop", "neighborhood": "South Park", "address": "2236 Fern St, San Diego, CA 92104", "url": "https://www.whistlestopbar.com/"},
+        "mic-drop-comedy": {"name": "Mic Drop Comedy", "neighborhood": "Sports Arena", "address": "3595 Sports Arena Blvd, San Diego, CA 92110", "url": "https://micdropcomedy.com/"},
+        "mad-house-comedy": {"name": "Mad House Comedy Club", "neighborhood": "Horton Plaza", "address": "502 Horton Plaza, San Diego, CA 92101", "url": "https://www.madhousecomedyclub.com/"},
+        "digital-gym-cinema": {"name": "Digital Gym Cinema", "neighborhood": "East Village", "address": "1100 Market St, San Diego, CA 92101", "url": "https://digitalgym.org/"},
+        "nova-sd": {"name": "Nova SD", "neighborhood": "Gaslamp", "address": "500 4th Ave, San Diego, CA 92101", "url": "https://www.novasd.com/"},
     },
 }
 

@@ -18,7 +18,7 @@ TOUR_WORDS = re.compile(
 )
 SEPARATORS = re.compile(
     r"\s+(?:with special guests?|special guests?|and special guests?|with|w/|feat\.?|"
-    r"ft\.?|featuring|plus|support(?:ing)?(?: from| by)?|b2b|x|vs\.?)\s+|\s+\+\s+|\s*,\s*|\s+/\s+|\s+_\s+|\s*\|\s*|:\s+",
+    r"ft\.?|featuring|support(?:ing)?(?: from| by)?|b2b|x|vs\.?)\s+|\s+\+\s+|\s*,\s*|\s+/\s+|\s+_\s+|\s*\|\s*|:\s+",
     re.I,
 )
 ROLE_SUFFIX = re.compile(r"\s*\([^)]*\)\s*$")

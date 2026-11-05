@@ -130,6 +130,7 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
     previous = load_json(feed_path, {"events": [], "venues": {}})
 
     events = {}
+    found_links = {}
     venues = {key: dict(value, id=key) for key, value in city["venues"].items()}
     sources = []
 
@@ -142,6 +143,8 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
             for raw in raws:
                 if source.get("category") and not raw.get("category"):
                     raw["category"] = source["category"]
+                for name, links in (raw.get("artist_links") or {}).items():
+                    found_links.setdefault(name, {}).update(links)
             normalized = [dict(e, source=label) for e in (normalize(r, zone) for r in raws) if e]
             if not normalized:
                 raise ValueError("no events found")
@@ -187,6 +190,10 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
     )
 
     cache = load_json(artist_path, {})
+    # Links a source gave for a specific show fill in what MusicBrainz didn't find.
+    for name, links in found_links.items():
+        record = cache.setdefault(artist_key(name), {"name": name, "checked": "1970-01-01T00:00:00+00:00"})
+        record["links"] = dict(links, **(record.get("links") or {}))
     if run_enrich:
         # Only musicians have Apple Music pages and similar artists worth looking up.
         names = [name for event in upcoming if event["category"] in ("music", "party") for name in event["artists"]]

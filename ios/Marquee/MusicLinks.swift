@@ -33,11 +33,19 @@ enum ArtistLink: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Their first known page, or a web search when we don't know any.
+    /// Searches Instagram or TikTok for someone whose pages we don't know yet.
+    static func socialSearches(for name: String) -> [(label: String, symbol: String, url: URL)] {
+        let query = name.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? name
+        return [
+            ("Find on Instagram", "camera", URL(string: "https://www.instagram.com/explore/search/keyword/?q=\(query)")),
+            ("Find on TikTok", "music.note.tv", URL(string: "https://www.tiktok.com/search/user?q=\(query)")),
+        ].compactMap { item in item.2.map { (item.0, item.1, $0) } }
+    }
+
+    /// Their first known page, or an Instagram search when we don't know any.
     static func primary(for name: String, info: ArtistInfo?, searchHint: String) -> URL? {
         if let first = available(info).first { return first.1 }
-        let query = "\(name) \(searchHint)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? name
-        return URL(string: "https://www.google.com/search?q=\(query)")
+        return socialSearches(for: name).first?.url
     }
 }
 

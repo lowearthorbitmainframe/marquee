@@ -41,6 +41,9 @@ class ParseArtists(unittest.TestCase):
         self.check("MINERVA HOYT / FRUIT LO0OPS (CHI) / SLEEVIES (SEA)", ["MINERVA HOYT", "FRUIT LO0OPS", "SLEEVIES"])
         self.check("AC/DC", ["AC/DC"])
 
+    def test_plus_inside_band_names(self):
+        self.check("Non Plus Temps, Pateka", ["Non Plus Temps", "Pateka"])
+
     def test_drops_connectors_and_placeholders(self):
         self.check("with Silverdeer", ["Silverdeer"])
         self.check("performed by Jimmy Rip", ["Jimmy Rip"])
@@ -98,7 +101,10 @@ class Helpers(unittest.TestCase):
             "priceRanges": [{"min": 45.5}],
             "_embedded": {
                 "venues": [{"name": "Hollywood Bowl", "city": {"name": "Los Angeles"}, "address": {"line1": "2301 N Highland Ave"}, "location": {"latitude": "34.11", "longitude": "-118.33"}}],
-                "attractions": [{"name": "Beach House"}, {"name": "Slow Pulp"}],
+                "attractions": [{"name": "Beach House", "externalLinks": {
+                    "homepage": [{"url": "https://beachhousebaltimore.com"}],
+                    "instagram": [{"url": "https://instagram.com/beachhousebaltimore"}],
+                }}, {"name": "Slow Pulp"}],
             },
         }
         event = parse_ticketmaster(item)
@@ -109,6 +115,8 @@ class Helpers(unittest.TestCase):
         self.assertEqual(event["start"], datetime(2026, 12, 1, 19, 30))
         self.assertEqual(event["venue_info"]["lat"], 34.11)
         self.assertIsNone(parse_ticketmaster(dict(item, name="VIP Parking Pass")))
+        self.assertEqual(event["artist_links"], {"Beach House": {
+            "website": "https://beachhousebaltimore.com", "instagram": "https://instagram.com/beachhousebaltimore"}})
 
     def test_empty_lineup_is_not_guessed_from_title(self):
         zone = ZoneInfo("America/Los_Angeles")
@@ -117,6 +125,11 @@ class Helpers(unittest.TestCase):
         self.assertEqual(normalize(raw, zone)["artists"], [])
         del raw["artists"]
         self.assertTrue(normalize(raw, zone)["artists"])
+
+    def test_month_with_comma(self):
+        from adapters import parse_month_day
+        from datetime import date
+        self.assertEqual(parse_month_day("Thu Nov, 5 2026", date(2026, 11, 1)), date(2026, 11, 5))
 
     def test_written_out_json_ld_date(self):
         self.assertEqual(parse_iso("Nov 05, 2026"), datetime(2026, 11, 5))

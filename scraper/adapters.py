@@ -100,7 +100,7 @@ MONTHS = {name: i + 1 for i, name in enumerate(
 def parse_month_day(text, today):
     """Finds 'Oct 30', 'October 30', 'November 14th' and adds the year."""
     match = re.search(
-        r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?\b(?:,?\s*(\d{4}))?",
+        r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[.,]?\s+(\d{1,2})(?:st|nd|rd|th)?\b(?:,?\s*(\d{4}))?",
         text, re.I)
     if not match:
         # Some calendars write dates as "11.4" or "11/4".
@@ -657,6 +657,17 @@ def ticketmaster_category(item):
     return segment
 
 
+def ticketmaster_links(attraction):
+    """A performer's own pages, as Ticketmaster lists them for that show."""
+    external = attraction.get("externalLinks") or {}
+    links = {}
+    for ours, theirs in (("website", "homepage"), ("instagram", "instagram"), ("tiktok", "tiktok"), ("soundcloud", "soundcloud")):
+        url = ((external.get(theirs) or [{}])[0]).get("url")
+        if url:
+            links[ours] = url
+    return links
+
+
 TICKETMASTER_NOT_SHOWS = re.compile(r"\b(parking|vip|package|suite|premium|shuttle|upgrade|voucher|gift card|add-?on)\b", re.I)
 
 
@@ -684,6 +695,8 @@ def parse_ticketmaster(item):
         },
         "title": item["name"],
         "artists": [a["name"] for a in embedded.get("attractions") or [] if a.get("name")],
+        "artist_links": {a["name"]: ticketmaster_links(a) for a in embedded.get("attractions") or []
+                         if a.get("name") and ticketmaster_links(a)},
         "start": parse_iso(clock),
         "ticket_url": item.get("url"),
         "image": images[-1].get("url") if images else None,
@@ -904,6 +917,8 @@ def alamo(source, fetch, today):
         if presentation.get("event") or presentation.get("primaryCollectionSlug"):
             special[presentation["slug"]] = presentation
     cinemas = {c["id"]: c.get("name") for c in (data.get("market") or [{}])[0].get("cinemas") or []}
+    # Markets with several theaters map each one to its own venue.
+    venue_for = {cid: (source.get("cinemas") or {}).get(name, source.get("venue")) for cid, name in cinemas.items()}
     events = []
     for session in data.get("sessions") or []:
         presentation = special.get(session.get("presentationSlug"))
@@ -913,9 +928,12 @@ def alamo(source, fetch, today):
         event = presentation.get("event") or {}
         series = (presentation.get("primaryCollectionSlug") or "").replace("-", " ").title()
         hero = (show.get("landscapeHeroImage") or {}).get("uri")
-        url = "https://drafthouse.com/los-angeles/show/%s" % show.get("slug", presentation["slug"])
+        url = "%s/show/%s" % (source.get("site", "https://drafthouse.com/los-angeles"), show.get("slug", presentation["slug"]))
+        venue = venue_for.get(session.get("cinemaId"), source.get("venue"))
+        if not venue:
+            continue
         events.append({
-            "venue": source["venue"],
+            "venue": venue,
             "title": clean_text(event.get("title") or show.get("title")),
             "tour": series or None,
             "start": datetime.fromisoformat(session["showTimeClt"]),
@@ -942,5 +960,207 @@ def ticketweb_index(source, fetch, today):
             "start": combine(date(infer_year(month, day, today), month, day), None),
             "url": url,
             "ticket_url": url,
+        })
+    return events
+
+
+def seetickets_list(source, fetch, today):
+    """The SeeTickets WordPress listing, used by the Chapel, Thee Stork Club and others."""
+    events = []
+    for card in fetch(source["url"]).split("seetickets-list-event-container")[1:]:
+        title = re.search(r'class="[^"]*\btitle"[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', card, re.S)
+        day = re.search(r'class="[^"]*\bdate"[^>]*>([^<]+)<', card)
+        if not (title and day):
+            continue
+        when = parse_month_day(day.group(1), today)
+        if not when:
+            continue
+        show = re.search(r'see-showtime[^>]*>([^<]+)<', card)
+        doors = re.search(r'see-doortime[^>]*>([^<]+)<', card)
+        headliner = re.search(r'class="[^"]*headliners"[^>]*>([^<]+)<', card)
+        support = re.search(r'Supporting Talent:\s*([^<]+)<', card)
+        image = re.search(r'<img[^>]+src="([^"]+)"', card)
+        age = re.search(r'class="ages">([^<]+)<', card)
+        price = re.search(r'class="price">([^<]+)<', card)
+        names = parse_artists(clean_text(headliner.group(1)) if headliner else clean_text(title.group(2)))
+        if support:
+            names += parse_artists(clean_text(support.group(1)))
+        doors_clock = parse_clock(doors.group(1)) if doors else None
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(2)),
+            "artists": names,
+            "start": combine(when, parse_clock(show.group(1)) if show else None),
+            "doors": combine(when, doors_clock) if doors_clock else None,
+            "url": title.group(1).replace("&amp;", "&"),
+            "ticket_url": title.group(1).replace("&amp;", "&"),
+            "image": image.group(1) if image else None,
+            "age": clean_text(age.group(1)) if age else None,
+            "price": clean_text(price.group(1)) if price else None,
+        })
+    return events
+
+
+def webflow_shows(source, fetch, today):
+    """Webflow venue sites list shows as collection items. `card`, `title` and
+    `date` in the source say which class names this site uses."""
+    page = fetch(source["url"])
+    events = []
+    for card in page.split(source["card"])[1:]:
+        link = re.search(r'href="([^"]*(?:/shows?/|tixr\.com|/events?/)[^"]*)"', card)
+        title = re.search(r'class="[^"]*%s[^"]*"[^>]*>([^<]+)<' % source["title"], card) if source.get("title") else None
+        text = clean_text(card)
+        when = parse_month_day(text, today)
+        if not (link and when):
+            continue
+        name = clean_text(title.group(1)) if title else None
+        if not name:
+            # The UC Theatre names shows only in the link: /shows/rexx-life-raj-14-nov
+            slug = re.sub(r"-\d{1,2}-[a-z]{3}$", "", link.group(1).rstrip("/").split("/")[-1])
+            name = slug.replace("-", " ").title()
+        clocks = re.findall(r"\b\d{1,2}(?::\d{2})?\s*[ap]\.?m\b", text, re.I)
+        image = re.search(r'url\((?:&quot;|")?(https://[^&")]+)', card) or re.search(r'<img[^>]+src="(https://[^"]+)"', card)
+        url = urllib.parse.urljoin(source["url"], link.group(1))
+        events.append({
+            "venue": source["venue"],
+            "title": name,
+            "start": combine(when, parse_clock(clocks[-1]) if clocks else None),
+            "doors": combine(when, parse_clock(clocks[0])) if len(clocks) > 1 else None,
+            "url": url,
+            "ticket_url": url,
+            "image": image.group(1) if image else None,
+            "sold_out": "sold out" in text.lower() and "w-condition-invisible" not in card[:400],
+        })
+    return events
+
+
+def dated_cards(source, fetch, today):
+    """Sites whose show cards carry a machine-readable date. The source names the
+    card marker and title class; dates come from a datetime or content attribute."""
+    events = []
+    for card in re.split(source["card"], fetch(source["url"]))[1:]:
+        stamp = re.search(r'(?:datetime|content)="([^"]*\d{4}[^"]*)"', card)
+        title = re.search(r'class="[^"]*%s[^"]*"[^>]*>(.*?)</' % source["title"], card, re.S)
+        link = re.search(r'href="(https?://[^"]+)"', card)
+        if not (stamp and title):
+            continue
+        start = parse_iso(stamp.group(1))
+        if not start:
+            try:
+                start = datetime.strptime(re.sub(r"\s+", " ", stamp.group(1)).strip().upper(), "%B %d, %Y %I:%M%p")
+            except ValueError:
+                day = parse_month_day(stamp.group(1), today)
+                start = combine(day, parse_clock(stamp.group(1))) if day else None
+        if not start:
+            continue
+        room = re.search(r'class="room-tag[^"]*">([^<]+)<', card)
+        image = re.search(r'<img[^>]+src="(https://[^"]+)"', card)
+        venue = source["venue"]
+        if room and source.get("rooms"):
+            venue = source["rooms"].get(clean_text(room.group(1)), venue)
+        events.append({
+            "venue": venue,
+            "title": clean_text(title.group(1)),
+            "start": start,
+            "url": link.group(1) if link else source["url"],
+            "ticket_url": link.group(1) if link else source["url"],
+            "image": image.group(1) if image else None,
+            "sold_out": "sold-out" in card[:300] or "sold out" in clean_text(card[:600]).lower(),
+        })
+    return events
+
+
+def bampfa(source, fetch, today):
+    """The Berkeley Art Museum and Pacific Film Archive calendar."""
+    events = []
+    for card in fetch(source["url"]).split('class="calendar-event"')[1:]:
+        day = re.search(r'popupboxthing-date">([^<]+)<', card)
+        clock = re.search(r'popupboxthing-time">([^<]+)<', card)
+        title = re.search(r'class="title">\s*<a href="([^"]+)">(.*?)</a>', card, re.S)
+        if not (day and title):
+            continue
+        try:
+            when = datetime.strptime(clean_text(day.group(1)), "%A, %B %d, %Y").date()
+        except ValueError:
+            continue
+        image = re.search(r"<img src='([^']+)'", card)
+        url = urllib.parse.urljoin(source["url"], title.group(1))
+        is_film = "/event/" in title.group(1) and ("director" in card or "cb_person" in card)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(2)),
+            "category": "film" if is_film else "other",
+            "start": combine(when, parse_clock(clock.group(1)) if clock else None),
+            "url": url,
+            "ticket_url": url,
+            "image": image.group(1) if image else None,
+        })
+    return events
+
+
+def roxie(source, fetch, today):
+    """The Roxie's month grid: one cell per day, each film with its showtimes."""
+    page = fetch(source["url"])
+    # The grid opens on the current month.
+    month_number, year = today.month, today.year
+    events = []
+    for cell in re.split(r'<td class="', page)[1:]:
+        if cell.startswith("past-day"):
+            continue
+        number = re.search(r'calendar-day">(\d{1,2})<', cell)
+        if not number:
+            continue
+        try:
+            day = date(year, month_number, int(number.group(1)))
+        except ValueError:
+            continue
+        for film in cell.split('<span class="film">')[1:]:
+            title = re.search(r'film-title">(.*?)</p>', film, re.S)
+            link = re.search(r'href="([^"]+)"', film)
+            if not title:
+                continue
+            for clock in re.findall(r'film-showtime"[^>]*>([^<]+)<', film):
+                events.append({
+                    "venue": source["venue"],
+                    "title": clean_text(title.group(1)),
+                    "start": combine(day, parse_clock(clock)),
+                    "url": link.group(1).replace("&#038;", "&") if link else source["url"],
+                    "ticket_url": link.group(1).replace("&#038;", "&") if link else source["url"],
+                })
+    return events
+
+
+def yoshis(source, fetch, today):
+    """Yoshi's Oakland. Dates are in the Etix ticket link, like sun11826."""
+    events = []
+    for card in fetch(source["url"]).split('class="event-indv"')[1:]:
+        title = re.search(r'class="headliner">\s*<a\s+href="([^"]+)"[^>]*>(.*?)</a>', card, re.S)
+        ticket = re.search(r'href="(https://www\.etix\.com/[^"]+)"', card)
+        if not (title and ticket):
+            continue
+        stamp = re.search(r"-(mon|tue|wed|thu|fri|sat|sun)(\d{3,4})(\d{2})-", ticket.group(1))
+        if not stamp:
+            continue
+        # "sun11826" could be 11/8 or 1/18; the weekday says which.
+        weekday = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].index(stamp.group(1))
+        digits, year = stamp.group(2), 2000 + int(stamp.group(3))
+        when = None
+        for cut in (1, 2):
+            try:
+                candidate = date(year, int(digits[:cut]), int(digits[cut:]))
+            except ValueError:
+                continue
+            if candidate.weekday() == weekday:
+                when = candidate
+        if not when:
+            continue
+        image = re.search(r'<img src="([^"]+)"', card)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(2)).title() if clean_text(title.group(2)).isupper() else clean_text(title.group(2)),
+            "start": combine(when, None),
+            "url": title.group(1),
+            "ticket_url": ticket.group(1),
+            "image": urllib.parse.urljoin(source["url"], image.group(1)) if image else None,
         })
     return events
