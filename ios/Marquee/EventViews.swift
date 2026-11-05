@@ -182,8 +182,8 @@ struct EventDetailView: View {
                             SectionHeader(title: "Lineup", subtitle: "Tap a service to hear them")
                             ForEach(event.artists, id: \.self) { ArtistCard(name: $0) }
                         } else {
-                            SectionHeader(title: "Featuring")
-                            ForEach(event.artists, id: \.self) { PerformerRow(name: $0) }
+                            SectionHeader(title: "Featuring", subtitle: event.kind == .comedy ? "Tap to find their podcast, specials and clips" : nil)
+                            ForEach(event.artists, id: \.self) { PerformerRow(name: $0, isComedian: event.kind == .comedy) }
                         }
                     }
                 }
@@ -289,21 +289,62 @@ struct ArtistCard: View {
     }
 }
 
-/// A comedian or other performer: followable, but no music links.
+/// A comedian or other performer: their pages, plus podcast, Spotify and YouTube.
 struct PerformerRow: View {
     @EnvironmentObject private var store: FeedStore
-    @EnvironmentObject private var taste: TasteStore
+    @Environment(\.openURL) private var openURL
 
     var name: String
+    var isComedian = true
+
+    private var info: ArtistInfo? { store.info(forArtist: name) }
 
     var body: some View {
-        HStack(spacing: 12) {
-            ArtistNameButton(name: name, info: store.info(forArtist: name), searchHint: "comedian")
-            Spacer(minLength: 0)
-            ArtistOpinionButtons(name: name)
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 12) {
+                ArtistNameButton(name: name, info: info, searchHint: isComedian ? "comedian" : "")
+                Spacer(minLength: 0)
+                ArtistOpinionButtons(name: name)
+            }
+
+            let pages = ArtistLink.available(info)
+            if !pages.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(pages, id: \.0) { kind, url in
+                            Button {
+                                openURL(url)
+                            } label: {
+                                Label(kind.label, systemImage: kind.symbol)
+                                    .font(.caption.weight(.semibold))
+                                    .padding(.horizontal, 12)
+                                    .frame(minHeight: 36)
+                                    .background(Color.white.opacity(0.08), in: Capsule())
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+            }
+
+            if isComedian { HStack(spacing: 8) {
+                ForEach(ComedyService.allCases) { service in
+                    Button {
+                        if let url = service.url(for: name, info: info) { openURL(url) }
+                    } label: {
+                        Label(service.rawValue, systemImage: service.symbol)
+                            .font(.caption.weight(.semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                            .frame(maxWidth: .infinity, minHeight: 44)
+                            .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityHint(service.isDirect(info) ? "Opens their page" : "Searches for them")
+                }
+            } }
         }
-        .padding(.leading, 12)
-        .padding(.vertical, 4)
+        .padding(12)
         .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
     }
 }

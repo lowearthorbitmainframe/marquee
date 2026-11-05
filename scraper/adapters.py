@@ -663,7 +663,8 @@ def ticketmaster_links(attraction):
     """A performer's own pages, as Ticketmaster lists them for that show."""
     external = attraction.get("externalLinks") or {}
     links = {}
-    for ours, theirs in (("website", "homepage"), ("instagram", "instagram"), ("tiktok", "tiktok"), ("soundcloud", "soundcloud")):
+    for ours, theirs in (("website", "homepage"), ("instagram", "instagram"), ("tiktok", "tiktok"), ("soundcloud", "soundcloud"),
+                         ("spotify", "spotify"), ("youtube", "youtube"), ("applemusic", "itunes")):
         url = ((external.get(theirs) or [{}])[0]).get("url")
         if url:
             links[ours] = url

@@ -203,7 +203,10 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
         save()
         print("looked up %d new artists; %d cached" % (done, len(cache)))
         if link_minutes:
-            checked = linker.add_links(names, cache, time.time() + link_minutes * 60, save)
+            # Comedians get links too (podcasts, YouTube), mixed in by how soon they play.
+            lineup = [(e["category"], n) for e in upcoming if e["category"] in ("music", "party", "comedy") for n in e["artists"]]
+            comedians = {artist_key(n) for c, n in lineup if c == "comedy"}
+            checked = linker.add_links([n for _, n in lineup], cache, time.time() + link_minutes * 60, save, comedians)
             save()
             print("checked links for %d artists; %d have links" % (checked, sum(1 for r in cache.values() if r.get("links"))))
 
@@ -214,7 +217,7 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
             key = artist_key(name)
             record = cache.get(key)
             if record and (record.get("genre") or record.get("related") or record.get("links")):
-                used[key] = {k: v for k, v in record.items() if k not in ("checked", "linksChecked", "linksMatch")}
+                used[key] = {k: v for k, v in record.items() if k not in ("checked", "linksChecked", "linksMatch", "linksVersion")}
                 if used[key].get("genre") in NON_MUSIC_GENRES:
                     del used[key]["genre"]
 
