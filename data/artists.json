@@ -327,6 +327,12 @@
 "Crayon"
 ]
 },
+"affair19": {
+"appleUrl": "https://music.apple.com/us/artist/affair-19/1705957879?uo=4",
+"checked": "2026-11-05T03:33:37+00:00",
+"genre": "Punk",
+"name": "Affair19"
+},
 "afrodesila": {
 "checked": "2026-11-02T06:01:51+00:00",
 "name": "AfroDesi LA"
@@ -3532,6 +3538,15 @@
 "genre": "Latin",
 "image": "https://cdn-images.dzcdn.net/images/artist/8899e8f1afe29b974d53cadb701a2fdd/250x250-000000-80-0-0.jpg",
 "name": "CONTROL",
+"related": []
+},
+"costra": {
+"appleUrl": "https://music.apple.com/us/artist/costra/507465738?uo=4",
+"checked": "2026-11-05T03:33:37+00:00",
+"fans": 9,
+"genre": "Metal",
+"image": "https://cdn-images.dzcdn.net/images/artist/9518dbf6a88d006fc95a77e1f5dbbfe9/250x250-000000-80-0-0.jpg",
+"name": "Costra",
 "related": []
 },
 "countessluann": {
@@ -10631,6 +10646,15 @@
 "name": "Malibu",
 "related": []
 },
+"malware": {
+"appleUrl": "https://music.apple.com/us/artist/malware/1502030631?uo=4",
+"checked": "2026-11-05T03:33:37+00:00",
+"fans": 31,
+"genre": "Electronic",
+"image": "https://cdn-images.dzcdn.net/images/artist/7f0a2c58c98c15f76765e6ea56b34bb8/250x250-000000-80-0-0.jpg",
+"name": "Malware",
+"related": []
+},
 "mamalarkyandlucky": {
 "checked": "2026-10-31T03:16:23+00:00",
 "name": "Mamalarky & Lucky"
@@ -12111,6 +12135,10 @@
 "Lee DeWyze",
 "Joshua James"
 ]
+},
+"nobodyrules": {
+"checked": "2026-11-05T03:33:37+00:00",
+"name": "Nobody Rules"
 },
 "nobuouematsu": {
 "appleUrl": "https://music.apple.com/us/artist/nobuo-uematsu/475970248?uo=4",
@@ -13720,6 +13748,28 @@
 "image": "https://cdn-images.dzcdn.net/images/artist/ae5183d4bc7d6765fc441e886be63817/250x250-000000-80-0-0.jpg",
 "name": "Rebecca Schiffman",
 "related": []
+},
+"rechall": {
+"appleUrl": "https://music.apple.com/us/artist/rec-hall/1566147535?uo=4",
+"checked": "2026-11-05T03:33:37+00:00",
+"fans": 391,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/8cd8f3c89d52046d38bee2b66c7ad210/250x250-000000-80-0-0.jpg",
+"name": "Rec Hall",
+"related": [
+"Ax and the Hatchetmen",
+"Dayglow",
+"Krooked Kings",
+"Wallows",
+"HOAX",
+"Rebounder",
+"Hippo Campus",
+"West 22nd",
+"flipturn",
+"Arcy Drive",
+"Dogpark",
+"Briston Maroney"
+]
 },
 "redasphalt": {
 "appleUrl": "https://music.apple.com/us/artist/red-asphalt/272383927?uo=4",
