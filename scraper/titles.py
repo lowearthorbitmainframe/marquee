@@ -41,7 +41,7 @@ WHOLE_EVENT = re.compile(
     re.I,
 )
 # The categories the app filters by. Sources can set one; otherwise the title decides.
-CATEGORY_NAMES = ("music", "comedy", "film", "theater", "party", "other")
+CATEGORY_NAMES = ("music", "comedy", "film", "theater", "party", "museum", "other")
 CATEGORIES = [
     ("comedy", re.compile(r"\b(comedy|comedians?|stand[- ]?up|improv)\b", re.I)),
     ("film", re.compile(r"\b(screening|film festival|movie night|in 35mm|in 70mm|double feature)\b", re.I)),

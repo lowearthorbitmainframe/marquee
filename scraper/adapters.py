@@ -6,6 +6,7 @@
 `start` and `doors` are naive local datetimes (or timezone-aware ones); scrape.py
 normalizes them. Adapters raise on layout changes so the last good data is kept.
 """
+import html
 import json
 import os
 import re
@@ -66,7 +67,26 @@ VENUE_ALIASES = {
     "improv-comedy-club-irvine": "irvine-improv",
     "improv-comedy-club-hollywood": "hollywood-improv",
     "brea-improv-comedy-club": "brea-improv",
+    "the-comedy-store-main-room": "the-comedy-store",
+    "the-comedy-chateau-yorick-showroom": "the-comedy-chateau",
+    "comedy-chateau": "the-comedy-chateau",
+    "bram-goldsmith-theater": "the-wallis",
+    "the-wallis-annenberg-center-for-the-performing-arts": "the-wallis",
+    "saban-theatre-beverly-hills": "saban-theatre",
+    "the-saban": "saban-theatre",
+    "the-canyon": "the-canyon-agoura-hills",
+    "the-canyon-club": "the-canyon-agoura-hills",
+    "haha-comedy-club": "ha-ha-comedy-club",
+    "the-comedy-store-belly-room": "the-comedy-store",
+    "the-comedy-store-original-room": "the-comedy-store",
+    "cobb-s-comedy-club": "cobbs-comedy-club",
+    "punch-line-comedy-club-san-francisco": "punch-line",
+    "improv-comedy-club-san-jose": "san-jose-improv",
+    "san-jose-improv-comedy-club": "san-jose-improv",
 }
+
+# Rooms where every show is comedy, whatever a ticketing feed calls it.
+COMEDY_ROOMS = re.compile(r"comedy|improv\b|laugh|punch ?line|ice house|ha ?ha|jester|funny bone|chuckle", re.I)
 
 
 def slugify(name):
@@ -155,6 +175,10 @@ def parse_iso(value):
     """AEG uses 'TBD' for times it hasn't set, so bad values return None.
     Some JSON-LD uses 'Nov 05, 2026', which has no time."""
     text = str(value).replace("Z", "+00:00")
+    # Some sites leave out zero padding ("2026-11-7T18:00-8:00").
+    text = re.sub(r"^(\d{4})-(\d{1,2})-(\d{1,2})", lambda m: "%s-%02d-%02d" % (m.group(1), int(m.group(2)), int(m.group(3))), text)
+    text = re.sub(r"T(\d{1,2}):(\d{2})(?::(\d{2}))?([+-])(\d{1,2})(?::?(\d{2}))?$",
+                  lambda m: "T%02d:%s:%s%s%02d:%s" % (int(m.group(1)), m.group(2), m.group(3) or "00", m.group(4), int(m.group(5)), m.group(6) or "00"), text)
     try:
         return datetime.fromisoformat(text)
     except ValueError:
@@ -169,10 +193,20 @@ def live_nation(source, fetch, today):
     """theecho.com, wiltern.com and friends. Their JSON-LD says 'The Echo' for
     both rooms, so the room comes from which page we fetched."""
     events = []
+    locations = source.get("locations")
     for item in json_ld_events(fetch(source["url"])):
+        venue = source.get("venue")
+        if locations:
+            # Promoters with several rooms (The Canyon) name each show's room; rooms outside the region are skipped.
+            place = item.get("location")
+            place = place[0] if isinstance(place, list) and place else place
+            venue = locations.get(html.unescape(place.get("name", "")) if isinstance(place, dict) else "")
+            if not venue:
+                continue
         events.append({
-            "venue": source["venue"],
-            "category": JSON_LD_CATEGORIES.get(item.get("@type")),
+            "venue": venue,
+            # Venue sites mark nearly everything MusicEvent, so a source's own category wins.
+            "category_guess": JSON_LD_CATEGORIES.get(item.get("@type")),
             "venue_info": {"address": json_ld_address(item.get("location"))},
             "title": item["name"],
             "start": parse_iso(item["startDate"]),
@@ -677,6 +711,11 @@ TICKETMASTER_NOT_SHOWS = re.compile(r"\b(parking|vip|package|suite|premium|shutt
 def parse_ticketmaster(item):
     if TICKETMASTER_NOT_SHOWS.search(item.get("name", "")):
         return None
+    # Ticketmaster sometimes files an overseas show under a local venue with a similar name
+    # (Adelaide tours turned up at North Hollywood's Comedy Chateau). The show's own time zone gives it away.
+    zone = (item.get("dates") or {}).get("timezone") or ""
+    if zone and not zone.startswith("America/"):
+        return None
     embedded = item.get("_embedded") or {}
     venue = (embedded.get("venues") or [{}])[0]
     start_info = (item.get("dates") or {}).get("start") or {}
@@ -705,7 +744,7 @@ def parse_ticketmaster(item):
         "image": images[-1].get("url") if images else None,
         "price": "From $%d" % round(prices[0]["min"]) if prices and prices[0].get("min") else None,
         "cancelled": status in ("cancelled", "postponed"),
-        "category": ticketmaster_category(item),
+        "category": "comedy" if COMEDY_ROOMS.search(venue["name"]) else ticketmaster_category(item),
     }
 
 
@@ -1395,5 +1434,195 @@ def spektrix(source, fetch, today):
             "start": parse_iso(item["start"]),
             "url": source.get("site"),
             "ticket_url": source.get("site"),
+        })
+    return events
+
+
+def json_ld_cards(source, fetch, today):
+    """Listings where each card carries its own JSON-LD with only a date, and
+    the showtime is printed beside it (the Ha Ha Comedy Club)."""
+    events = []
+    for card in fetch(source["url"]).split(source["card"])[1:]:
+        items = list(json_ld_events(card))
+        if not items or not items[0].get("startDate"):
+            continue
+        item = items[0]
+        day = parse_iso(item["startDate"])
+        if not day:
+            continue
+        text = clean_text(re.sub(r"<script.*?</script>", " ", card, flags=re.S))
+        clock = parse_clock(text)
+        events.append({
+            "venue": source["venue"],
+            "title": html.unescape(item["name"]),
+            "start": combine(day.date(), clock) if clock else day,
+            "ticket_url": offer_url(item.get("offers")) or item.get("url"),
+            "image": image_url(item.get("image")),
+            "cancelled": "Cancelled" in str(item.get("eventStatus")),
+        })
+    return events
+
+
+def seatengine(source, fetch, today):
+    """Comedy clubs on SeatEngine (The Comedy Chateau). Each show lists its showtimes."""
+    events = []
+    for card in fetch(source["url"]).split("event-list-item")[1:]:
+        title = re.search(r'class="el-header"><a href="([^"]+)">(.*?)</a>', card, re.S)
+        if not title:
+            continue
+        image = re.search(r'<img src="([^"]+)"', card)
+        for when, show in re.findall(r'class="event-date">([^<]+)</h6>\s*<a[^>]+href="([^"]+)"', card):
+            try:
+                start = datetime.strptime(when.strip(), "%a %b %d %Y, %I:%M %p")
+            except ValueError:
+                continue
+            events.append({
+                "venue": source["venue"],
+                "title": clean_text(title.group(2)),
+                "start": start,
+                "url": urllib.parse.urljoin(source["url"], title.group(1)),
+                "ticket_url": urllib.parse.urljoin(source["url"], show),
+                "image": image.group(1) if image else None,
+            })
+    return events
+
+
+def stagey(source, fetch, today):
+    """Small theaters that sell through Stagey (the Whitefire). The schedule
+    page lists each performance under a dated heading."""
+    events = []
+    for block in re.split(r'<h4 class="my-0">', fetch(source["url"]))[1:]:
+        match = re.match(r"\s*\w+, (\w+ \d{1,2}, \d{4}) \|\s*(\d{1,2}:\d{2} [AP]M)", block)
+        title = re.search(r"<h2[^>]*>(.*?)</h2>", block, re.S)
+        if not (match and title):
+            continue
+        link = re.search(r'href="([^"]*/projects/\d+)"', block)
+        tickets = re.search(r'href="([^"]+)"[^>]*>\s*Buy Tickets', block)
+        image = re.search(r'data-original="([^"]+)"', block)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(1)),
+            "start": datetime.strptime("%s %s" % match.groups(), "%B %d, %Y %I:%M %p"),
+            "url": urllib.parse.urljoin(source["url"], link.group(1)) if link else source["url"],
+            "ticket_url": html.unescape(tickets.group(1)) if tickets else None,
+            "image": image.group(1) if image else None,
+        })
+    return events
+
+
+MONTH_NAME = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?"
+DAY_TEXT = MONTH_NAME + r"\s+\d{1,2}(?:st|nd|rd|th)?(?:,?\s+\d{4})?"
+DATE_RANGE = re.compile(r"(%s)[\s|]*(?:–|—|-|to)[\s|]*(%s|\d{1,2},?\s+\d{4})" % (DAY_TEXT, DAY_TEXT), re.I)
+THROUGH = re.compile(r"(?:through|thru|until|ends|closes)\s+(%s)" % DAY_TEXT, re.I)
+ONE_DAY = re.compile(r"(%s)(?:\s*[|,·@]?\s*(\d{1,2}(?::\d{2})?\s*[ap]\.?m\.?))?" % DAY_TEXT, re.I)
+
+
+def parse_day_text(text, today, year_hint=None):
+    """'Nov 07, 2026', 'Sept 20, 2026', 'Sat Nov 7' and the like."""
+    match = re.match(r"(%s)\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s+(\d{4}))?" % MONTH_NAME, text.strip(), re.I)
+    if not match:
+        return None
+    month = MONTHS.get(match.group(1)[:3].lower())
+    day = int(match.group(2))
+    year = int(match.group(3)) if match.group(3) else year_hint or infer_year(month, day, today)
+    try:
+        return date(year, month, day)
+    except ValueError:
+        return None
+
+
+def card_title(card, source):
+    if source.get("title"):
+        match = re.search(source["title"], card, re.S)
+        if match:
+            return clean_text(match.group(1))
+    match = (re.search(r"<h[1-6][^>]*>(.*?)</h[1-6]>", card, re.S) or re.search(r'aria-label="(?:Read more about )?([^"]+)"', card)
+             or re.search(r'<img[^>]+alt="([^"]{3,})"', card))
+    return clean_text(html.unescape(re.sub(r"<[^>]+>", " ", match.group(1)))) if match else None
+
+
+# Museum listings mix in members' nights, donor receptions and rentals, which aren't open to the public.
+MUSEUM_SKIP = re.compile(r"\bmembers?\b|leadership circle|patrons?\b|donors?\b|subscribe|private event|rentals?\b|school (group|tour)|teachers?\b|^(current )?exhibitions( at| on|$)|^on view$", re.I)
+
+
+def museum_cards(source, fetch, today):
+    """Museum listings. With "kind": "exhibition", each card is a show on view between
+    two dates; otherwise each card is a dated program, talk or screening."""
+    events = []
+    exhibition = source.get("kind") == "exhibition"
+    for card in fetch(source["url"]).split(source["card"])[1:]:
+        title = card_title(card, source)
+        if not title or MUSEUM_SKIP.search(title):
+            continue
+        # Cards split on their own link ('href="/exhibitions/') start with the rest of that link.
+        if source["card"].startswith('href="'):
+            link = re.match(r'([^"]*)"', source["card"][6:] + card)
+        else:
+            link = re.search(r'href="([^"#]+)"', card)
+        image = re.search(r'<img[^>]+(?:data-src|src)="([^"]+)"', card)
+        text = clean_text(re.sub(r"<[^>]+>", " | ", card))
+        base = {
+            "venue": source["venue"],
+            "title": title,
+            "url": urllib.parse.urljoin(source["url"], html.unescape(link.group(1))) if link else source["url"],
+            "image": urllib.parse.urljoin(source["url"], html.unescape(image.group(1))) if image else None,
+            "category": "museum",
+        }
+        base["ticket_url"] = base["url"]
+        if exhibition:
+            span = DATE_RANGE.search(text)
+            if span:
+                end_text = span.group(2)
+                if re.match(r"\d", end_text):
+                    end_text = span.group(1).split()[0] + " " + end_text
+                end = parse_day_text(end_text, today)
+                year = re.search(r"\d{4}", span.group(1))
+                start = parse_day_text(span.group(1), today, int(year.group(0)) if year else (end.year if end else None))
+                if start and end and start > end:
+                    start = date(start.year - 1, start.month, start.day)
+            else:
+                through = THROUGH.search(text)
+                start, end = None, parse_day_text(through.group(1), today) if through else None
+            if not end or end < today or any(e["url"] == base["url"] for e in events):
+                continue
+            events.append(dict(base, start=datetime.combine(start or today, datetime.min.time()), end=end, exhibition=True))
+            continue
+        for match in ONE_DAY.finditer(text):
+            day = parse_day_text(match.group(1), today)
+            if not day or day < today:
+                continue
+            clock = parse_clock(match.group(2)) if match.group(2) else parse_clock(text[match.end():match.end() + 40])
+            start = combine(day, clock) if clock else datetime.combine(day, datetime.min.time())
+            if not any(e["title"] == title and e["start"] == start for e in events):
+                events.append(dict(base, start=start))
+            if not source.get("all_dates"):
+                break
+    return events
+
+
+def json_ld_exhibitions(source, fetch, today):
+    """Museums that publish ExhibitionEvent JSON-LD (the Getty). Shows listed on
+    "elsewhere" pages (the Getty Villa) go to that venue."""
+    elsewhere = {}
+    for venue, url in (source.get("elsewhere") or {}).items():
+        for path in re.findall(r'href="([^"]*/exhibitions/[^"/?#]+)', fetch(url)):
+            elsewhere[path.rstrip("/").rsplit("/", 1)[-1]] = venue
+    events = []
+    for item in json_ld_events(fetch(source["url"])):
+        end = parse_iso(item.get("endDate"))
+        start = parse_iso(item.get("startDate"))
+        if not (item.get("name") and end and start) or end.date() < today:
+            continue
+        slug = (item.get("url") or "").rstrip("/").rsplit("/", 1)[-1]
+        events.append({
+            "venue": elsewhere.get(slug, source["venue"]),
+            "title": clean_text(html.unescape(item["name"]).replace("*", "")),
+            "start": start,
+            "end": end.date(),
+            "exhibition": True,
+            "url": item.get("url"),
+            "ticket_url": item.get("url"),
+            "image": image_url(item.get("image")),
+            "category": "museum",
         })
     return events

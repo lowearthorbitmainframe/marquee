@@ -3,7 +3,13 @@ import Foundation
 enum FeedConfig {
     /// Where the scraper publishes each region's feed and the list of regions.
     /// The app falls back to the Los Angeles snapshot bundled at build time.
-    static let baseURL = "https://raw.githubusercontent.com/lowearthorbitmainframe/marquee/main/data/"
+    static let publishedURL = "https://raw.githubusercontent.com/lowearthorbitmainframe/marquee/main/data/"
+    #if DEBUG
+    /// Debug builds can read unpublished feeds: launch with `-feedBaseURL file:///path/to/data/`.
+    static var baseURL: String { UserDefaults.standard.string(forKey: "feedBaseURL") ?? publishedURL }
+    #else
+    static let baseURL = publishedURL
+    #endif
     static let refreshInterval: TimeInterval = 60 * 60
     static let defaultRegion = Region(id: "los-angeles", name: "Los Angeles")
 
@@ -134,7 +140,7 @@ final class FeedStore: ObservableObject {
         venuesById = Dictionary(feed.venues.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         eventsByDay = Dictionary(grouping: feed.events) { calendar.startOfDay(for: $0.start) }
         showCounts = feed.events.reduce(into: [:]) { $0[$1.venueId, default: 0] += 1 }
-        venueKinds = feed.events.reduce(into: [:]) { $0[$1.venueId, default: []].insert($1.kind) }
+        venueKinds = feed.events.reduce(into: [:]) { $0[$1.venueId, default: []].formUnion($1.kinds) }
         let kindCounts = feed.events.reduce(into: [String: [EventCategory: Int]]()) { $0[$1.venueId, default: [:]][$1.kind, default: 0] += 1 }
         venueKindOrder = kindCounts.mapValues { counts in counts.sorted { $0.value > $1.value }.map(\.key) }
         self.feed = feed
@@ -157,6 +163,14 @@ final class FeedStore: ObservableObject {
 
     func events(on day: Date) -> [Event] {
         (eventsByDay[calendar.startOfDay(for: day)] ?? []).filter { !isHidden($0) }
+    }
+
+    /// Museum exhibitions open on this day, other than ones opening that day (those are listed as events).
+    func exhibitions(on day: Date) -> [Event] {
+        let start = calendar.startOfDay(for: day)
+        return (feed?.events ?? [])
+            .filter { $0.isOnView(start, calendar: calendar) && calendar.startOfDay(for: $0.start) != start }
+            .sorted { ($0.end ?? $0.start) < ($1.end ?? $1.start) }
     }
 
     var today: Date { calendar.startOfDay(for: Date()) }

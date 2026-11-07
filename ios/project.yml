@@ -26,9 +26,9 @@ targets:
     info:
       path: Marquee/Info.plist
       properties:
-        CFBundleDisplayName: Marquee
+        CFBundleDisplayName: Scenester
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
-        NSAppleMusicUsageDescription: Marquee reads the artists in your library to find their shows and similar bands near you.
+        NSAppleMusicUsageDescription: Scenester reads the artists in your library to find their shows and similar bands near you.
         UIBackgroundModes: [fetch]
         BGTaskSchedulerPermittedIdentifiers: [com.bryanstage.marquee.refresh]

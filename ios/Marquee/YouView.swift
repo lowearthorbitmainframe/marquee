@@ -14,6 +14,7 @@ struct YouView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                CityBannerHeader()
                 VStack(alignment: .leading, spacing: 24) {
                     VStack(alignment: .leading, spacing: 10) {
                         SectionHeader(title: "Saved shows")
@@ -114,7 +115,7 @@ struct AlertsSection: View {
             }
             .tint(Theme.accent)
             if denied {
-                Text("Notifications are off for Marquee. Turn them on in Settings to get alerts.")
+                Text("Notifications are off for Scenester. Turn them on in Settings to get alerts.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }

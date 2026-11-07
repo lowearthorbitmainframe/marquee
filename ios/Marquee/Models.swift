@@ -73,6 +73,9 @@ struct Event: Codable, Identifiable, Hashable {
     var age: String?
     var price: String?
     var tour: String?
+    /// Museum exhibitions are on view from `start` until `end`.
+    var end: Date?
+    var exhibition: Bool?
 }
 
 struct SourceStatus: Codable, Hashable {
@@ -83,7 +86,7 @@ struct SourceStatus: Codable, Hashable {
 }
 
 enum EventCategory: String, CaseIterable, Identifiable {
-    case music, comedy, film, theater, party, other
+    case music, comedy, film, theater, party, museum, other
 
     var id: String { rawValue }
 
@@ -94,6 +97,7 @@ enum EventCategory: String, CaseIterable, Identifiable {
         case .film: "Film"
         case .theater: "Theater"
         case .party: "Nightlife"
+        case .museum: "Museums"
         case .other: "Other"
         }
     }
@@ -105,12 +109,13 @@ enum EventCategory: String, CaseIterable, Identifiable {
         case .film: "film"
         case .theater: "theatermasks"
         case .party: "sparkles"
+        case .museum: "building.columns"
         case .other: "star"
         }
     }
 
     /// The filters people pick from; "Other" is only ever part of "All".
-    static let filters: [EventCategory] = [.music, .comedy, .film, .theater, .party]
+    static let filters: [EventCategory] = [.music, .comedy, .film, .theater, .party, .museum]
 
     /// Music and nightlife acts have Apple Music pages; comedians and films don't.
     var hasMusicLinks: Bool { self == .music || self == .party }
@@ -118,6 +123,31 @@ enum EventCategory: String, CaseIterable, Identifiable {
 
 extension Event {
     var kind: EventCategory { EventCategory(rawValue: category) ?? .other }
+
+    /// A nightlife event that names its DJs or artists in the headline ("Disclosure (DJ set)")
+    /// is also a music show; an unnamed club night is not.
+    var headlinesArtists: Bool {
+        guard kind == .party else { return false }
+        let headline = title.lowercased()
+        return artists.contains { $0.count > 1 && headline.contains($0.lowercased()) }
+    }
+
+    /// Every category this event belongs to.
+    var kinds: Set<EventCategory> { headlinesArtists ? [kind, .music] : [kind] }
+
+    var isExhibition: Bool { exhibition == true && end != nil }
+
+    /// Whether an exhibition can be seen on this day.
+    func isOnView(_ day: Date, calendar: Calendar) -> Bool {
+        guard isExhibition, let end else { return false }
+        let first = calendar.startOfDay(for: start)
+        return first <= day && day <= end
+    }
+
+    func matches(_ category: EventCategory?) -> Bool {
+        guard let category else { return true }
+        return kinds.contains(category)
+    }
 }
 
 enum ArtistKey {

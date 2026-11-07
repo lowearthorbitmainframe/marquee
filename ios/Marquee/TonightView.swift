@@ -20,6 +20,7 @@ struct TonightView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                CityBannerHeader()
                 LazyVStack(alignment: .leading, spacing: 12) {
                     DayStrip(days: upcomingDays, selected: day) { selectedDay = $0 }
                     CategoryChips(selection: category)
@@ -32,7 +33,7 @@ struct TonightView: View {
                     if store.feed == nil {
                         ContentUnavailableView("Couldn't load shows", systemImage: "exclamationmark.triangle", description: Text("Pull down to try again."))
                             .padding(.top, 40)
-                    } else if lists.isEmpty {
+                    } else if lists.isEmpty && !(category.wrappedValue == .museum && !store.exhibitions(on: day).isEmpty) {
                         ContentUnavailableView("Nothing listed", systemImage: "moon.zzz", description: Text(category.wrappedValue == nil ? "No shows found for this day yet." : "Nothing in \(category.wrappedValue!.label.lowercased()) this day. Try All."))
                             .padding(.top, 40)
                     }
@@ -43,6 +44,9 @@ struct TonightView: View {
                             EventLink(event: item.event, reason: item.reason)
                                 .id("\(item.event.id)-\(item.reason ?? "")")
                         }
+                    }
+                    OnViewSection(exhibitions: store.exhibitions(on: day), expanded: category.wrappedValue == .museum) {
+                        category.wrappedValue = .museum
                     }
                     FreshnessFooter().padding(.top, 8)
                 }
@@ -76,7 +80,7 @@ struct TonightView: View {
     private var sections: [DaySection] {
         let recommender = Recommender(taste: taste.profile, feed: store.feed)
         let scored = store.events(on: day)
-            .filter { category.wrappedValue == nil || $0.kind == category.wrappedValue }
+            .filter { $0.matches(category.wrappedValue) }
             .map { (event: $0, match: recommender.recommend($0)) }
             .filter { $0.match.score >= 0 }
 
@@ -179,5 +183,42 @@ extension View {
     func marqueeDestinations() -> some View {
         navigationDestination(for: Event.self) { EventDetailView(event: $0) }
             .navigationDestination(for: Venue.self) { VenueDetailView(venue: $0) }
+    }
+}
+
+/// Exhibitions on view this day. Under "Museums" they're listed in full; elsewhere
+/// they fold into one row that switches to that filter.
+struct OnViewSection: View {
+    var exhibitions: [Event]
+    var expanded: Bool
+    var showAll: () -> Void
+
+    var body: some View {
+        if exhibitions.isEmpty {
+            EmptyView()
+        } else if expanded {
+            SectionHeader(title: "On view", subtitle: "Exhibitions you can see this day").padding(.top, 8)
+            ForEach(exhibitions) { EventLink(event: $0) }
+        } else {
+            Button(action: showAll) {
+                HStack(spacing: 12) {
+                    Image(systemName: EventCategory.museum.symbol)
+                        .font(.title3)
+                        .foregroundStyle(EventCategory.museum.color)
+                        .frame(width: 44, height: 44)
+                        .background(EventCategory.museum.wash, in: RoundedRectangle(cornerRadius: 10))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("\(exhibitions.count) museum exhibitions on view").font(.headline)
+                        Text("Exhibitions you can catch this day").font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right").foregroundStyle(.secondary)
+                }
+                .padding(10)
+                .background(Theme.card, in: RoundedRectangle(cornerRadius: 14))
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 8)
+        }
     }
 }

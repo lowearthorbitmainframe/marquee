@@ -87,6 +87,12 @@ def normalize(raw, zone):
         event["timeTBA"] = True
     if raw.get("doors"):
         event["doors"] = to_local(raw["doors"], zone).isoformat()
+    # Museum exhibitions run between two dates; the app shows them as "on view".
+    if raw.get("end"):
+        # The app reads dates with a time and zone, so an exhibition closes at the end of its last day.
+        event["end"] = to_local(datetime.combine(raw["end"], datetime.max.time().replace(microsecond=0)), zone).isoformat()
+        event["exhibition"] = True
+        event.pop("timeTBA", None)
     for source_key, feed_key in [("ticket_url", "ticketUrl"), ("url", "url"), ("image", "image"),
                                  ("age", "age"), ("price", "price"), ("tour", "tour")]:
         # The app reads these as text, so one odd value must not reach the feed.
@@ -141,8 +147,8 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
         try:
             raws = adapter(source, fetch, today)
             for raw in raws:
-                if source.get("category") and not raw.get("category"):
-                    raw["category"] = source["category"]
+                guess = raw.pop("category_guess", None)
+                raw["category"] = raw.get("category") or source.get("category") or guess
                 for name, links in (raw.get("artist_links") or {}).items():
                     found_links.setdefault(name, {}).update(links)
             normalized = [dict(e, source=label) for e in (normalize(r, zone) for r in raws) if e]
@@ -185,7 +191,7 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
     events = {k: e for k, e in events.items() if e["venueId"] in venues}
 
     upcoming = sorted(
-        remove_duplicates(e for e in events.values() if e["start"][:10] >= today.isoformat()),
+        remove_duplicates(e for e in events.values() if max(e["start"][:10], e.get("end", "")[:10]) >= today.isoformat()),
         key=lambda e: (e["start"][:10], bool(e.get("timeTBA")), e["start"], e["venueId"]),
     )
 

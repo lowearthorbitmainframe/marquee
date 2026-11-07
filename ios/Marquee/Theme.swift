@@ -22,6 +22,7 @@ enum Format {
     static func monthDay(_ date: Date, _ zone: TimeZone) -> String { formatter("MMM d", zone).string(from: date) }
     static func fullDay(_ date: Date, _ zone: TimeZone) -> String { formatter("EEEE, MMMM d", zone).string(from: date) }
     static func month(_ date: Date, _ zone: TimeZone) -> String { formatter("MMMM yyyy", zone).string(from: date) }
+    static func year(_ date: Date, _ zone: TimeZone) -> String { formatter("yyyy", zone).string(from: date) }
 }
 
 extension View {
@@ -66,6 +67,7 @@ extension EventCategory {
         case .film: Color(red: 0.60, green: 0.52, blue: 0.80)
         case .theater: Color(red: 0.80, green: 0.52, blue: 0.44)
         case .party: Color(red: 0.42, green: 0.70, blue: 0.56)
+        case .museum: Color(red: 0.70, green: 0.66, blue: 0.48)
         case .other: Color(white: 0.55)
         }
     }
@@ -175,5 +177,50 @@ struct FlowLayout: Layout {
             rowHeight = max(rowHeight, size.height)
         }
         return (origins, CGSize(width: maxWidth, height: y + rowHeight))
+    }
+}
+
+/// The ink drawing of the selected city that sits behind each main screen's title,
+/// so the city is plain at a glance. It fades into the screen color below the title.
+struct CityBanner: View {
+    @EnvironmentObject private var store: FeedStore
+
+    static let height: CGFloat = 400
+
+    var body: some View {
+        Image("banner-\(store.regionId)")
+            .resizable()
+            .scaledToFill()
+            .frame(height: Self.height, alignment: .center)
+            .frame(maxWidth: .infinity)
+            .clipped()
+            .overlay {
+                // Dark at the top for the clock, then a deep fade so the title reads in white.
+                LinearGradient(stops: [
+                    .init(color: .black.opacity(0.4), location: 0),
+                    .init(color: .clear, location: 0.16),
+                    .init(color: Theme.background.opacity(0.25), location: 0.5),
+                    .init(color: Theme.background.opacity(0.8), location: 0.8),
+                    .init(color: Theme.background, location: 1),
+                ], startPoint: .top, endPoint: .bottom)
+            }
+            .accessibilityHidden(true)
+    }
+}
+
+/// Put first inside a main screen's scroll view: the banner reaches up behind the large
+/// title and scrolls away with the content, so the collapsed title bar stays clean.
+struct CityBannerHeader: View {
+    /// How far the scroll content starts below the top of the screen under a large title.
+    static let lift: CGFloat = 170
+
+    var body: some View {
+        Color.clear
+            .frame(height: 0)
+            .frame(maxWidth: .infinity)
+            .overlay(alignment: .top) {
+                CityBanner().offset(y: -Self.lift)
+            }
+            .padding(.bottom, -8)
     }
 }

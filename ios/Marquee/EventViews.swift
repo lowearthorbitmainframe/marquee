@@ -94,6 +94,11 @@ struct EventRow: View {
 
     private var detailLine: String {
         var parts: [String] = []
+        if event.isExhibition, let end = event.end {
+            parts.append(event.start > Date() ? "Opens \(Format.monthDay(event.start, zone))" : "Through \(Format.monthDay(end, zone))")
+            parts.append(store.venue(for: event)?.name ?? "")
+            return parts.joined(separator: " · ")
+        }
         if showsDate { parts.append(Format.monthDay(event.start, zone)) }
         parts.append(event.timeTBA == true ? "Time TBA" : Format.time(event.start, zone))
         parts.append(store.venue(for: event)?.name ?? "")
@@ -159,8 +164,13 @@ struct EventDetailView: View {
                     if let tour = event.tour {
                         Text(tour).font(.subheadline).foregroundStyle(.secondary)
                     }
-                    Text(Format.fullDay(event.start, zone)).font(.headline).foregroundStyle(Theme.accent)
-                    Text(timeLine).font(.subheadline).foregroundStyle(.secondary)
+                    if event.isExhibition, let end = event.end {
+                        Text("On view \(Format.monthDay(event.start, zone)) – \(Format.monthDay(end, zone)), \(Format.year(end, zone))")
+                            .font(.headline).foregroundStyle(Theme.accent)
+                    } else {
+                        Text(Format.fullDay(event.start, zone)).font(.headline).foregroundStyle(Theme.accent)
+                        Text(timeLine).font(.subheadline).foregroundStyle(.secondary)
+                    }
                 }
 
                 if let ticket = event.ticketUrl.flatMap(URL.init(string:)) {
@@ -210,6 +220,7 @@ struct EventDetailView: View {
 
     private var ticketLabel: String {
         if event.cancelled { return "Cancelled" }
+        if event.kind == .museum { return "Details and tickets" }
         return event.soldOut ? "Sold out, check tickets" : "Get tickets"
     }
 

@@ -9,7 +9,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Marquee</string>
+	<string>Scenester</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,7 +25,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Marquee reads the artists in your library to find their shows and similar bands near you.</string>
+	<string>Scenester reads the artists in your library to find their shows and similar bands near you.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -27,7 +27,7 @@ struct EventQuery {
     @MainActor func matches(_ event: Event, store: FeedStore, followed: Set<String>) -> Bool {
         if myVenuesOnly, !followed.contains(event.venueId) { return false }
         if let venueId, event.venueId != venueId { return false }
-        if let category, event.kind != category { return false }
+        if !event.matches(category) { return false }
         if let genre, !store.genres(for: event).contains(genre) { return false }
         let term = search.trimmingCharacters(in: .whitespaces)
         guard !term.isEmpty else { return true }
@@ -73,6 +73,7 @@ struct BrowseView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
+                CityBannerHeader()
                 LazyVStack(alignment: .leading, spacing: 10, pinnedViews: [.sectionHeaders]) {
                     controls
                     let groups = groups
