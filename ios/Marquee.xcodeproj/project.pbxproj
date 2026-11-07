@@ -10,6 +10,7 @@
 		0AACEB3C4D145678316D0C95 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3B3EF94B2D6DA1954D0882 /* Models.swift */; };
 		180F5ECF707DAEE20489B2CD /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F7F7EE3F28BD1FF334A002 /* BrowseView.swift */; };
 		1B9B1E71DE3173F5773C60C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E16560576CC455AB9E6B3847 /* Assets.xcassets */; };
+		52442763865210EF4C34BBE5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */; };
 		5DC7367BF15CA094AB4DC69A /* EventViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04647A7D08704C8BE7154CEA /* EventViews.swift */; };
 		5DD4A65A6A609BDBDDC9DA6B /* MarqueeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3413C2E9C99ECE927901879E /* MarqueeApp.swift */; };
 		717D50B230579DC03C9F4969 /* EventTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B44A7884A946BCB8D4D21B /* EventTags.swift */; };
@@ -29,6 +30,7 @@
 		3413C2E9C99ECE927901879E /* MarqueeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeApp.swift; sourceTree = "<group>"; };
 		38CB46A01065AD90A6CD9422 /* YouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouView.swift; sourceTree = "<group>"; };
 		4008A22CC8C03698DEEBF42E /* Marquee.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Marquee.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		95F7F7EE3F28BD1FF334A002 /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		A0DE3CA2C0224E3E00EC567A /* los-angeles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "los-angeles.json"; sourceTree = "<group>"; };
 		A9EB71EE659BD7A4B8BD1931 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 				3413C2E9C99ECE927901879E /* MarqueeApp.swift */,
 				DF3B3EF94B2D6DA1954D0882 /* Models.swift */,
 				E8565B4EB381A8141F953928 /* MusicLinks.swift */,
+				6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */,
 				BD7450B03CBD8BE29FA55F87 /* Taste.swift */,
 				AF786A89C8F867B2A20C028E /* Theme.swift */,
 				AD5AF6B61A045787712D8698 /* TonightView.swift */,
@@ -154,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B9B1E71DE3173F5773C60C3 /* Assets.xcassets in Resources */,
+				52442763865210EF4C34BBE5 /* PrivacyInfo.xcprivacy in Resources */,
 				D05DCF5AB32BFDA3CA9834F8 /* los-angeles.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

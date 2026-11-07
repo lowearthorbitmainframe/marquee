@@ -32,3 +32,5 @@ targets:
         NSAppleMusicUsageDescription: Scenester reads the artists in your library to find their shows and similar bands near you.
         UIBackgroundModes: [fetch]
         BGTaskSchedulerPermittedIdentifiers: [com.bryanstage.marquee.refresh]
+        # Only HTTPS through Apple's own networking, so no export compliance paperwork is needed.
+        ITSAppUsesNonExemptEncryption: false
