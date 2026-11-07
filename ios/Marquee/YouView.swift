@@ -26,6 +26,7 @@ struct YouView: View {
                     }
                     NewShowsSection()
                     YourArtistsShows()
+                    SuggestVenueSection()
                     RegionSection()
                     AlertsSection()
                     ArtistsEditor()

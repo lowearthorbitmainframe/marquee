@@ -19,6 +19,7 @@
 		966190BBCDB2516F58037021 /* FeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D738D3CAF12A2BEB7CD13D /* FeedStore.swift */; };
 		A5834D39850094007DD7F59E /* MusicLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8565B4EB381A8141F953928 /* MusicLinks.swift */; };
 		D05DCF5AB32BFDA3CA9834F8 /* los-angeles.json in Resources */ = {isa = PBXBuildFile; fileRef = A0DE3CA2C0224E3E00EC567A /* los-angeles.json */; };
+		D5973E37BDA9B00009820D0B /* Suggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7949E1273A4FDC4FF6B46 /* Suggestions.swift */; };
 		EA9F681ACF29336D691AE1DC /* VenuesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C30CB4C12D7FA83933CCD2 /* VenuesView.swift */; };
 		F2C7AC243A0B47704BF035CC /* TonightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5AF6B61A045787712D8698 /* TonightView.swift */; };
 		F612E0894D2D5F75624E2677 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF786A89C8F867B2A20C028E /* Theme.swift */; };
@@ -33,6 +34,7 @@
 		6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		95F7F7EE3F28BD1FF334A002 /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		A0DE3CA2C0224E3E00EC567A /* los-angeles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "los-angeles.json"; sourceTree = "<group>"; };
+		A1C7949E1273A4FDC4FF6B46 /* Suggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Suggestions.swift; sourceTree = "<group>"; };
 		A9EB71EE659BD7A4B8BD1931 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		AD5AF6B61A045787712D8698 /* TonightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TonightView.swift; sourceTree = "<group>"; };
 		AF786A89C8F867B2A20C028E /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				DF3B3EF94B2D6DA1954D0882 /* Models.swift */,
 				E8565B4EB381A8141F953928 /* MusicLinks.swift */,
 				6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */,
+				A1C7949E1273A4FDC4FF6B46 /* Suggestions.swift */,
 				BD7450B03CBD8BE29FA55F87 /* Taste.swift */,
 				AF786A89C8F867B2A20C028E /* Theme.swift */,
 				AD5AF6B61A045787712D8698 /* TonightView.swift */,
@@ -177,6 +180,7 @@
 				5DD4A65A6A609BDBDDC9DA6B /* MarqueeApp.swift in Sources */,
 				0AACEB3C4D145678316D0C95 /* Models.swift in Sources */,
 				A5834D39850094007DD7F59E /* MusicLinks.swift in Sources */,
+				D5973E37BDA9B00009820D0B /* Suggestions.swift in Sources */,
 				76988A275A5073991ABC9E0A /* Taste.swift in Sources */,
 				F612E0894D2D5F75624E2677 /* Theme.swift in Sources */,
 				F2C7AC243A0B47704BF035CC /* TonightView.swift in Sources */,

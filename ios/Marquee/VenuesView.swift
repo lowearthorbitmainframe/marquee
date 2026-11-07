@@ -26,6 +26,10 @@ struct VenuesView: View {
         store.showCounts[venue.id] ?? 0
     }
 
+    @State private var isSuggesting = false
+    // Kept apart from the search text, which iOS clears when the search field closes.
+    @State private var suggestName = ""
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -37,11 +41,30 @@ struct VenuesView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                    // A search that finds nothing is the moment someone knows a venue is missing.
+                    if !search.trimmingCharacters(in: .whitespaces).isEmpty && filtered.isEmpty {
+                        ContentUnavailableView {
+                            Label("No venue called \"\(search)\"", systemImage: "magnifyingglass")
+                        } description: {
+                            Text("Know a place we should list?")
+                        } actions: {
+                            Button("Suggest \(search)") { suggestName = search; isSuggesting = true }
+                                .buttonStyle(.borderedProminent)
+                        }
+                        .padding(.top, 30)
+                    }
                 }
                 .padding(16)
             }
             .screenBackground()
             .navigationTitle("Venues")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button { suggestName = search; isSuggesting = true } label: { Image(systemName: "plus") }
+                        .accessibilityLabel("Suggest a venue")
+                }
+            }
+            .sheet(isPresented: $isSuggesting) { SuggestVenueView(initialName: suggestName) }
             .searchable(text: $search, prompt: "Venue or neighborhood")
             .marqueeDestinations()
         }

@@ -6,6 +6,7 @@ import UserNotifications
 struct MarqueeApp: App {
     @StateObject private var store = FeedStore()
     @StateObject private var taste = TasteStore()
+    @StateObject private var suggestions = SuggestionService()
 
     init() {
         UNUserNotificationCenter.current().delegate = NotificationPresenter.shared
@@ -16,10 +17,12 @@ struct MarqueeApp: App {
             RootView()
                 .environmentObject(store)
                 .environmentObject(taste)
+                .environmentObject(suggestions)
                 .tint(Theme.accent)
                 .preferredColorScheme(.dark)
                 .task {
                     store.loadLocal()
+                    await suggestions.flush()
                     await refreshAndAlert()
                 }
         }
