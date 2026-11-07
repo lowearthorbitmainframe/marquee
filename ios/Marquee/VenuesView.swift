@@ -29,7 +29,6 @@ struct VenuesView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                CityBannerHeader()
                 LazyVStack(spacing: 10) {
                     CategoryChips(selection: $category)
                     ForEach(filtered) { venue in

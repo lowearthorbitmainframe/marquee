@@ -20,7 +20,6 @@ struct TonightView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                CityBannerHeader()
                 LazyVStack(alignment: .leading, spacing: 12) {
                     DayStrip(days: upcomingDays, selected: day) { selectedDay = $0 }
                     CategoryChips(selection: category)

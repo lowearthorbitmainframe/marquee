@@ -14,7 +14,6 @@ struct YouView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                CityBannerHeader()
                 VStack(alignment: .leading, spacing: 24) {
                     VStack(alignment: .leading, spacing: 10) {
                         SectionHeader(title: "Saved shows")

@@ -73,7 +73,6 @@ struct BrowseView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                CityBannerHeader()
                 LazyVStack(alignment: .leading, spacing: 10, pinnedViews: [.sectionHeaders]) {
                     controls
                     let groups = groups
