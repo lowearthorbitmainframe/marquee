@@ -29,7 +29,7 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Scenester reads the artists in your library to find their shows and similar bands near you.</string>
 	<key>SuggestionsUseCloudKit</key>
-	<true/>
+	<false/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
