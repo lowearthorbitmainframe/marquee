@@ -208,6 +208,9 @@ struct EventDetailView: View {
         .inlineTitle()
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
+                shareButton
+            }
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     taste.toggleSaved(event)
                 } label: {
@@ -216,6 +219,39 @@ struct EventDetailView: View {
                 .accessibilityLabel(isSaved ? "Remove from saved" : "Save show")
             }
         }
+    }
+
+    /// Texts, emails or posts the show: what, when and where, with the ticket link
+    /// so Messages and Mail show a preview card.
+    @ViewBuilder private var shareButton: some View {
+        let link = (event.ticketUrl ?? event.url).flatMap(URL.init(string:))
+        if let link {
+            ShareLink(item: link, subject: Text(event.title), message: Text(shareText)) {
+                Image(systemName: "square.and.arrow.up")
+            }
+            .accessibilityLabel("Share this show")
+        } else {
+            ShareLink(item: shareText, subject: Text(event.title)) {
+                Image(systemName: "square.and.arrow.up")
+            }
+            .accessibilityLabel("Share this show")
+        }
+    }
+
+    private var shareText: String {
+        var when: String
+        if event.isExhibition, let end = event.end {
+            when = "on view through \(Format.monthDay(end, zone))"
+        } else {
+            when = Format.fullDay(event.start, zone)
+            if event.timeTBA != true { when += " at \(Format.time(event.start, zone))" }
+        }
+        var lines = [event.title, when]
+        if let venue {
+            lines.append([venue.name, venue.address].compactMap { $0 }.joined(separator: ", "))
+        }
+        lines.append("Found on Scenester")
+        return lines.joined(separator: "\n")
     }
 
     private var ticketLabel: String {
