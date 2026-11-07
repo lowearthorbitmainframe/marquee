@@ -32,6 +32,7 @@
 		38CB46A01065AD90A6CD9422 /* YouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouView.swift; sourceTree = "<group>"; };
 		4008A22CC8C03698DEEBF42E /* Marquee.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Marquee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		8CAA2D433B55A56B36536F0A /* Scenester.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Scenester.entitlements; sourceTree = "<group>"; };
 		95F7F7EE3F28BD1FF334A002 /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		A0DE3CA2C0224E3E00EC567A /* los-angeles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "los-angeles.json"; sourceTree = "<group>"; };
 		A1C7949E1273A4FDC4FF6B46 /* Suggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Suggestions.swift; sourceTree = "<group>"; };
@@ -72,6 +73,7 @@
 				DF3B3EF94B2D6DA1954D0882 /* Models.swift */,
 				E8565B4EB381A8141F953928 /* MusicLinks.swift */,
 				6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */,
+				8CAA2D433B55A56B36536F0A /* Scenester.entitlements */,
 				A1C7949E1273A4FDC4FF6B46 /* Suggestions.swift */,
 				BD7450B03CBD8BE29FA55F87 /* Taste.swift */,
 				AF786A89C8F867B2A20C028E /* Theme.swift */,
@@ -196,6 +198,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Marquee/Scenester.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V7YN565TXP;
@@ -272,6 +275,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Marquee/Scenester.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V7YN565TXP;
