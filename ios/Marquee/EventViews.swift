@@ -91,6 +91,7 @@ struct EventRow: View {
                 RoundedRectangle(cornerRadius: 14).strokeBorder(border, lineWidth: 0.75)
             }
         }
+        .shadow(color: Theme.cardGlow, radius: 8)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(event.kind.label): \(event.title)")
     }

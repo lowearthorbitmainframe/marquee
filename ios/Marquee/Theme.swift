@@ -1,10 +1,10 @@
 import SwiftUI
 
 /// The app's color schemes. "amber" is the original; "red" is red and black with white type;
-/// "goth" is black, oxblood and bone with serif type. Debug builds can try one with the
-/// launch argument `-theme red` or `-theme goth`.
+/// "goth" is black, oxblood and bone with serif type; "synth" is synthwave: an indigo night,
+/// sunset gradients and neon. Debug builds can try one with `-theme red`, `goth` or `synth`.
 enum ThemeStyle: String {
-    case amber, red, goth
+    case amber, red, goth, synth
 
     static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .amber }
 
@@ -17,6 +17,11 @@ enum Theme {
 
     private static let cherry = Color(red: 0.86, green: 0.11, blue: 0.16)
     private static let oxblood = Color(red: 0.55, green: 0.04, blue: 0.09)
+    // Synthwave: sunset orange, hot pink, violet and neon blue on an indigo night.
+    static let sunsetOrange = Color(red: 1.00, green: 0.55, blue: 0.24)
+    static let sunsetPink = Color(red: 1.00, green: 0.30, blue: 0.62)
+    static let sunsetViolet = Color(red: 0.62, green: 0.36, blue: 1.00)
+    static let neonBlue = Color(red: 0.30, green: 0.80, blue: 1.00)
     /// Warm bone white, the goth theme's ink.
     private static let bone = Color(red: 0.91, green: 0.87, blue: 0.80)
 
@@ -25,6 +30,7 @@ enum Theme {
         case .amber: Color(red: 1.0, green: 0.72, blue: 0.27)
         case .red: cherry
         case .goth: oxblood
+        case .synth: sunsetOrange
         }
     }
     /// Text and icons drawn on top of the accent color.
@@ -33,15 +39,17 @@ enum Theme {
         case .amber: .black
         case .red: .white
         case .goth: bone
+        case .synth: .white
         }
     }
     /// The default color of text.
-    static var ink: Color { style == .goth ? bone : .primary }
+    static var ink: Color { style == .goth ? bone : style == .synth ? .white : .primary }
     static var background: Color {
         switch style {
         case .amber: Color(red: 0.06, green: 0.06, blue: 0.08)
         case .red: Color(red: 0.03, green: 0.02, blue: 0.02)
         case .goth: .black
+        case .synth: Color(red: 0.04, green: 0.02, blue: 0.10)
         }
     }
     static var card: Color {
@@ -49,10 +57,23 @@ enum Theme {
         case .amber: Color(red: 0.12, green: 0.12, blue: 0.15)
         case .red: Color(red: 0.13, green: 0.06, blue: 0.07)
         case .goth: Color(red: 0.05, green: 0.04, blue: 0.045)
+        case .synth: Color(red: 0.11, green: 0.06, blue: 0.22).opacity(0.85)
         }
     }
     /// A hairline drawn around cards; the goth theme outlines rather than fills.
-    static var cardBorder: Color? { style == .goth ? Color(red: 0.38, green: 0.05, blue: 0.09) : nil }
+    static var cardBorder: Color? {
+        switch style {
+        case .goth: Color(red: 0.38, green: 0.05, blue: 0.09)
+        case .synth: sunsetViolet.opacity(0.55)
+        default: nil
+        }
+    }
+    /// A soft neon glow around outlined cards (synthwave only).
+    static var cardGlow: Color { style == .synth ? sunsetViolet.opacity(0.35) : .clear }
+
+    /// The sunset gradient used on synthwave titles and the retro sun.
+    static let sunset = LinearGradient(colors: [Color(red: 1.0, green: 0.78, blue: 0.30), sunsetOrange, sunsetPink, sunsetViolet],
+                                       startPoint: .top, endPoint: .bottom)
     static let separator = Color.white.opacity(0.08)
     /// The selected tab's icon; the others use `tabUnselected`.
     static var tabSelected: Color {
@@ -60,6 +81,7 @@ enum Theme {
         case .amber: accent
         case .red: Color(white: 0.95)
         case .goth: bone
+        case .synth: .white
         }
     }
     /// Screen titles; nil keeps the system's white.
@@ -68,6 +90,7 @@ enum Theme {
         case .amber: nil
         case .red: UIColor(cherry)
         case .goth: UIColor(red: 0.72, green: 0.07, blue: 0.12, alpha: 1)
+        case .synth: UIColor(red: 1.00, green: 0.55, blue: 0.24, alpha: 1)
         }
     }
     static var tabUnselected: UIColor? {
@@ -75,6 +98,7 @@ enum Theme {
         case .amber: nil
         case .red: UIColor(cherry)
         case .goth: UIColor(red: 0.62, green: 0.06, blue: 0.11, alpha: 1)
+        case .synth: UIColor(red: 0.68, green: 0.55, blue: 1.00, alpha: 1)
         }
     }
 
@@ -82,11 +106,19 @@ enum Theme {
 
     /// The big screen title: a high-contrast serif in the goth theme.
     static var titleFont: Font {
-        style == .goth ? .custom("Bodoni 72", size: 36, relativeTo: .largeTitle).weight(.bold) : .largeTitle.weight(.bold)
+        switch style {
+        case .goth: .custom("Bodoni 72", size: 36, relativeTo: .largeTitle).weight(.bold)
+        case .synth: .system(size: 34, weight: .black).italic()
+        default: .largeTitle.weight(.bold)
+        }
     }
     /// Section headers like "All shows": small capitals in the goth theme.
     static var headerFont: Font {
-        style == .goth ? .custom("Bodoni 72 Smallcaps", size: 24, relativeTo: .title3) : .title3.weight(.bold)
+        switch style {
+        case .goth: .custom("Bodoni 72 Smallcaps", size: 24, relativeTo: .title3)
+        case .synth: .system(size: 15, weight: .heavy).italic()
+        default: .title3.weight(.bold)
+        }
     }
     /// Event names on listings.
     static var eventTitleFont: Font {
@@ -123,8 +155,14 @@ extension View {
         #endif
     }
 
-    func screenBackground() -> some View {
-        background(Theme.background.ignoresSafeArea())
+    @ViewBuilder func screenBackground() -> some View {
+        if Theme.style == .synth {
+            // An indigo night: violet at the top fading to deep blue-black.
+            background(LinearGradient(colors: [Color(red: 0.16, green: 0.06, blue: 0.32), Theme.background, Color(red: 0.02, green: 0.03, blue: 0.10)],
+                                      startPoint: .top, endPoint: .bottom).ignoresSafeArea())
+        } else {
+            background(Theme.background.ignoresSafeArea())
+        }
     }
 }
 
@@ -134,7 +172,14 @@ struct SectionHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            if Theme.style == .goth {
+            if Theme.style == .synth {
+                // Neon capitals, spaced wide, with a faint glow.
+                Text(title.uppercased())
+                    .font(Theme.headerFont)
+                    .tracking(3)
+                    .foregroundStyle(Theme.neonBlue)
+                    .shadow(color: Theme.neonBlue.opacity(0.7), radius: 6)
+            } else if Theme.style == .goth {
                 // A small dagger and the title in small capitals, ruled underneath.
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text("†").font(Theme.headerFont).foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
@@ -158,6 +203,7 @@ extension EventCategory {
     var color: Color {
         if Theme.style == .red { return nightColor }
         if Theme.style == .goth { return mourningColor }
+        if Theme.style == .synth { return neonColor }
         return switch self {
         case .music: Color(red: 0.45, green: 0.58, blue: 0.80)
         case .comedy: Color(red: 0.78, green: 0.47, blue: 0.60)
@@ -194,6 +240,19 @@ extension EventCategory {
         case .party: Color(red: 0.52, green: 0.63, blue: 0.43)
         case .museum: Color(red: 0.78, green: 0.73, blue: 0.62)
         case .other: Color(white: 0.5)
+        }
+    }
+
+    /// Neon for synthwave: electric blue, hot pink, sunset orange, violet, cyan and peach.
+    private var neonColor: Color {
+        switch self {
+        case .music: Color(red: 0.35, green: 0.62, blue: 1.00)
+        case .comedy: Color(red: 1.00, green: 0.36, blue: 0.68)
+        case .film: Color(red: 1.00, green: 0.60, blue: 0.26)
+        case .theater: Color(red: 0.72, green: 0.45, blue: 1.00)
+        case .party: Color(red: 0.25, green: 0.90, blue: 1.00)
+        case .museum: Color(red: 1.00, green: 0.78, blue: 0.56)
+        case .other: Color(white: 0.75)
         }
     }
 
@@ -316,9 +375,8 @@ struct CenteredScreenTitle: View {
 
     var body: some View {
         if Theme.style.isCustom {
-            Text(text)
-                .font(Theme.titleFont)
-                .foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
+            titleText
+                .background { if Theme.style == .synth { RetroSun().offset(y: -6) } }
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 4)
@@ -329,6 +387,23 @@ struct CenteredScreenTitle: View {
                     scroll?.showSmall = bottom < 110
                 }
                 .onDisappear { scroll?.showSmall = true }
+        }
+    }
+
+    @ViewBuilder private var titleText: some View {
+        if Theme.style == .synth {
+            // White neon letters glowing pink, so they read over the sunset sun.
+            Text(text)
+                .font(Theme.titleFont)
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+                .shadow(color: Theme.sunsetPink, radius: 3)
+                .shadow(color: Theme.sunsetPink.opacity(0.8), radius: 12)
+        } else {
+            Text(text)
+                .font(Theme.titleFont)
+                .foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
         }
     }
 
@@ -374,5 +449,30 @@ extension View {
         } else {
             navigationTitle(text)
         }
+    }
+}
+
+
+/// The synthwave sun: a sunset-gradient disc whose lower half is cut by widening bands,
+/// glowing faintly behind the screen title.
+struct RetroSun: View {
+    var body: some View {
+        Circle()
+            .fill(Theme.sunset)
+            .frame(width: 170, height: 170)
+            .mask {
+                VStack(spacing: 0) {
+                    Rectangle().frame(height: 95)
+                    ForEach(0..<6) { band in
+                        Rectangle().frame(height: CGFloat(10 - band))
+                        Color.clear.frame(height: CGFloat(2 + band))
+                    }
+                    Spacer(minLength: 0)
+                }
+            }
+            .opacity(0.35)
+            .blur(radius: 0.5)
+            .shadow(color: Theme.sunsetOrange.opacity(0.6), radius: 24)
+            .accessibilityHidden(true)
     }
 }
