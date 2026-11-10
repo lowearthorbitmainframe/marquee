@@ -1,6 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <rect width="1024" height="1024" fill="#000000"/>
-  <text x="512" y="492" text-anchor="middle" dominant-baseline="central"
-        font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif"
-        font-weight="700" font-size="820" fill="#ffffff">S</text>
+  <!-- Scenester's gunmetal Tokyo look: a white S with the title's cyan/pink chromatic split. -->
+  <style>
+    text { font-family: 'Futura-CondensedExtraBold', 'Futura', sans-serif; font-weight: 800;
+           font-size: 860px; text-anchor: middle; dominant-baseline: central; }
+  </style>
+  <rect width="1024" height="1024" fill="#2B3338"/>
+  <text x="482" y="530" fill="#00CCF2">S</text>
+  <text x="542" y="530" fill="#FF2E87">S</text>
+  <text x="512" y="530" fill="#FFFFFF">S</text>
 </svg>

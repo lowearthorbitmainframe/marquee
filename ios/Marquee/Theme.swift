@@ -7,11 +7,11 @@ import SwiftUI
 /// hologram pink, thin wide capitals and monospaced readouts. Debug builds can try one with
 /// `-theme red`, `goth`, `synth`, `hipster` or `blade`. "tokyo" is Tokyo cyberpunk on white:
 /// neon pink, cyan and yellow, heavy condensed capitals and signage blocks; "tokyoNight" is
-/// the same on gunmetal gray (the runner-up look). Blade Runner is the default.
+/// the same on gunmetal gray, the default. Blade Runner is the runner-up.
 enum ThemeStyle: String {
     case amber, red, goth, synth, hipster, blade, tokyo, tokyoNight
 
-    static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .blade }
+    static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .tokyoNight }
 
     /// The one light theme.
     var isLight: Bool { self == .hipster || self == .tokyo }
