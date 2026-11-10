@@ -8,12 +8,15 @@ import SwiftUI
 /// `-theme red`, `goth`, `synth`, `hipster` or `blade`. "tokyo" is Tokyo cyberpunk on white:
 /// neon pink, cyan and yellow, heavy condensed capitals and signage blocks.
 enum ThemeStyle: String {
-    case amber, red, goth, synth, hipster, blade, tokyo
+    case amber, red, goth, synth, hipster, blade, tokyo, tokyoNight
 
     static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .amber }
 
     /// The one light theme.
     var isLight: Bool { self == .hipster || self == .tokyo }
+
+    /// The Tokyo look on white ("tokyo") or on near-black ("tokyoNight").
+    var isTokyo: Bool { self == .tokyo || self == .tokyoNight }
 
     /// Themes that draw their own centered titles and colored tab icons.
     var isCustom: Bool { self != .amber }
@@ -34,6 +37,8 @@ enum Theme {
     static let tokyoCyan = Color(red: 0.00, green: 0.80, blue: 0.95)
     static let signYellow = Color(red: 1.00, green: 0.90, blue: 0.00)
     static let tokyoInk = Color(red: 0.07, green: 0.07, blue: 0.09)
+    /// The Tokyo title's lettering: ink on white, white at night.
+    static var tokyoTitleInk: Color { style == .tokyoNight ? .white : tokyoInk }
     // Blade Runner 2049: irradiated orange haze, blue-black night, cyan and hologram pink.
     static let haze = Color(red: 0.88, green: 0.47, blue: 0.16)
     static let replicantCyan = Color(red: 0.25, green: 0.78, blue: 0.82)
@@ -55,7 +60,7 @@ enum Theme {
         case .synth: sunsetOrange
         case .hipster: mustard
         case .blade: haze
-        case .tokyo: neonPink
+        case .tokyo, .tokyoNight: neonPink
         }
     }
     /// Text and icons drawn on top of the accent color.
@@ -67,11 +72,11 @@ enum Theme {
         case .synth: .white
         case .hipster: hipsterInk
         case .blade: .black
-        case .tokyo: .white
+        case .tokyo, .tokyoNight: .white
         }
     }
     /// The default color of text.
-    static var ink: Color { style == .goth ? bone : style == .synth ? .white : style == .hipster ? hipsterInk : style == .blade ? ash : style == .tokyo ? tokyoInk : .primary }
+    static var ink: Color { style == .goth ? bone : style == .synth ? .white : style == .hipster ? hipsterInk : style == .blade ? ash : style == .tokyo ? tokyoInk : style == .tokyoNight ? .white : .primary }
     static var background: Color {
         switch style {
         case .amber: Color(red: 0.06, green: 0.06, blue: 0.08)
@@ -81,6 +86,7 @@ enum Theme {
         case .hipster: paper
         case .blade: Color(red: 0.04, green: 0.05, blue: 0.06)
         case .tokyo: Color(red: 0.97, green: 0.97, blue: 0.98)
+        case .tokyoNight: Color(red: 0.05, green: 0.05, blue: 0.08)
         }
     }
     static var card: Color {
@@ -92,6 +98,7 @@ enum Theme {
         case .hipster: Color(red: 0.99, green: 0.97, blue: 0.93)
         case .blade: Color(red: 0.08, green: 0.09, blue: 0.10).opacity(0.85)
         case .tokyo: .white
+        case .tokyoNight: Color(red: 0.10, green: 0.10, blue: 0.14)
         }
     }
     /// A hairline drawn around cards; the goth theme outlines rather than fills.
@@ -102,6 +109,7 @@ enum Theme {
         case .hipster: hipsterInk.opacity(0.22)
         case .blade: replicantCyan.opacity(0.28)
         case .tokyo: tokyoInk.opacity(0.85)
+        case .tokyoNight: Color.white.opacity(0.22)
         default: nil
         }
     }
@@ -123,7 +131,7 @@ enum Theme {
         case .synth: .white
         case .hipster: hipsterInk
         case .blade: ash
-        case .tokyo: neonPink
+        case .tokyo, .tokyoNight: neonPink
         }
     }
     /// Screen titles; nil keeps the system's white.
@@ -136,6 +144,7 @@ enum Theme {
         case .hipster: UIColor(red: 0.14, green: 0.12, blue: 0.11, alpha: 1)
         case .blade: UIColor(red: 0.91, green: 0.89, blue: 0.85, alpha: 1)
         case .tokyo: UIColor(red: 0.07, green: 0.07, blue: 0.09, alpha: 1)
+        case .tokyoNight: .white
         }
     }
     static var tabUnselected: UIColor? {
@@ -147,6 +156,7 @@ enum Theme {
         case .hipster: UIColor(red: 0.55, green: 0.50, blue: 0.45, alpha: 1)
         case .blade: UIColor(red: 0.88, green: 0.47, blue: 0.16, alpha: 1)
         case .tokyo: UIColor(red: 0.07, green: 0.07, blue: 0.09, alpha: 0.45)
+        case .tokyoNight: UIColor(white: 1, alpha: 0.5)
         }
     }
 
@@ -159,7 +169,7 @@ enum Theme {
         case .synth: .custom("Futura-Bold", size: 38, relativeTo: .largeTitle)
         case .hipster: .custom("HelveticaNeue-CondensedBlack", size: 46, relativeTo: .largeTitle)
         case .blade: .custom("AvenirNext-UltraLight", size: 34, relativeTo: .largeTitle)
-        case .tokyo: .custom("Futura-CondensedExtraBold", size: 52, relativeTo: .largeTitle)
+        case .tokyo, .tokyoNight: .custom("Futura-CondensedExtraBold", size: 52, relativeTo: .largeTitle)
         default: .largeTitle.weight(.bold)
         }
     }
@@ -170,7 +180,7 @@ enum Theme {
         case .synth: .system(size: 14, weight: .heavy, design: .rounded)
         case .hipster: .custom("AmericanTypewriter-Semibold", size: 20, relativeTo: .title3)
         case .blade: .custom("Menlo-Regular", size: 13, relativeTo: .footnote)
-        case .tokyo: .custom("Futura-CondensedExtraBold", size: 17, relativeTo: .headline)
+        case .tokyo, .tokyoNight: .custom("Futura-CondensedExtraBold", size: 17, relativeTo: .headline)
         default: .title3.weight(.bold)
         }
     }
@@ -180,7 +190,7 @@ enum Theme {
         case .goth: .custom("Bodoni 72", size: 20, relativeTo: .headline).weight(.bold)
         case .hipster: .custom("HelveticaNeue-Bold", size: 17, relativeTo: .headline)
         case .blade: .custom("AvenirNext-DemiBold", size: 17, relativeTo: .headline)
-        case .tokyo: .custom("AvenirNext-Bold", size: 17, relativeTo: .headline)
+        case .tokyo, .tokyoNight: .custom("AvenirNext-Bold", size: 17, relativeTo: .headline)
         default: .headline
         }
     }
@@ -240,7 +250,7 @@ struct SectionHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            if Theme.style == .tokyo {
+            if Theme.style.isTokyo {
                 HStack(spacing: 8) {
                     Text(title.uppercased())
                         .font(Theme.headerFont)
@@ -295,7 +305,7 @@ extension EventCategory {
         if Theme.style == .synth { return neonColor }
         if Theme.style == .hipster { return thriftColor }
         if Theme.style == .blade { return cityColor }
-        if Theme.style == .tokyo { return signColor }
+        if Theme.style.isTokyo { return signColor }
         return switch self {
         case .music: Color(red: 0.45, green: 0.58, blue: 0.80)
         case .comedy: Color(red: 0.78, green: 0.47, blue: 0.60)
@@ -399,6 +409,7 @@ extension EventCategory {
         case .red: color.opacity(0.05)
         // Tokyo fills each card with a light, see-through version of its color.
         case .tokyo: color.opacity(0.16)
+        case .tokyoNight: color.opacity(0.22)
         default: .clear
         }
     }
@@ -541,7 +552,7 @@ struct CenteredScreenTitle: View {
             ZineTitle(text: text)
         } else if Theme.style == .blade {
             CityTitle(text: text)
-        } else if Theme.style == .tokyo {
+        } else if Theme.style.isTokyo {
             TokyoTitle(text: text)
         } else {
             Text(text)
@@ -608,11 +619,11 @@ private struct SmallTitleOnScroll: ViewModifier {
     /// title's thin, wide capitals.
     @ViewBuilder private var barTitle: some View {
         switch Theme.style {
-        case .tokyo:
+        case .tokyo, .tokyoNight:
             Text(CityTitle.split(text).lead.uppercased())
                 .font(.custom("Futura-CondensedExtraBold", size: 22, relativeTo: .headline))
                 .tracking(1)
-                .foregroundStyle(Theme.tokyoInk)
+                .foregroundStyle(Theme.tokyoTitleInk)
                 .shadow(color: Theme.tokyoCyan.opacity(0.9), radius: 0, x: -1.5, y: 0)
                 .shadow(color: Theme.neonPink.opacity(0.9), radius: 0, x: 1.5, y: 0)
         case .blade:
@@ -786,7 +797,7 @@ struct TokyoTitle: View {
         VStack(spacing: 8) {
             Text(name.uppercased())
                 .font(Theme.titleFont)
-                .foregroundStyle(Theme.tokyoInk)
+                .foregroundStyle(Theme.tokyoTitleInk)
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
                 // A chromatic split: cyan nudged left, pink nudged right.
@@ -796,10 +807,11 @@ struct TokyoTitle: View {
                 Text(parts.lead.uppercased())
                     .font(.custom("Futura-CondensedExtraBold", size: 18, relativeTo: .headline))
                     .tracking(3)
-                    .foregroundStyle(.white)
+                    // Inverted from the title: white on ink by day, ink on white at night.
+                    .foregroundStyle(Theme.style == .tokyoNight ? Theme.tokyoInk : .white)
                     .padding(.horizontal, 10)
                     .frame(height: 30)
-                    .background(Theme.tokyoInk)
+                    .background(Theme.tokyoTitleInk)
             }
         }
         .frame(maxWidth: .infinity)
