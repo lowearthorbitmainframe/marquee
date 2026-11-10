@@ -68,6 +68,8 @@ enum Theme {
         default: nil
         }
     }
+    /// The neon-tube glow on a selected day or filter (synthwave only).
+    static var chipGlow: Color { style == .synth ? sunsetOrange.opacity(0.9) : .clear }
     /// A soft neon glow around outlined cards (synthwave only).
     static var cardGlow: Color { style == .synth ? sunsetViolet.opacity(0.35) : .clear }
 
@@ -293,6 +295,7 @@ struct CategoryChips: View {
                 }
             }
         }
+        .scrollClipDisabled()
     }
 }
 
@@ -322,6 +325,7 @@ struct Chip: View {
             .padding(.horizontal, 14)
             .padding(.vertical, 8)
             .background(isOn ? (dot.map { $0.opacity(0.38) } ?? Theme.accent) : Theme.card, in: Capsule())
+            .shadow(color: isOn ? Theme.chipGlow : .clear, radius: 8)
             .overlay { if isOn, let dot { Capsule().strokeBorder(dot.opacity(0.6), lineWidth: 1) } }
             .foregroundStyle(isOn && dot == nil ? Theme.onAccent : Color.primary)
         }
@@ -376,7 +380,6 @@ struct CenteredScreenTitle: View {
     var body: some View {
         if Theme.style.isCustom {
             titleText
-                .background { if Theme.style == .synth { RetroSun().offset(y: -6) } }
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 4)
@@ -392,14 +395,7 @@ struct CenteredScreenTitle: View {
 
     @ViewBuilder private var titleText: some View {
         if Theme.style == .synth {
-            // White neon letters glowing pink, so they read over the sunset sun.
-            Text(text)
-                .font(Theme.titleFont)
-                .foregroundStyle(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-                .shadow(color: Theme.sunsetPink, radius: 3)
-                .shadow(color: Theme.sunsetPink.opacity(0.8), radius: 12)
+            SynthTitle(text: text)
         } else {
             Text(text)
                 .font(Theme.titleFont)
@@ -459,10 +455,10 @@ struct RetroSun: View {
     var body: some View {
         Circle()
             .fill(Theme.sunset)
-            .frame(width: 170, height: 170)
+            .frame(width: 120, height: 120)
             .mask {
                 VStack(spacing: 0) {
-                    Rectangle().frame(height: 95)
+                    Rectangle().frame(height: 62)
                     ForEach(0..<6) { band in
                         Rectangle().frame(height: CGFloat(10 - band))
                         Color.clear.frame(height: CGFloat(2 + band))
@@ -470,9 +466,93 @@ struct RetroSun: View {
                     Spacer(minLength: 0)
                 }
             }
-            .opacity(0.35)
+            .opacity(0.55)
             .blur(radius: 0.5)
             .shadow(color: Theme.sunsetOrange.opacity(0.6), radius: 24)
             .accessibilityHidden(true)
+    }
+}
+
+
+/// The synthwave screen title, outrun-style: a sunset sun over a neon grid, with the title in
+/// chrome block capitals. Titles like "Tonight in Los Angeles" put the lead-in ("Tonight in")
+/// above in glowing pink script.
+struct SynthTitle: View {
+    var text: String
+
+    private var parts: (script: String?, block: String) {
+        if let range = text.range(of: " in ") {
+            return (String(text[..<range.upperBound]).trimmingCharacters(in: .whitespaces), String(text[range.upperBound...]))
+        }
+        return (nil, text)
+    }
+
+    /// Sky blue fading to white above a hard horizon, then sunset below: the classic chrome.
+    private static let chrome = LinearGradient(stops: [
+        .init(color: Color(red: 0.55, green: 0.85, blue: 1.0), location: 0),
+        .init(color: .white, location: 0.42),
+        .init(color: Color(red: 0.22, green: 0.10, blue: 0.40), location: 0.5),
+        .init(color: Color(red: 1.0, green: 0.45, blue: 0.70), location: 0.56),
+        .init(color: Color(red: 1.0, green: 0.78, blue: 0.40), location: 1),
+    ], startPoint: .top, endPoint: .bottom)
+
+    var body: some View {
+        ZStack {
+            VStack(spacing: 0) {
+                RetroSun()
+                NeonGrid().frame(height: 40).padding(.horizontal, -16)
+            }
+            .offset(y: 4)
+            VStack(spacing: -10) {
+                if let script = parts.script {
+                    Text(script)
+                        .font(.custom("SnellRoundhand-Black", size: 38, relativeTo: .title))
+                        .foregroundStyle(Color(red: 0.75, green: 0.98, blue: 1.0))
+                        .shadow(color: Theme.neonBlue, radius: 2)
+                        .shadow(color: Theme.neonBlue.opacity(0.9), radius: 10)
+                        .rotationEffect(.degrees(-6))
+                        .offset(x: -40)
+                        .zIndex(1)
+                }
+                Text(parts.block.uppercased())
+                    .font(.custom("Futura-CondensedExtraBold", size: 48, relativeTo: .largeTitle))
+                    .tracking(1)
+                    .foregroundStyle(Self.chrome)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    // A slant to the right, like a speeding title card.
+                    .transformEffect(CGAffineTransform(a: 1, b: 0, c: -0.18, d: 1, tx: 8, ty: 0))
+                    .shadow(color: Color(red: 0.12, green: 0.02, blue: 0.25), radius: 0, x: 2, y: 3)
+                    .shadow(color: Theme.sunsetViolet.opacity(0.8), radius: 12)
+            }
+            .padding(.top, 20)
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+/// The outrun floor: magenta lines running to a vanishing point, with rows that bunch up
+/// toward the horizon. Fades out at the bottom.
+struct NeonGrid: View {
+    var body: some View {
+        Canvas { context, size in
+            var path = Path()
+            let center = size.width / 2
+            for i in -10...10 {
+                path.move(to: CGPoint(x: center + CGFloat(i) * 6, y: 0))
+                path.addLine(to: CGPoint(x: center + CGFloat(i) * size.width / 7, y: size.height))
+            }
+            for row in 1...7 {
+                let y = size.height * pow(CGFloat(row) / 7, 2)
+                path.move(to: CGPoint(x: 0, y: y))
+                path.addLine(to: CGPoint(x: size.width, y: y))
+            }
+            path.move(to: CGPoint(x: 0, y: 0.5))
+            path.addLine(to: CGPoint(x: size.width, y: 0.5))
+            context.stroke(path, with: .color(Theme.sunsetPink.opacity(0.75)), lineWidth: 1)
+        }
+        .shadow(color: Theme.sunsetPink.opacity(0.9), radius: 4)
+        .mask(LinearGradient(colors: [.white, .white.opacity(0)], startPoint: .top, endPoint: .bottom))
+        .accessibilityHidden(true)
     }
 }

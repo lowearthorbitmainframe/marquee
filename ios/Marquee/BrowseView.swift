@@ -166,6 +166,7 @@ struct BrowseView: View {
                 }
             }
         }
+        .scrollClipDisabled()
     }
 
     private func stepLabel(_ symbol: String) -> some View {
@@ -181,6 +182,7 @@ struct BrowseView: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
         .background(isOn ? Theme.accent : Theme.card, in: Capsule())
+        .shadow(color: isOn ? Theme.chipGlow : .clear, radius: 8)
         .foregroundStyle(isOn ? Theme.onAccent : Color.primary)
     }
 

@@ -129,6 +129,7 @@ struct DayStrip: View {
                         }
                         .frame(width: 52, height: 56)
                         .background(isOn ? Theme.accent : Theme.card, in: RoundedRectangle(cornerRadius: 12))
+                        .shadow(color: isOn ? Theme.chipGlow : .clear, radius: 8)
                         .foregroundStyle(isOn ? Theme.onAccent : Color.primary)
                     }
                     .buttonStyle(.plain)
@@ -137,6 +138,7 @@ struct DayStrip: View {
                 }
             }
         }
+        .scrollClipDisabled()
     }
 }
 
