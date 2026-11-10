@@ -10,6 +10,18 @@ struct MarqueeApp: App {
 
     init() {
         UNUserNotificationCenter.current().delegate = NotificationPresenter.shared
+        if let unselected = Theme.tabUnselected {
+            // iOS 26's glass tab bar only honors colors set through a full appearance.
+            let appearance = UITabBarAppearance()
+            appearance.configureWithDefaultBackground()
+            for item in [appearance.stackedLayoutAppearance, appearance.inlineLayoutAppearance, appearance.compactInlineLayoutAppearance] {
+                item.normal.iconColor = unselected
+                item.normal.titleTextAttributes = [.foregroundColor: unselected]
+            }
+            UITabBar.appearance().standardAppearance = appearance
+            UITabBar.appearance().scrollEdgeAppearance = appearance
+            UITabBar.appearance().unselectedItemTintColor = unselected
+        }
     }
 
     var body: some Scene {
@@ -60,18 +72,40 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var store: FeedStore
     @ObservedObject private var router = AlertRouter.shared
+    @State private var tab = 0
+
+    /// iOS colors tab icons itself unless an icon brings its own color, so themes with a
+    /// separate unselected color draw each icon pre-colored.
+    @ViewBuilder private func tabLabel(_ title: String, _ symbol: String, _ index: Int) -> some View {
+        if let unselected = Theme.tabUnselected, let image = UIImage(systemName: symbol) {
+            let color = index == tab ? UIColor(Theme.tabSelected) : unselected
+            Label { Text(title) } icon: { Image(uiImage: image.withTintColor(color, renderingMode: .alwaysOriginal)) }
+        } else {
+            Label(title, systemImage: symbol)
+        }
+    }
 
     var body: some View {
-        TabView {
+        // The tab bar takes its selected color from this tint; each screen gets the accent back.
+        TabView(selection: $tab) {
             TonightView()
-                .tabItem { Label("Tonight", systemImage: "sparkles") }
+                .tint(Theme.accent)
+                .tabItem { tabLabel("Tonight", "sparkles", 0) }
+                .tag(0)
             BrowseView()
-                .tabItem { Label("Browse", systemImage: "calendar") }
+                .tint(Theme.accent)
+                .tabItem { tabLabel("Browse", "calendar", 1) }
+                .tag(1)
             VenuesView()
-                .tabItem { Label("Venues", systemImage: "building.columns") }
+                .tint(Theme.accent)
+                .tabItem { tabLabel("Venues", "building.columns", 2) }
+                .tag(2)
             YouView()
-                .tabItem { Label("You", systemImage: "person.crop.circle") }
+                .tint(Theme.accent)
+                .tabItem { tabLabel("You", "person.crop.circle", 3) }
+                .tag(3)
         }
+        .tint(Theme.tabSelected)
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task {

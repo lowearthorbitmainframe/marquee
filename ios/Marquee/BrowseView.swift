@@ -180,7 +180,7 @@ struct BrowseView: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
         .background(isOn ? Theme.accent : Theme.card, in: Capsule())
-        .foregroundStyle(isOn ? Color.black : Color.primary)
+        .foregroundStyle(isOn ? Theme.onAccent : Color.primary)
     }
 
     private var rangeTitle: String {

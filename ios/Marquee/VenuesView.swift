@@ -155,7 +155,7 @@ struct VenueDetailView: View {
                 HStack(spacing: 8) {
                     Button(isFollowed ? "Following" : "Follow") { taste.toggleVenue(venue.id) }
                         .buttonStyle(.borderedProminent)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(Theme.onAccent)
                     if let maps = mapsURL {
                         Button("Directions") { openURL(maps) }.buttonStyle(.bordered)
                     }

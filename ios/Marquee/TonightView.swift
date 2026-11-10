@@ -128,7 +128,7 @@ struct DayStrip: View {
                         }
                         .frame(width: 52, height: 56)
                         .background(isOn ? Theme.accent : Theme.card, in: RoundedRectangle(cornerRadius: 12))
-                        .foregroundStyle(isOn ? Color.black : Color.primary)
+                        .foregroundStyle(isOn ? Theme.onAccent : Color.primary)
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(Format.fullDay(day, zone))

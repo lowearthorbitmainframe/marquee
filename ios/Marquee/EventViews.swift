@@ -181,7 +181,7 @@ struct EventDetailView: View {
                             .font(.headline)
                             .frame(maxWidth: .infinity, minHeight: 50)
                             .background(Theme.accent, in: RoundedRectangle(cornerRadius: 12))
-                            .foregroundStyle(.black)
+                            .foregroundStyle(Theme.onAccent)
                     }
                     .buttonStyle(.plain)
                 }

@@ -1,10 +1,31 @@
 import SwiftUI
 
+/// The app's color schemes. "amber" is the original; "red" is red and black with white type.
+/// Debug builds can try one with the launch argument `-theme red`.
+enum ThemeStyle: String {
+    case amber, red
+
+    static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .amber }
+}
+
 enum Theme {
-    static let accent = Color(red: 1.0, green: 0.72, blue: 0.27)
-    static let background = Color(red: 0.06, green: 0.06, blue: 0.08)
-    static let card = Color(red: 0.12, green: 0.12, blue: 0.15)
+    static var style: ThemeStyle { ThemeStyle.current }
+
+    static var accent: Color {
+        style == .red ? Color(red: 0.86, green: 0.11, blue: 0.16) : Color(red: 1.0, green: 0.72, blue: 0.27)
+    }
+    /// Text and icons drawn on top of the accent color.
+    static var onAccent: Color { style == .red ? .white : .black }
+    static var background: Color {
+        style == .red ? Color(red: 0.03, green: 0.02, blue: 0.02) : Color(red: 0.06, green: 0.06, blue: 0.08)
+    }
+    static var card: Color {
+        style == .red ? Color(red: 0.13, green: 0.06, blue: 0.07) : Color(red: 0.12, green: 0.12, blue: 0.15)
+    }
     static let separator = Color.white.opacity(0.08)
+    /// The selected tab's icon; the others use `tabUnselected`.
+    static var tabSelected: Color { style == .red ? Color(white: 0.95) : accent }
+    static var tabUnselected: UIColor? { style == .red ? UIColor(red: 0.86, green: 0.11, blue: 0.16, alpha: 1) : nil }
 }
 
 enum Format {
@@ -72,8 +93,9 @@ extension EventCategory {
         }
     }
 
-    /// A dark, see-through wash of the color for card backgrounds.
-    var wash: Color { color.opacity(0.14) }
+    /// A dark, see-through wash of the color for card backgrounds. The red theme keeps
+    /// cards red-black, so the category shows only in the stripe and label.
+    var wash: Color { color.opacity(Theme.style == .red ? 0.04 : 0.14) }
 }
 
 /// The small colored tag that names an event's kind.
@@ -135,7 +157,7 @@ struct Chip: View {
             .padding(.vertical, 8)
             .background(isOn ? (dot.map { $0.opacity(0.38) } ?? Theme.accent) : Theme.card, in: Capsule())
             .overlay { if isOn, let dot { Capsule().strokeBorder(dot.opacity(0.6), lineWidth: 1) } }
-            .foregroundStyle(isOn && dot == nil ? Color.black : Color.primary)
+            .foregroundStyle(isOn && dot == nil ? Theme.onAccent : Color.primary)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isOn ? .isSelected : [])
