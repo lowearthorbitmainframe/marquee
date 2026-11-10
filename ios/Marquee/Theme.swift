@@ -6,11 +6,12 @@ import SwiftUI
 /// colors and zine type; "blade" is Blade Runner 2049: orange haze over blue-black, cyan and
 /// hologram pink, thin wide capitals and monospaced readouts. Debug builds can try one with
 /// `-theme red`, `goth`, `synth`, `hipster` or `blade`. "tokyo" is Tokyo cyberpunk on white:
-/// neon pink, cyan and yellow, heavy condensed capitals and signage blocks.
+/// neon pink, cyan and yellow, heavy condensed capitals and signage blocks; "tokyoNight" is
+/// the same on gunmetal gray (the runner-up look). Blade Runner is the default.
 enum ThemeStyle: String {
     case amber, red, goth, synth, hipster, blade, tokyo, tokyoNight
 
-    static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .amber }
+    static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .blade }
 
     /// The one light theme.
     var isLight: Bool { self == .hipster || self == .tokyo }
