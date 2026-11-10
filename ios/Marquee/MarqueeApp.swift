@@ -47,6 +47,7 @@ struct MarqueeApp: App {
                 .environmentObject(taste)
                 .environmentObject(suggestions)
                 .tint(Theme.accent)
+                .foregroundStyle(Theme.ink)
                 .preferredColorScheme(.dark)
                 .task {
                     store.loadLocal()

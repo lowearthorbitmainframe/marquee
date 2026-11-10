@@ -35,7 +35,7 @@ struct VenuesView: View {
             ScrollView {
                 LazyVStack(spacing: 10) {
                     CenteredScreenTitle(text: "Venues")
-                    if Theme.style == .red {
+                    if Theme.style.isCustom {
                         // The red theme's title sits in the page, so search goes under it.
                         HStack(spacing: 8) {
                             Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
@@ -144,6 +144,11 @@ struct VenueRow: View {
             Rectangle().fill(mainKind.color.opacity(mainKind.stripeOpacity)).frame(width: 4)
         }
         .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay {
+            if let border = Theme.cardBorder {
+                RoundedRectangle(cornerRadius: 14).strokeBorder(border, lineWidth: 0.75)
+            }
+        }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(venue.name), \(kinds.map(\.label).joined(separator: ", "))")
     }
@@ -204,7 +209,7 @@ struct VenueDetailView: View {
 private extension View {
     /// The system search bar, except in the red theme, which draws its own under the title.
     @ViewBuilder func venueSearch(text: Binding<String>) -> some View {
-        if Theme.style == .red {
+        if Theme.style.isCustom {
             self
         } else {
             searchable(text: text, prompt: "Venue or neighborhood")

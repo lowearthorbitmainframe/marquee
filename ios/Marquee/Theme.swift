@@ -1,33 +1,97 @@
 import SwiftUI
 
-/// The app's color schemes. "amber" is the original; "red" is red and black with white type.
-/// Debug builds can try one with the launch argument `-theme red`.
+/// The app's color schemes. "amber" is the original; "red" is red and black with white type;
+/// "goth" is black, oxblood and bone with serif type. Debug builds can try one with the
+/// launch argument `-theme red` or `-theme goth`.
 enum ThemeStyle: String {
-    case amber, red
+    case amber, red, goth
 
     static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .amber }
+
+    /// Themes that draw their own centered titles and colored tab icons.
+    var isCustom: Bool { self != .amber }
 }
 
 enum Theme {
     static var style: ThemeStyle { ThemeStyle.current }
 
+    private static let cherry = Color(red: 0.86, green: 0.11, blue: 0.16)
+    private static let oxblood = Color(red: 0.55, green: 0.04, blue: 0.09)
+    /// Warm bone white, the goth theme's ink.
+    private static let bone = Color(red: 0.91, green: 0.87, blue: 0.80)
+
     static var accent: Color {
-        style == .red ? Color(red: 0.86, green: 0.11, blue: 0.16) : Color(red: 1.0, green: 0.72, blue: 0.27)
+        switch style {
+        case .amber: Color(red: 1.0, green: 0.72, blue: 0.27)
+        case .red: cherry
+        case .goth: oxblood
+        }
     }
     /// Text and icons drawn on top of the accent color.
-    static var onAccent: Color { style == .red ? .white : .black }
+    static var onAccent: Color {
+        switch style {
+        case .amber: .black
+        case .red: .white
+        case .goth: bone
+        }
+    }
+    /// The default color of text.
+    static var ink: Color { style == .goth ? bone : .primary }
     static var background: Color {
-        style == .red ? Color(red: 0.03, green: 0.02, blue: 0.02) : Color(red: 0.06, green: 0.06, blue: 0.08)
+        switch style {
+        case .amber: Color(red: 0.06, green: 0.06, blue: 0.08)
+        case .red: Color(red: 0.03, green: 0.02, blue: 0.02)
+        case .goth: .black
+        }
     }
     static var card: Color {
-        style == .red ? Color(red: 0.13, green: 0.06, blue: 0.07) : Color(red: 0.12, green: 0.12, blue: 0.15)
+        switch style {
+        case .amber: Color(red: 0.12, green: 0.12, blue: 0.15)
+        case .red: Color(red: 0.13, green: 0.06, blue: 0.07)
+        case .goth: Color(red: 0.05, green: 0.04, blue: 0.045)
+        }
     }
+    /// A hairline drawn around cards; the goth theme outlines rather than fills.
+    static var cardBorder: Color? { style == .goth ? Color(red: 0.38, green: 0.05, blue: 0.09) : nil }
     static let separator = Color.white.opacity(0.08)
     /// The selected tab's icon; the others use `tabUnselected`.
-    static var tabSelected: Color { style == .red ? Color(white: 0.95) : accent }
+    static var tabSelected: Color {
+        switch style {
+        case .amber: accent
+        case .red: Color(white: 0.95)
+        case .goth: bone
+        }
+    }
     /// Screen titles; nil keeps the system's white.
-    static var titleColor: UIColor? { style == .red ? UIColor(red: 0.86, green: 0.11, blue: 0.16, alpha: 1) : nil }
-    static var tabUnselected: UIColor? { style == .red ? UIColor(red: 0.86, green: 0.11, blue: 0.16, alpha: 1) : nil }
+    static var titleColor: UIColor? {
+        switch style {
+        case .amber: nil
+        case .red: UIColor(cherry)
+        case .goth: UIColor(red: 0.72, green: 0.07, blue: 0.12, alpha: 1)
+        }
+    }
+    static var tabUnselected: UIColor? {
+        switch style {
+        case .amber: nil
+        case .red: UIColor(cherry)
+        case .goth: UIColor(red: 0.62, green: 0.06, blue: 0.11, alpha: 1)
+        }
+    }
+
+    // MARK: Type
+
+    /// The big screen title: a high-contrast serif in the goth theme.
+    static var titleFont: Font {
+        style == .goth ? .custom("Bodoni 72", size: 36, relativeTo: .largeTitle).weight(.bold) : .largeTitle.weight(.bold)
+    }
+    /// Section headers like "All shows": small capitals in the goth theme.
+    static var headerFont: Font {
+        style == .goth ? .custom("Bodoni 72 Smallcaps", size: 24, relativeTo: .title3) : .title3.weight(.bold)
+    }
+    /// Event names on listings.
+    static var eventTitleFont: Font {
+        style == .goth ? .custom("Bodoni 72", size: 20, relativeTo: .headline).weight(.bold) : .headline
+    }
 }
 
 enum Format {
@@ -70,7 +134,15 @@ struct SectionHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(title).font(.title3.weight(.bold))
+            if Theme.style == .goth {
+                // A small dagger and the title in small capitals, ruled underneath.
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text("†").font(Theme.headerFont).foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
+                    Text(title).font(Theme.headerFont).tracking(1.5)
+                }
+            } else {
+                Text(title).font(Theme.headerFont)
+            }
             if let subtitle {
                 Text(subtitle).font(.footnote).foregroundStyle(.secondary)
             }
@@ -85,6 +157,7 @@ extension EventCategory {
     /// for your own selections and "For you" reasons, so none of these use it.
     var color: Color {
         if Theme.style == .red { return nightColor }
+        if Theme.style == .goth { return mourningColor }
         return switch self {
         case .music: Color(red: 0.45, green: 0.58, blue: 0.80)
         case .comedy: Color(red: 0.78, green: 0.47, blue: 0.60)
@@ -110,12 +183,26 @@ extension EventCategory {
         }
     }
 
+    /// Mourning colors for the goth theme: tarnished silver, dried rose, pewter, amethyst,
+    /// absinthe and bone.
+    private var mourningColor: Color {
+        switch self {
+        case .music: Color(red: 0.68, green: 0.68, blue: 0.72)
+        case .comedy: Color(red: 0.66, green: 0.38, blue: 0.44)
+        case .film: Color(red: 0.47, green: 0.53, blue: 0.63)
+        case .theater: Color(red: 0.54, green: 0.40, blue: 0.66)
+        case .party: Color(red: 0.52, green: 0.63, blue: 0.43)
+        case .museum: Color(red: 0.78, green: 0.73, blue: 0.62)
+        case .other: Color(white: 0.5)
+        }
+    }
+
     /// How strongly the stripe on each listing shows the color.
-    var stripeOpacity: Double { Theme.style == .red ? 0.8 : 0.55 }
+    var stripeOpacity: Double { Theme.style == .amber ? 0.55 : 0.8 }
 
     /// A dark, see-through wash of the color for card backgrounds. The red theme keeps
     /// cards red-black, so the category shows only in the stripe and label.
-    var wash: Color { color.opacity(Theme.style == .red ? 0.05 : 0.14) }
+    var wash: Color { color.opacity(Theme.style == .amber ? 0.14 : Theme.style == .red ? 0.05 : 0) }
 }
 
 /// The small colored tag that names an event's kind.
@@ -127,7 +214,7 @@ struct CategoryTag: View {
             .font(.caption.weight(.bold))
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
-            .background(category.color.opacity(Theme.style == .red ? 0.2 : 0.16), in: Capsule())
+            .background(category.color.opacity(Theme.style == .amber ? 0.16 : 0.2), in: Capsule())
             .foregroundStyle(category.color)
     }
 }
@@ -228,10 +315,10 @@ struct CenteredScreenTitle: View {
     var text: String
 
     var body: some View {
-        if Theme.style == .red {
+        if Theme.style.isCustom {
             Text(text)
-                .font(.largeTitle.weight(.bold))
-                .foregroundStyle(Theme.accent)
+                .font(Theme.titleFont)
+                .foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 4)
@@ -267,8 +354,8 @@ private struct SmallTitleOnScroll: ViewModifier {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(text)
-                        .font(.headline)
-                        .foregroundStyle(Theme.accent)
+                        .font(Theme.style == .goth ? .custom("Bodoni 72", size: 18, relativeTo: .headline).weight(.bold) : .headline)
+                        .foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
                         .lineLimit(1)
                         .opacity(scroll.showSmall ? 1 : 0)
                         .animation(.easeInOut(duration: 0.2), value: scroll.showSmall)
@@ -282,7 +369,7 @@ extension View {
     /// A main screen's title: the system large title, or in the red theme a centered one
     /// drawn by `CenteredScreenTitle` with the system title kept small and out of sight.
     @ViewBuilder func screenTitle(_ text: String) -> some View {
-        if Theme.style == .red {
+        if Theme.style.isCustom {
             modifier(SmallTitleOnScroll(text: text))
         } else {
             navigationTitle(text)

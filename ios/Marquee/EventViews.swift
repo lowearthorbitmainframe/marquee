@@ -51,7 +51,7 @@ struct EventRow: View {
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(event.title)
-                    .font(.headline)
+                    .font(Theme.eventTitleFont)
                     .lineLimit(2)
                     .strikethrough(event.cancelled)
                 Text(detailLine)
@@ -86,6 +86,11 @@ struct EventRow: View {
             Rectangle().fill(event.kind.color.opacity(event.kind.stripeOpacity)).frame(width: 4)
         }
         .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay {
+            if let border = Theme.cardBorder {
+                RoundedRectangle(cornerRadius: 14).strokeBorder(border, lineWidth: 0.75)
+            }
+        }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("\(event.kind.label): \(event.title)")
     }
