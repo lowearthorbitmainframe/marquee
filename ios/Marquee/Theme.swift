@@ -471,12 +471,15 @@ struct CenteredScreenTitle: View {
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 4)
                 .accessibilityAddTraits(.isHeader)
-                // Tells the bar to show a small title once this one is behind it. Lazy lists drop
-                // rows that scroll far off screen, so disappearing counts as scrolled away too.
-                .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxY } action: { bottom in
-                    scroll?.showSmall = bottom < 110
+                // The big title fades as it rises, while the bar's small one fades in, both tied
+                // to how far it has scrolled rather than switching at one point.
+                .opacity(1 - Double(scrollState.progress))
+                .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
+                    scroll?.update(frame: frame)
                 }
-                .onDisappear { scroll?.showSmall = true }
+                .onAppear { scroll?.settle() }
+                // Lazy lists drop rows that scroll far off screen, so disappearing counts as scrolled away.
+                .onDisappear { scroll?.progress = 1 }
         }
     }
 
@@ -498,9 +501,31 @@ struct CenteredScreenTitle: View {
     private var scroll: TitleScrollState? { scrollState }
 }
 
-/// Whether the red theme's big title has scrolled away, shared by the title and the bar.
+/// How far the big title has scrolled up under the bar, from 0 (resting) to 1 (gone), shared by
+/// the title and the bar.
 final class TitleScrollState: ObservableObject {
-    @Published var showSmall = false
+    @Published var progress: CGFloat = 0
+    private var latest: CGRect?
+    private var restingTop: CGFloat?
+
+    /// Remembers where the title sits once the screen has finished laying out. Pulling down to
+    /// refresh moves it lower than that, which simply counts as no scroll.
+    func settle() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self, self.restingTop == nil, let latest = self.latest else { return }
+            self.restingTop = latest.minY
+        }
+    }
+
+    /// The swap happens while the title's last line (about 40 points) slides under the bar, so
+    /// the small title takes over right where the big one's last line disappears.
+    func update(frame: CGRect) {
+        latest = frame
+        guard let rest = restingTop, frame.height > 0 else { return }
+        let window: CGFloat = 40
+        let clamped = min(max((rest + window - frame.maxY) / window, 0), 1)
+        if abs(clamped - progress) > 0.005 || clamped == 0 || clamped == 1 { progress = clamped }
+    }
 }
 
 /// The red theme's top bar: empty while the big title shows, then a small red title once it
@@ -515,15 +540,33 @@ private struct SmallTitleOnScroll: ViewModifier {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(text)
-                        .font(Theme.style == .goth ? .custom("Bodoni 72", size: 18, relativeTo: .headline).weight(.bold) : .headline)
-                        .foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
+                    barTitle
                         .lineLimit(1)
-                        .opacity(scroll.showSmall ? 1 : 0)
-                        .animation(.easeInOut(duration: 0.2), value: scroll.showSmall)
+                        // Grows into place as the big title leaves, in step with the scroll.
+                        .opacity(Double(scroll.progress))
+                        // Starts a little larger and settles to size, so it reads as the big line shrinking into place.
+                        .scaleEffect(1.25 - 0.25 * scroll.progress)
                 }
             }
             .environmentObject(scroll)
+    }
+
+    /// The bar's small title. Blade Runner keeps just the lead word ("TONIGHT") in the big
+    /// title's thin, wide capitals.
+    @ViewBuilder private var barTitle: some View {
+        switch Theme.style {
+        case .blade:
+            Text(CityTitle.split(text).lead.uppercased())
+                .font(.custom("AvenirNext-UltraLight", size: 18, relativeTo: .headline))
+                .tracking(7)
+                .foregroundStyle(Theme.ash)
+        case .goth:
+            Text(text).font(.custom("Bodoni 72", size: 18, relativeTo: .headline).weight(.bold))
+                .foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
+        default:
+            Text(text).font(.headline)
+                .foregroundStyle(Color(uiColor: Theme.titleColor ?? .white))
+        }
     }
 }
 
@@ -636,46 +679,36 @@ extension View {
 }
 
 
-/// The Blade Runner 2049 screen title: a monospaced cyan lead-in, the name in thin, widely
-/// spaced capitals with a faint orange glow, and, for a city, its coordinates as a readout.
+/// The Blade Runner 2049 screen title: the city in thin, widely spaced capitals with a faint
+/// orange glow, and the lead word ("TONIGHT") under it in the same type, smaller.
 struct CityTitle: View {
     var text: String
 
-    private static let coordinates = [
-        "Los Angeles": "34.0522° N   118.2437° W",
-        "Bay Area": "37.7749° N   122.4194° W",
-        "San Diego": "32.7157° N   117.1611° W",
-    ]
-
-    private var parts: (overline: String?, main: String) {
+    /// "Tonight in Los Angeles" becomes lead "Tonight" and place "Los Angeles"; other titles are all place.
+    static func split(_ text: String) -> (lead: String, place: String?) {
         if let range = text.range(of: " in ") {
-            return (String(text[..<range.upperBound]).trimmingCharacters(in: .whitespaces), String(text[range.upperBound...]))
+            return (String(text[..<range.lowerBound]), String(text[range.upperBound...]))
         }
-        return (nil, text)
+        return (text, nil)
     }
 
     var body: some View {
-        VStack(spacing: 8) {
-            if let overline = parts.overline {
-                Text(overline.uppercased())
-                    .font(.custom("Menlo-Regular", size: 12, relativeTo: .caption))
-                    .tracking(4)
-                    .foregroundStyle(Theme.replicantCyan)
-            }
-            Text(parts.main.uppercased())
+        let parts = Self.split(text)
+        VStack(spacing: 10) {
+            Text((parts.place ?? parts.lead).uppercased())
                 .font(Theme.titleFont)
                 .tracking(9)
-                .foregroundStyle(Theme.ash)
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
                 .shadow(color: Theme.haze.opacity(0.7), radius: 12)
-            if let readout = Self.coordinates[parts.main] {
-                Text(readout)
-                    .font(.custom("Menlo-Regular", size: 11, relativeTo: .caption2))
-                    .tracking(1)
-                    .foregroundStyle(Theme.haze.opacity(0.85))
+            if parts.place != nil {
+                Text(parts.lead.uppercased())
+                    .font(.custom("AvenirNext-UltraLight", size: 20, relativeTo: .title3))
+                    .tracking(8)
+                    .shadow(color: Theme.haze.opacity(0.5), radius: 8)
             }
         }
+        .foregroundStyle(Theme.ash)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 6)
     }
