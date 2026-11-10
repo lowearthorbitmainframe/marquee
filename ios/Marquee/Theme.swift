@@ -96,26 +96,26 @@ extension EventCategory {
         }
     }
 
-    /// Brighter, saturated colors that read clearly on black and don't compete with the red
-    /// accent: gold, hot pink, cyan, violet, neon green and sand. None is red.
+    /// Muted, dusty tones that sit quietly beside the red accent and still tell the kinds
+    /// apart: ochre, dusty rose, slate teal, faded lavender, sage and stone. None is red.
     private var nightColor: Color {
         switch self {
-        case .music: Color(red: 0.98, green: 0.74, blue: 0.27)
-        case .comedy: Color(red: 1.00, green: 0.43, blue: 0.72)
-        case .film: Color(red: 0.38, green: 0.80, blue: 0.95)
-        case .theater: Color(red: 0.71, green: 0.56, blue: 1.00)
-        case .party: Color(red: 0.42, green: 0.90, blue: 0.58)
-        case .museum: Color(red: 0.93, green: 0.85, blue: 0.68)
-        case .other: Color(white: 0.75)
+        case .music: Color(red: 0.80, green: 0.67, blue: 0.42)
+        case .comedy: Color(red: 0.80, green: 0.55, blue: 0.63)
+        case .film: Color(red: 0.49, green: 0.66, blue: 0.73)
+        case .theater: Color(red: 0.63, green: 0.57, blue: 0.78)
+        case .party: Color(red: 0.55, green: 0.71, blue: 0.59)
+        case .museum: Color(red: 0.75, green: 0.70, blue: 0.62)
+        case .other: Color(white: 0.65)
         }
     }
 
     /// How strongly the stripe on each listing shows the color.
-    var stripeOpacity: Double { Theme.style == .red ? 0.95 : 0.55 }
+    var stripeOpacity: Double { Theme.style == .red ? 0.8 : 0.55 }
 
     /// A dark, see-through wash of the color for card backgrounds. The red theme keeps
     /// cards red-black, so the category shows only in the stripe and label.
-    var wash: Color { color.opacity(Theme.style == .red ? 0.07 : 0.14) }
+    var wash: Color { color.opacity(Theme.style == .red ? 0.05 : 0.14) }
 }
 
 /// The small colored tag that names an event's kind.
@@ -127,7 +127,7 @@ struct CategoryTag: View {
             .font(.caption.weight(.bold))
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
-            .background(category.color.opacity(Theme.style == .red ? 0.24 : 0.16), in: Capsule())
+            .background(category.color.opacity(Theme.style == .red ? 0.2 : 0.16), in: Capsule())
             .foregroundStyle(category.color)
     }
 }
