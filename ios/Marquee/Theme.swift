@@ -3,9 +3,11 @@ import SwiftUI
 /// The app's color schemes. "amber" is the original; "red" is red and black with white type;
 /// "goth" is black, oxblood and bone with serif type; "synth" is synthwave: an indigo night,
 /// sunset gradients and neon; "hipster" is early-2000s indie: cream paper, ink, thrift-store
-/// colors and zine type. Debug builds can try one with `-theme red`, `goth`, `synth` or `hipster`.
+/// colors and zine type; "blade" is Blade Runner 2049: orange haze over blue-black, cyan and
+/// hologram pink, thin wide capitals and monospaced readouts. Debug builds can try one with
+/// `-theme red`, `goth`, `synth`, `hipster` or `blade`.
 enum ThemeStyle: String {
-    case amber, red, goth, synth, hipster
+    case amber, red, goth, synth, hipster, blade
 
     static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .amber }
 
@@ -26,6 +28,11 @@ enum Theme {
     static let sunsetPink = Color(red: 1.00, green: 0.30, blue: 0.62)
     static let sunsetViolet = Color(red: 0.62, green: 0.36, blue: 1.00)
     static let neonBlue = Color(red: 0.30, green: 0.80, blue: 1.00)
+    // Blade Runner 2049: irradiated orange haze, blue-black night, cyan and hologram pink.
+    static let haze = Color(red: 0.88, green: 0.47, blue: 0.16)
+    static let replicantCyan = Color(red: 0.25, green: 0.78, blue: 0.82)
+    static let hologramPink = Color(red: 0.95, green: 0.33, blue: 0.60)
+    static let ash = Color(red: 0.91, green: 0.89, blue: 0.85)
     // Early-2000s indie: cream paper, near-black ink, mustard and brick.
     static let paper = Color(red: 0.95, green: 0.92, blue: 0.86)
     static let hipsterInk = Color(red: 0.14, green: 0.12, blue: 0.11)
@@ -41,6 +48,7 @@ enum Theme {
         case .goth: oxblood
         case .synth: sunsetOrange
         case .hipster: mustard
+        case .blade: haze
         }
     }
     /// Text and icons drawn on top of the accent color.
@@ -51,10 +59,11 @@ enum Theme {
         case .goth: bone
         case .synth: .white
         case .hipster: hipsterInk
+        case .blade: .black
         }
     }
     /// The default color of text.
-    static var ink: Color { style == .goth ? bone : style == .synth ? .white : style == .hipster ? hipsterInk : .primary }
+    static var ink: Color { style == .goth ? bone : style == .synth ? .white : style == .hipster ? hipsterInk : style == .blade ? ash : .primary }
     static var background: Color {
         switch style {
         case .amber: Color(red: 0.06, green: 0.06, blue: 0.08)
@@ -62,6 +71,7 @@ enum Theme {
         case .goth: .black
         case .synth: Color(red: 0.04, green: 0.02, blue: 0.10)
         case .hipster: paper
+        case .blade: Color(red: 0.04, green: 0.05, blue: 0.06)
         }
     }
     static var card: Color {
@@ -71,6 +81,7 @@ enum Theme {
         case .goth: Color(red: 0.05, green: 0.04, blue: 0.045)
         case .synth: Color(red: 0.11, green: 0.06, blue: 0.22).opacity(0.85)
         case .hipster: Color(red: 0.99, green: 0.97, blue: 0.93)
+        case .blade: Color(red: 0.08, green: 0.09, blue: 0.10).opacity(0.85)
         }
     }
     /// A hairline drawn around cards; the goth theme outlines rather than fills.
@@ -79,6 +90,7 @@ enum Theme {
         case .goth: Color(red: 0.38, green: 0.05, blue: 0.09)
         case .synth: sunsetViolet.opacity(0.55)
         case .hipster: hipsterInk.opacity(0.22)
+        case .blade: replicantCyan.opacity(0.28)
         default: nil
         }
     }
@@ -99,6 +111,7 @@ enum Theme {
         case .goth: bone
         case .synth: .white
         case .hipster: hipsterInk
+        case .blade: ash
         }
     }
     /// Screen titles; nil keeps the system's white.
@@ -109,6 +122,7 @@ enum Theme {
         case .goth: UIColor(red: 0.72, green: 0.07, blue: 0.12, alpha: 1)
         case .synth: UIColor(red: 1.00, green: 0.55, blue: 0.24, alpha: 1)
         case .hipster: UIColor(red: 0.14, green: 0.12, blue: 0.11, alpha: 1)
+        case .blade: UIColor(red: 0.91, green: 0.89, blue: 0.85, alpha: 1)
         }
     }
     static var tabUnselected: UIColor? {
@@ -118,6 +132,7 @@ enum Theme {
         case .goth: UIColor(red: 0.62, green: 0.06, blue: 0.11, alpha: 1)
         case .synth: UIColor(red: 0.68, green: 0.55, blue: 1.00, alpha: 1)
         case .hipster: UIColor(red: 0.55, green: 0.50, blue: 0.45, alpha: 1)
+        case .blade: UIColor(red: 0.88, green: 0.47, blue: 0.16, alpha: 1)
         }
     }
 
@@ -129,6 +144,7 @@ enum Theme {
         case .goth: .custom("Bodoni 72", size: 36, relativeTo: .largeTitle).weight(.bold)
         case .synth: .custom("Futura-Bold", size: 38, relativeTo: .largeTitle)
         case .hipster: .custom("HelveticaNeue-CondensedBlack", size: 46, relativeTo: .largeTitle)
+        case .blade: .custom("AvenirNext-UltraLight", size: 34, relativeTo: .largeTitle)
         default: .largeTitle.weight(.bold)
         }
     }
@@ -138,6 +154,7 @@ enum Theme {
         case .goth: .custom("Bodoni 72 Smallcaps", size: 24, relativeTo: .title3)
         case .synth: .system(size: 14, weight: .heavy, design: .rounded)
         case .hipster: .custom("AmericanTypewriter-Semibold", size: 20, relativeTo: .title3)
+        case .blade: .custom("Menlo-Regular", size: 13, relativeTo: .footnote)
         default: .title3.weight(.bold)
         }
     }
@@ -146,6 +163,7 @@ enum Theme {
         switch style {
         case .goth: .custom("Bodoni 72", size: 20, relativeTo: .headline).weight(.bold)
         case .hipster: .custom("HelveticaNeue-Bold", size: 17, relativeTo: .headline)
+        case .blade: .custom("AvenirNext-DemiBold", size: 17, relativeTo: .headline)
         default: .headline
         }
     }
@@ -181,7 +199,15 @@ extension View {
     }
 
     @ViewBuilder func screenBackground() -> some View {
-        if Theme.style == .synth {
+        if Theme.style == .blade {
+            // Las Vegas haze at the top, settling into the blue-black of the city at night.
+            background(LinearGradient(stops: [
+                .init(color: Color(red: 0.42, green: 0.18, blue: 0.06), location: 0),
+                .init(color: Color(red: 0.16, green: 0.08, blue: 0.05), location: 0.22),
+                .init(color: Theme.background, location: 0.5),
+                .init(color: Color(red: 0.02, green: 0.04, blue: 0.07), location: 1),
+            ], startPoint: .top, endPoint: .bottom).ignoresSafeArea())
+        } else if Theme.style == .synth {
             // An indigo night: violet at the top fading to deep blue-black.
             background(LinearGradient(colors: [Color(red: 0.16, green: 0.06, blue: 0.32), Theme.background, Color(red: 0.02, green: 0.03, blue: 0.10)],
                                       startPoint: .top, endPoint: .bottom).ignoresSafeArea())
@@ -197,7 +223,12 @@ struct SectionHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            if Theme.style == .hipster {
+            if Theme.style == .blade {
+                Text("// " + title.uppercased())
+                    .font(Theme.headerFont)
+                    .tracking(3)
+                    .foregroundStyle(Theme.replicantCyan)
+            } else if Theme.style == .hipster {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(title.lowercased()).font(Theme.headerFont)
                     Rectangle().fill(Theme.brick).frame(width: 28, height: 3)
@@ -235,6 +266,7 @@ extension EventCategory {
         if Theme.style == .goth { return mourningColor }
         if Theme.style == .synth { return neonColor }
         if Theme.style == .hipster { return thriftColor }
+        if Theme.style == .blade { return cityColor }
         return switch self {
         case .music: Color(red: 0.45, green: 0.58, blue: 0.80)
         case .comedy: Color(red: 0.78, green: 0.47, blue: 0.60)
@@ -297,6 +329,19 @@ extension EventCategory {
         case .party: Color(red: 0.36, green: 0.48, blue: 0.62)
         case .museum: Color(red: 0.46, green: 0.47, blue: 0.22)
         case .other: Color(white: 0.45)
+        }
+    }
+
+    /// Blade Runner 2049 colors: haze amber, hologram pink, cyan, sodium blue, acid yellow, dust.
+    private var cityColor: Color {
+        switch self {
+        case .music: Color(red: 0.91, green: 0.57, blue: 0.23)
+        case .comedy: Color(red: 0.94, green: 0.33, blue: 0.60)
+        case .film: Color(red: 0.21, green: 0.77, blue: 0.81)
+        case .theater: Color(red: 0.49, green: 0.55, blue: 0.94)
+        case .party: Color(red: 0.85, green: 0.82, blue: 0.29)
+        case .museum: Color(red: 0.66, green: 0.63, blue: 0.59)
+        case .other: Color(white: 0.5)
         }
     }
 
@@ -440,6 +485,8 @@ struct CenteredScreenTitle: View {
             SynthTitle(text: text)
         } else if Theme.style == .hipster {
             ZineTitle(text: text)
+        } else if Theme.style == .blade {
+            CityTitle(text: text)
         } else {
             Text(text)
                 .font(Theme.titleFont)
@@ -585,5 +632,51 @@ extension View {
         } else {
             clipShape(RoundedRectangle(cornerRadius: 10))
         }
+    }
+}
+
+
+/// The Blade Runner 2049 screen title: a monospaced cyan lead-in, the name in thin, widely
+/// spaced capitals with a faint orange glow, and, for a city, its coordinates as a readout.
+struct CityTitle: View {
+    var text: String
+
+    private static let coordinates = [
+        "Los Angeles": "34.0522° N   118.2437° W",
+        "Bay Area": "37.7749° N   122.4194° W",
+        "San Diego": "32.7157° N   117.1611° W",
+    ]
+
+    private var parts: (overline: String?, main: String) {
+        if let range = text.range(of: " in ") {
+            return (String(text[..<range.upperBound]).trimmingCharacters(in: .whitespaces), String(text[range.upperBound...]))
+        }
+        return (nil, text)
+    }
+
+    var body: some View {
+        VStack(spacing: 8) {
+            if let overline = parts.overline {
+                Text(overline.uppercased())
+                    .font(.custom("Menlo-Regular", size: 12, relativeTo: .caption))
+                    .tracking(4)
+                    .foregroundStyle(Theme.replicantCyan)
+            }
+            Text(parts.main.uppercased())
+                .font(Theme.titleFont)
+                .tracking(9)
+                .foregroundStyle(Theme.ash)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+                .shadow(color: Theme.haze.opacity(0.7), radius: 12)
+            if let readout = Self.coordinates[parts.main] {
+                Text(readout)
+                    .font(.custom("Menlo-Regular", size: 11, relativeTo: .caption2))
+                    .tracking(1)
+                    .foregroundStyle(Theme.haze.opacity(0.85))
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 6)
     }
 }
