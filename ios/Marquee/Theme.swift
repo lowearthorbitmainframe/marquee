@@ -2,11 +2,15 @@ import SwiftUI
 
 /// The app's color schemes. "amber" is the original; "red" is red and black with white type;
 /// "goth" is black, oxblood and bone with serif type; "synth" is synthwave: an indigo night,
-/// sunset gradients and neon. Debug builds can try one with `-theme red`, `goth` or `synth`.
+/// sunset gradients and neon; "hipster" is early-2000s indie: cream paper, ink, thrift-store
+/// colors and zine type. Debug builds can try one with `-theme red`, `goth`, `synth` or `hipster`.
 enum ThemeStyle: String {
-    case amber, red, goth, synth
+    case amber, red, goth, synth, hipster
 
     static var current: ThemeStyle { ThemeStyle(rawValue: UserDefaults.standard.string(forKey: "theme") ?? "") ?? .amber }
+
+    /// The one light theme.
+    var isLight: Bool { self == .hipster }
 
     /// Themes that draw their own centered titles and colored tab icons.
     var isCustom: Bool { self != .amber }
@@ -22,6 +26,11 @@ enum Theme {
     static let sunsetPink = Color(red: 1.00, green: 0.30, blue: 0.62)
     static let sunsetViolet = Color(red: 0.62, green: 0.36, blue: 1.00)
     static let neonBlue = Color(red: 0.30, green: 0.80, blue: 1.00)
+    // Early-2000s indie: cream paper, near-black ink, mustard and brick.
+    static let paper = Color(red: 0.95, green: 0.92, blue: 0.86)
+    static let hipsterInk = Color(red: 0.14, green: 0.12, blue: 0.11)
+    static let mustard = Color(red: 0.85, green: 0.63, blue: 0.11)
+    static let brick = Color(red: 0.71, green: 0.27, blue: 0.18)
     /// Warm bone white, the goth theme's ink.
     private static let bone = Color(red: 0.91, green: 0.87, blue: 0.80)
 
@@ -31,6 +40,7 @@ enum Theme {
         case .red: cherry
         case .goth: oxblood
         case .synth: sunsetOrange
+        case .hipster: mustard
         }
     }
     /// Text and icons drawn on top of the accent color.
@@ -40,16 +50,18 @@ enum Theme {
         case .red: .white
         case .goth: bone
         case .synth: .white
+        case .hipster: hipsterInk
         }
     }
     /// The default color of text.
-    static var ink: Color { style == .goth ? bone : style == .synth ? .white : .primary }
+    static var ink: Color { style == .goth ? bone : style == .synth ? .white : style == .hipster ? hipsterInk : .primary }
     static var background: Color {
         switch style {
         case .amber: Color(red: 0.06, green: 0.06, blue: 0.08)
         case .red: Color(red: 0.03, green: 0.02, blue: 0.02)
         case .goth: .black
         case .synth: Color(red: 0.04, green: 0.02, blue: 0.10)
+        case .hipster: paper
         }
     }
     static var card: Color {
@@ -58,6 +70,7 @@ enum Theme {
         case .red: Color(red: 0.13, green: 0.06, blue: 0.07)
         case .goth: Color(red: 0.05, green: 0.04, blue: 0.045)
         case .synth: Color(red: 0.11, green: 0.06, blue: 0.22).opacity(0.85)
+        case .hipster: Color(red: 0.99, green: 0.97, blue: 0.93)
         }
     }
     /// A hairline drawn around cards; the goth theme outlines rather than fills.
@@ -65,6 +78,7 @@ enum Theme {
         switch style {
         case .goth: Color(red: 0.38, green: 0.05, blue: 0.09)
         case .synth: sunsetViolet.opacity(0.55)
+        case .hipster: hipsterInk.opacity(0.22)
         default: nil
         }
     }
@@ -76,7 +90,7 @@ enum Theme {
     /// The sunset gradient used on synthwave titles and the retro sun.
     static let sunset = LinearGradient(colors: [Color(red: 1.0, green: 0.78, blue: 0.30), sunsetOrange, sunsetPink, sunsetViolet],
                                        startPoint: .top, endPoint: .bottom)
-    static let separator = Color.white.opacity(0.08)
+    static var separator: Color { style.isLight ? hipsterInk.opacity(0.12) : Color.white.opacity(0.08) }
     /// The selected tab's icon; the others use `tabUnselected`.
     static var tabSelected: Color {
         switch style {
@@ -84,6 +98,7 @@ enum Theme {
         case .red: Color(white: 0.95)
         case .goth: bone
         case .synth: .white
+        case .hipster: hipsterInk
         }
     }
     /// Screen titles; nil keeps the system's white.
@@ -93,6 +108,7 @@ enum Theme {
         case .red: UIColor(cherry)
         case .goth: UIColor(red: 0.72, green: 0.07, blue: 0.12, alpha: 1)
         case .synth: UIColor(red: 1.00, green: 0.55, blue: 0.24, alpha: 1)
+        case .hipster: UIColor(red: 0.14, green: 0.12, blue: 0.11, alpha: 1)
         }
     }
     static var tabUnselected: UIColor? {
@@ -101,6 +117,7 @@ enum Theme {
         case .red: UIColor(cherry)
         case .goth: UIColor(red: 0.62, green: 0.06, blue: 0.11, alpha: 1)
         case .synth: UIColor(red: 0.68, green: 0.55, blue: 1.00, alpha: 1)
+        case .hipster: UIColor(red: 0.55, green: 0.50, blue: 0.45, alpha: 1)
         }
     }
 
@@ -111,6 +128,7 @@ enum Theme {
         switch style {
         case .goth: .custom("Bodoni 72", size: 36, relativeTo: .largeTitle).weight(.bold)
         case .synth: .custom("Futura-Bold", size: 38, relativeTo: .largeTitle)
+        case .hipster: .custom("HelveticaNeue-CondensedBlack", size: 46, relativeTo: .largeTitle)
         default: .largeTitle.weight(.bold)
         }
     }
@@ -119,12 +137,17 @@ enum Theme {
         switch style {
         case .goth: .custom("Bodoni 72 Smallcaps", size: 24, relativeTo: .title3)
         case .synth: .system(size: 14, weight: .heavy, design: .rounded)
+        case .hipster: .custom("AmericanTypewriter-Semibold", size: 20, relativeTo: .title3)
         default: .title3.weight(.bold)
         }
     }
     /// Event names on listings.
     static var eventTitleFont: Font {
-        style == .goth ? .custom("Bodoni 72", size: 20, relativeTo: .headline).weight(.bold) : .headline
+        switch style {
+        case .goth: .custom("Bodoni 72", size: 20, relativeTo: .headline).weight(.bold)
+        case .hipster: .custom("HelveticaNeue-Bold", size: 17, relativeTo: .headline)
+        default: .headline
+        }
     }
 }
 
@@ -174,7 +197,12 @@ struct SectionHeader: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            if Theme.style == .synth {
+            if Theme.style == .hipster {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(title.lowercased()).font(Theme.headerFont)
+                    Rectangle().fill(Theme.brick).frame(width: 28, height: 3)
+                }
+            } else if Theme.style == .synth {
                 // Neon capitals, spaced wide, with a faint glow.
                 Text(title.uppercased())
                     .font(Theme.headerFont)
@@ -206,6 +234,7 @@ extension EventCategory {
         if Theme.style == .red { return nightColor }
         if Theme.style == .goth { return mourningColor }
         if Theme.style == .synth { return neonColor }
+        if Theme.style == .hipster { return thriftColor }
         return switch self {
         case .music: Color(red: 0.45, green: 0.58, blue: 0.80)
         case .comedy: Color(red: 0.78, green: 0.47, blue: 0.60)
@@ -255,6 +284,19 @@ extension EventCategory {
         case .party: Color(red: 0.25, green: 0.90, blue: 1.00)
         case .museum: Color(red: 1.00, green: 0.78, blue: 0.56)
         case .other: Color(white: 0.75)
+        }
+    }
+
+    /// Thrift-store colors for the hipster theme: mustard, teal, brick, olive, dusty blue, plum.
+    private var thriftColor: Color {
+        switch self {
+        case .music: Color(red: 0.80, green: 0.58, blue: 0.10)
+        case .comedy: Color(red: 0.71, green: 0.27, blue: 0.18)
+        case .film: Color(red: 0.18, green: 0.48, blue: 0.47)
+        case .theater: Color(red: 0.47, green: 0.27, blue: 0.42)
+        case .party: Color(red: 0.36, green: 0.48, blue: 0.62)
+        case .museum: Color(red: 0.46, green: 0.47, blue: 0.22)
+        case .other: Color(white: 0.45)
         }
     }
 
@@ -396,6 +438,8 @@ struct CenteredScreenTitle: View {
     @ViewBuilder private var titleText: some View {
         if Theme.style == .synth {
             SynthTitle(text: text)
+        } else if Theme.style == .hipster {
+            ZineTitle(text: text)
         } else {
             Text(text)
                 .font(Theme.titleFont)
@@ -488,5 +532,58 @@ struct SynthTitle: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 6)
+    }
+}
+
+
+/// The hipster screen title, like an early-2000s show flyer: a typewritten lead-in over the
+/// name in lowercase condensed black Helvetica, finished with a period and a strip of mustard tape.
+struct ZineTitle: View {
+    var text: String
+
+    private var parts: (overline: String?, main: String) {
+        if let range = text.range(of: " in ") {
+            return (String(text[..<range.upperBound]).trimmingCharacters(in: .whitespaces), String(text[range.upperBound...]))
+        }
+        return (nil, text)
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            if let overline = parts.overline {
+                Text(overline.lowercased())
+                    .font(.custom("AmericanTypewriter", size: 17, relativeTo: .headline))
+                    .foregroundStyle(Theme.hipsterInk.opacity(0.75))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 3)
+                    .background(Theme.mustard.opacity(0.85))
+                    .rotationEffect(.degrees(-2))
+                    .padding(.bottom, 4)
+            }
+            (Text(parts.main.lowercased()) + Text(".").foregroundColor(Theme.brick))
+                .font(Theme.titleFont)
+                .foregroundStyle(Theme.hipsterInk)
+                .tracking(-1)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 4)
+    }
+}
+
+
+extension View {
+    /// Listing art: rounded corners, or in the hipster theme a white Polaroid frame with a
+    /// thicker bottom edge and a slight shadow.
+    @ViewBuilder func polaroid() -> some View {
+        if Theme.style == .hipster {
+            padding(4).padding(.bottom, 8)
+                .background(Color.white)
+                .shadow(color: .black.opacity(0.18), radius: 2, x: 0, y: 1)
+                .rotationEffect(.degrees(-1.5))
+        } else {
+            clipShape(RoundedRectangle(cornerRadius: 10))
+        }
     }
 }

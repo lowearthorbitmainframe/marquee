@@ -48,7 +48,7 @@ struct MarqueeApp: App {
                 .environmentObject(suggestions)
                 .tint(Theme.accent)
                 .foregroundStyle(Theme.ink)
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(Theme.style.isLight ? .light : .dark)
                 .task {
                     store.loadLocal()
                     await suggestions.flush()

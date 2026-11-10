@@ -47,7 +47,7 @@ struct EventRow: View {
         HStack(spacing: 12) {
             Poster(url: event.image, title: event.title, symbol: event.kind.symbol, tint: event.kind.color)
                 .frame(width: 84, height: 84)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .polaroid()
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(event.title)
