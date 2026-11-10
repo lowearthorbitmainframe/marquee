@@ -109,10 +109,11 @@ enum Theme {
         case .hipster: hipsterInk.opacity(0.22)
         case .blade: replicantCyan.opacity(0.28)
         case .tokyo: tokyoInk.opacity(0.85)
-        case .tokyoNight: Color.white.opacity(0.22)
+        case .tokyoNight: Color.white.opacity(0.9)
         default: nil
         }
     }
+    static var cardBorderWidth: CGFloat { style == .tokyoNight ? 1.5 : 0.75 }
     /// The neon-tube glow on a selected day or filter (synthwave only).
     static var chipGlow: Color { style == .synth ? sunsetOrange.opacity(0.9) : .clear }
     /// A soft neon glow around outlined cards (synthwave only).

@@ -146,7 +146,7 @@ struct VenueRow: View {
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay {
             if let border = Theme.cardBorder {
-                RoundedRectangle(cornerRadius: 14).strokeBorder(border, lineWidth: 0.75)
+                RoundedRectangle(cornerRadius: 14).strokeBorder(border, lineWidth: Theme.cardBorderWidth)
             }
         }
         .shadow(color: Theme.cardGlow, radius: 8)
