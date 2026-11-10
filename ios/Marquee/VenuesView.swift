@@ -141,7 +141,7 @@ struct VenueRow: View {
         .padding(.leading, 4)
         .background(Theme.card.overlay(mainKind.wash))
         .overlay(alignment: .leading) {
-            Rectangle().fill(mainKind.color.opacity(0.55)).frame(width: 4)
+            Rectangle().fill(mainKind.color.opacity(mainKind.stripeOpacity)).frame(width: 4)
         }
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .accessibilityElement(children: .contain)

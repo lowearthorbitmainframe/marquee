@@ -84,7 +84,8 @@ extension EventCategory {
     /// Each kind of event keeps one muted color everywhere. Amber stays reserved
     /// for your own selections and "For you" reasons, so none of these use it.
     var color: Color {
-        switch self {
+        if Theme.style == .red { return nightColor }
+        return switch self {
         case .music: Color(red: 0.45, green: 0.58, blue: 0.80)
         case .comedy: Color(red: 0.78, green: 0.47, blue: 0.60)
         case .film: Color(red: 0.60, green: 0.52, blue: 0.80)
@@ -95,9 +96,26 @@ extension EventCategory {
         }
     }
 
+    /// Brighter, saturated colors that read clearly on black and don't compete with the red
+    /// accent: gold, hot pink, cyan, violet, neon green and sand. None is red.
+    private var nightColor: Color {
+        switch self {
+        case .music: Color(red: 0.98, green: 0.74, blue: 0.27)
+        case .comedy: Color(red: 1.00, green: 0.43, blue: 0.72)
+        case .film: Color(red: 0.38, green: 0.80, blue: 0.95)
+        case .theater: Color(red: 0.71, green: 0.56, blue: 1.00)
+        case .party: Color(red: 0.42, green: 0.90, blue: 0.58)
+        case .museum: Color(red: 0.93, green: 0.85, blue: 0.68)
+        case .other: Color(white: 0.75)
+        }
+    }
+
+    /// How strongly the stripe on each listing shows the color.
+    var stripeOpacity: Double { Theme.style == .red ? 0.95 : 0.55 }
+
     /// A dark, see-through wash of the color for card backgrounds. The red theme keeps
     /// cards red-black, so the category shows only in the stripe and label.
-    var wash: Color { color.opacity(Theme.style == .red ? 0.04 : 0.14) }
+    var wash: Color { color.opacity(Theme.style == .red ? 0.07 : 0.14) }
 }
 
 /// The small colored tag that names an event's kind.
@@ -109,7 +127,7 @@ struct CategoryTag: View {
             .font(.caption.weight(.bold))
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
-            .background(category.color.opacity(0.16), in: Capsule())
+            .background(category.color.opacity(Theme.style == .red ? 0.24 : 0.16), in: Capsule())
             .foregroundStyle(category.color)
     }
 }
@@ -218,7 +236,45 @@ struct CenteredScreenTitle: View {
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 4)
                 .accessibilityAddTraits(.isHeader)
+                // Tells the bar to show a small title once this one is behind it. Lazy lists drop
+                // rows that scroll far off screen, so disappearing counts as scrolled away too.
+                .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxY } action: { bottom in
+                    scroll?.showSmall = bottom < 110
+                }
+                .onDisappear { scroll?.showSmall = true }
         }
+    }
+
+    @EnvironmentObject private var scrollState: TitleScrollState
+    private var scroll: TitleScrollState? { scrollState }
+}
+
+/// Whether the red theme's big title has scrolled away, shared by the title and the bar.
+final class TitleScrollState: ObservableObject {
+    @Published var showSmall = false
+}
+
+/// The red theme's top bar: empty while the big title shows, then a small red title once it
+/// has scrolled up under the bar.
+private struct SmallTitleOnScroll: ViewModifier {
+    var text: String
+    @StateObject private var scroll = TitleScrollState()
+
+    func body(content: Content) -> some View {
+        content
+            .navigationTitle(text)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(text)
+                        .font(.headline)
+                        .foregroundStyle(Theme.accent)
+                        .lineLimit(1)
+                        .opacity(scroll.showSmall ? 1 : 0)
+                        .animation(.easeInOut(duration: 0.2), value: scroll.showSmall)
+                }
+            }
+            .environmentObject(scroll)
     }
 }
 
@@ -227,9 +283,7 @@ extension View {
     /// drawn by `CenteredScreenTitle` with the system title kept small and out of sight.
     @ViewBuilder func screenTitle(_ text: String) -> some View {
         if Theme.style == .red {
-            navigationTitle(text)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar { ToolbarItem(placement: .principal) { Color.clear.frame(width: 1, height: 1) } }
+            modifier(SmallTitleOnScroll(text: text))
         } else {
             navigationTitle(text)
         }

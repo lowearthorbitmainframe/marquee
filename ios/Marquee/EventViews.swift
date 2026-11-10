@@ -83,7 +83,7 @@ struct EventRow: View {
         .padding(.leading, 4)
         .background(Theme.card.overlay(event.kind.wash))
         .overlay(alignment: .leading) {
-            Rectangle().fill(event.kind.color.opacity(0.55)).frame(width: 4)
+            Rectangle().fill(event.kind.color.opacity(event.kind.stripeOpacity)).frame(width: 4)
         }
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .accessibilityElement(children: .contain)
