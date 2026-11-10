@@ -109,7 +109,7 @@ enum Theme {
         case .hipster: hipsterInk.opacity(0.22)
         case .blade: replicantCyan.opacity(0.28)
         case .tokyo: tokyoInk.opacity(0.85)
-        case .tokyoNight: Color.white.opacity(0.9)
+        case .tokyoNight: Color(white: 0.62)
         default: nil
         }
     }
