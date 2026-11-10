@@ -82,6 +82,9 @@ LOS_ANGELES = {
             "card": 'class="event-item w-dyn-item"', "category": "comedy",
         },
         {"adapter": "seatengine", "url": "https://thecomedychateau.com/events", "venue": "the-comedy-chateau", "category": "comedy"},
+        # Suggested in the app, November 2026
+        {"adapter": "thundertix", "url": "https://thebakedpotato.thundertix.com", "venue": "the-baked-potato"},
+        {"adapter": "ical_feed", "url": "https://harvardandstone.com/events.ics", "venue": "harvard-and-stone"},
         # Valley, Westside and Pasadena stages
         {
             "adapter": "live_nation", "label": "the canyon", "url": "https://wheremusicmeetsthesoul.com/",
@@ -193,6 +196,8 @@ LOS_ANGELES = {
         "hammer-museum": {"name": "Hammer Museum", "neighborhood": "Westwood", "address": "10899 Wilshire Blvd, Los Angeles, CA 90024", "url": "https://hammer.ucla.edu/"},
         "moca-grand-avenue": {"name": "MOCA Grand Avenue", "neighborhood": "Downtown", "address": "250 S Grand Ave, Los Angeles, CA 90012", "url": "https://www.moca.org/"},
         "academy-museum": {"name": "Academy Museum of Motion Pictures", "neighborhood": "Miracle Mile", "address": "6067 Wilshire Blvd, Los Angeles, CA 90036", "url": "https://www.academymuseum.org/"},
+        "the-baked-potato": {"name": "The Baked Potato", "neighborhood": "Studio City", "address": "3787 Cahuenga Blvd, Studio City, CA 91604", "url": "https://www.thebakedpotato.com/"},
+        "harvard-and-stone": {"name": "Harvard & Stone", "neighborhood": "East Hollywood", "address": "5221 Hollywood Blvd, Los Angeles, CA 90027", "url": "https://harvardandstone.com/"},
         "ha-ha-comedy-club": {"name": "Ha Ha Comedy Club", "neighborhood": "North Hollywood", "address": "4712 Lankershim Blvd, North Hollywood, CA 91602", "url": "https://www.hahacomedyclub.com/"},
         "the-comedy-chateau": {"name": "The Comedy Chateau", "neighborhood": "North Hollywood", "address": "4615 Lankershim Blvd, North Hollywood, CA 91602", "url": "https://thecomedychateau.com/"},
         "the-canyon-agoura-hills": {"name": "The Canyon", "neighborhood": "Agoura Hills", "address": "28912 Roadside Dr, Agoura Hills, CA 91301", "url": "https://wheremusicmeetsthesoul.com/"},

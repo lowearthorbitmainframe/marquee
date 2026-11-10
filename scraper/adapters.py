@@ -1626,3 +1626,64 @@ def json_ld_exhibitions(source, fetch, today):
             "category": "museum",
         })
     return events
+
+
+def ical_feed(source, fetch, today):
+    """A standard iCalendar (.ics) feed, as WordPress's Events Manager publishes at /events.ics
+    (Harvard & Stone)."""
+    text = fetch(source["url"])
+    # Long lines are folded onto the next line with a leading space.
+    text = re.sub(r"\r?\n[ \t]", "", text)
+    events = []
+    for block in text.split("BEGIN:VEVENT")[1:]:
+        block = block.split("END:VEVENT")[0]
+        fields = {}
+        for line in block.splitlines():
+            key, _, value = line.partition(":")
+            fields.setdefault(key.split(";")[0].upper(), (key, value.strip()))
+        if "DTSTART" not in fields or "SUMMARY" not in fields:
+            continue
+        key, value = fields["DTSTART"]
+        if value.endswith("Z"):
+            start = datetime.strptime(value, "%Y%m%dT%H%M%SZ").replace(tzinfo=timezone.utc)
+        elif "T" in value:
+            start = datetime.strptime(value[:15], "%Y%m%dT%H%M%S")
+            zone = re.search(r"TZID=([^;:]+)", key)
+            if zone:
+                start = start.replace(tzinfo=ZoneInfo(zone.group(1)))
+        else:
+            start = datetime.strptime(value[:8], "%Y%m%d")
+        title = fields["SUMMARY"][1].replace("\\,", ",").replace("\;", ";").replace("\\n", " ")
+        url = fields.get("URL", ("", ""))[1] or None
+        events.append({
+            "venue": source["venue"],
+            "title": html.unescape(title),
+            "start": start,
+            "url": url,
+            "ticket_url": url,
+        })
+    return events
+
+
+def thundertix(source, fetch, today):
+    """Venues selling through ThunderTix (the Baked Potato). The public event list gives each
+    show's name and date; times are on the show's own page, so they're left as TBA."""
+    events = []
+    for box in fetch(source["url"]).split("event_box")[1:]:
+        title = re.search(r"<h1>(.*?)</h1>", box, re.S)
+        when = re.search(r'class="event_date">\s*\w+\s+(\w+\s+\d{1,2},\s+\d{4})', box)
+        link = re.search(r'href="(/events/\d+)"', box)
+        if not (title and when):
+            continue
+        image = re.search(r'<img src="([^"]+)"', box)
+        url = urllib.parse.urljoin(source["url"], link.group(1)) if link else source["url"]
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(title.group(1)),
+            "start": datetime.strptime(re.sub(r"\s+", " ", when.group(1)), "%B %d, %Y"),
+            "url": url,
+            "ticket_url": url,
+            "image": image.group(1) if image else None,
+            "sold_out": "sold out" in box.lower(),
+        })
+    return events
