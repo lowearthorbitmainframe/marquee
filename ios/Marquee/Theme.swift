@@ -6,7 +6,7 @@ import SwiftUI
 /// colors and zine type; "blade" is Blade Runner 2049: orange haze over blue-black, cyan and
 /// hologram pink, thin wide capitals and monospaced readouts. Debug builds can try one with
 /// `-theme red`, `goth`, `synth`, `hipster` or `blade`. "tokyo" is Tokyo cyberpunk on white:
-/// neon pink, cyan and yellow, heavy condensed capitals, katakana and signage blocks.
+/// neon pink, cyan and yellow, heavy condensed capitals and signage blocks.
 enum ThemeStyle: String {
     case amber, red, goth, synth, hipster, blade, tokyo
 
@@ -767,28 +767,15 @@ struct CityTitle: View {
 }
 
 
-/// The Tokyo cyberpunk screen title: the place's name in katakana in neon pink, the name in
-/// heavy condensed capitals with a cyan and pink split edge like a glitching screen, and for
-/// tonight a black "TONIGHT 今夜" tag beneath.
+/// The Tokyo cyberpunk screen title: the name in heavy condensed capitals with a cyan and pink
+/// split edge like a glitching screen, and for tonight a black "TONIGHT" tag beneath.
 struct TokyoTitle: View {
     var text: String
-
-    private static let katakana = [
-        "Los Angeles": "ロサンゼルス", "Bay Area": "ベイエリア", "San Diego": "サンディエゴ",
-        "Venues": "会場", "Browse": "さがす", "You": "あなた",
-    ]
-    private static let kanji = ["Tonight": "今夜"]
 
     var body: some View {
         let parts = CityTitle.split(text)
         let name = parts.place ?? parts.lead
-        VStack(spacing: 4) {
-            if let kana = Self.katakana[name] {
-                Text(kana)
-                    .font(.custom("HiraginoSans-W6", size: 13, relativeTo: .caption))
-                    .tracking(4)
-                    .foregroundStyle(Theme.neonPink)
-            }
+        VStack(spacing: 8) {
             Text(name.uppercased())
                 .font(Theme.titleFont)
                 .foregroundStyle(Theme.tokyoInk)
@@ -798,23 +785,13 @@ struct TokyoTitle: View {
                 .shadow(color: Theme.tokyoCyan, radius: 0, x: -3, y: 0)
                 .shadow(color: Theme.neonPink, radius: 0, x: 3, y: 0)
             if parts.place != nil {
-                HStack(spacing: 0) {
-                    Text(parts.lead.uppercased())
-                        .font(.custom("Futura-CondensedExtraBold", size: 18, relativeTo: .headline))
-                        .tracking(3)
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 10)
-                        .frame(height: 30)
-                        .background(Theme.tokyoInk)
-                    if let kanji = Self.kanji[parts.lead] {
-                        Text(kanji)
-                            .font(.custom("HiraginoSans-W8", size: 16, relativeTo: .headline))
-                            .foregroundStyle(Theme.tokyoInk)
-                            .padding(.horizontal, 8)
-                            .frame(height: 30)
-                            .background(Theme.signYellow)
-                    }
-                }
+                Text(parts.lead.uppercased())
+                    .font(.custom("Futura-CondensedExtraBold", size: 18, relativeTo: .headline))
+                    .tracking(3)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .frame(height: 30)
+                    .background(Theme.tokyoInk)
             }
         }
         .frame(maxWidth: .infinity)
