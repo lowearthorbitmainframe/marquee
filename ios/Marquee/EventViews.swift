@@ -50,10 +50,7 @@ struct EventRow: View {
                 .polaroid()
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(event.title)
-                    .font(Theme.eventTitleFont)
-                    .lineLimit(2)
-                    .strikethrough(event.cancelled)
+                ListingTitle(text: event.title, cancelled: event.cancelled)
                 Text(detailLine)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -485,5 +482,41 @@ struct VenueSummary: View {
             }
             .buttonStyle(.plain)
         }
+    }
+}
+
+/// A listing's title, shown in full where it can be: full size if it fits in three lines,
+/// otherwise a step smaller, down to 70% before the end is cut off.
+struct ListingTitle: View {
+    var text: String
+    var cancelled = false
+
+    @State private var width: CGFloat = 0
+    @Environment(\.dynamicTypeSize) private var typeSize  // re-measure when text size changes
+
+    private static let scales: [CGFloat] = [1, 0.9, 0.8, 0.7]
+    private static let maxLines: CGFloat = 3
+
+    var body: some View {
+        Text(text)
+            .font(Theme.eventTitleFont(scale: scale))
+            .lineLimit(Int(Self.maxLines))
+            .strikethrough(cancelled)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+    }
+
+    /// The largest size at which the whole title fits in three lines.
+    private var scale: CGFloat {
+        _ = typeSize
+        guard width > 0 else { return 1 }
+        for scale in Self.scales {
+            let font = Theme.eventTitleUIFont(scale: scale)
+            let height = (text as NSString).boundingRect(
+                with: CGSize(width: width, height: .greatestFiniteMagnitude),
+                options: [.usesLineFragmentOrigin], attributes: [.font: font], context: nil).height
+            if height <= font.lineHeight * Self.maxLines + 1 { return scale }
+        }
+        return Self.scales.last!
     }
 }

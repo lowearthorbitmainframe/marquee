@@ -187,13 +187,29 @@ enum Theme {
         }
     }
     /// Event names on listings.
-    static var eventTitleFont: Font {
+    static var eventTitleFont: Font { eventTitleFont(scale: 1) }
+
+    /// The same font as UIKit, for measuring how many lines a title takes.
+    static func eventTitleUIFont(scale: CGFloat) -> UIFont {
+        let base: UIFont
         switch style {
-        case .goth: .custom("Bodoni 72", size: 20, relativeTo: .headline).weight(.bold)
-        case .hipster: .custom("HelveticaNeue-Bold", size: 17, relativeTo: .headline)
-        case .blade: .custom("AvenirNext-DemiBold", size: 17, relativeTo: .headline)
-        case .tokyo, .tokyoNight: .custom("AvenirNext-Bold", size: 17, relativeTo: .headline)
-        default: .headline
+        case .goth: base = UIFont(name: "BodoniSvtyTwoITCTT-Bold", size: 20 * scale) ?? .boldSystemFont(ofSize: 20 * scale)
+        case .hipster: base = UIFont(name: "HelveticaNeue-Bold", size: 17 * scale) ?? .boldSystemFont(ofSize: 17 * scale)
+        case .blade: base = UIFont(name: "AvenirNext-DemiBold", size: 17 * scale) ?? .boldSystemFont(ofSize: 17 * scale)
+        case .tokyo, .tokyoNight: base = UIFont(name: "AvenirNext-Bold", size: 17 * scale) ?? .boldSystemFont(ofSize: 17 * scale)
+        default: base = .systemFont(ofSize: 17 * scale, weight: .semibold)
+        }
+        return UIFontMetrics(forTextStyle: .headline).scaledFont(for: base)
+    }
+
+    /// The listing title at a fraction of its usual size, so long titles can shrink to fit.
+    static func eventTitleFont(scale: CGFloat) -> Font {
+        switch style {
+        case .goth: .custom("Bodoni 72", size: 20 * scale, relativeTo: .headline).weight(.bold)
+        case .hipster: .custom("HelveticaNeue-Bold", size: 17 * scale, relativeTo: .headline)
+        case .blade: .custom("AvenirNext-DemiBold", size: 17 * scale, relativeTo: .headline)
+        case .tokyo, .tokyoNight: .custom("AvenirNext-Bold", size: 17 * scale, relativeTo: .headline)
+        default: scale == 1 ? .headline : .system(size: 17 * scale, weight: .semibold)
         }
     }
 }
