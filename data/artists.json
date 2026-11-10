@@ -8181,6 +8181,13 @@
 "Q Funktion"
 ]
 },
+"bassblizzard": {
+"checked": "2026-11-10T13:20:43+00:00",
+"linksChecked": "2026-11-10T13:21:10+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Bass Blizzard"
+},
 "bassface": {
 "appleUrl": "https://music.apple.com/us/artist/bass-face/1484861794?uo=4",
 "checked": "2026-11-04T07:29:01+00:00",
@@ -10405,6 +10412,18 @@
 "Bailey Zimmerman",
 "Gavin Adcock"
 ]
+},
+"blancodiablo": {
+"appleUrl": "https://music.apple.com/us/artist/blanco-diablo/134539402?uo=4",
+"checked": "2026-11-10T13:20:43+00:00",
+"fans": 45,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/dca35e80b0f558bbed33f691e79f87c0/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-10T13:21:10+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "BLANCO DIABLO",
+"related": []
 },
 "blanke": {
 "appleUrl": "https://music.apple.com/us/artist/blanke/274124666?uo=4",
@@ -24659,6 +24678,13 @@
 "Pangaea"
 ]
 },
+"djstopazanddfly": {
+"checked": "2026-11-10T13:24:07+00:00",
+"linksChecked": "2026-11-10T13:24:11+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "DJs TOPAZ & D-FLY"
+},
 "djvaughnavakian": {
 "checked": "2026-11-05T19:33:44+00:00",
 "linksChecked": "2026-11-05T23:37:37+00:00",
@@ -31106,6 +31132,18 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Flame Monroe"
+},
+"flamesofdurga": {
+"appleUrl": "https://music.apple.com/us/artist/flames-of-durga/1045998833?uo=4",
+"checked": "2026-11-10T13:20:43+00:00",
+"fans": 25,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/9d0c7e04538c4dd913aa3b35fa12b133/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-10T13:21:10+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Flames of Durga",
+"related": []
 },
 "flamingroovies": {
 "appleUrl": "https://music.apple.com/us/artist/flamin-groovies/69837834?uo=4",
@@ -39220,6 +39258,16 @@
 "linksVersion": 2,
 "name": "Hushmoney",
 "related": []
+},
+"hustle": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/the-side-hustle-show/id655135292"
+},
+"linksChecked": "2026-11-10T13:25:04+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Hustle"
 },
 "hvdes": {
 "appleUrl": "https://music.apple.com/us/artist/hvdes/1298170052?uo=4",
@@ -59498,6 +59546,18 @@
 "name": "Moondough",
 "related": []
 },
+"moonfuzz": {
+"appleUrl": "https://music.apple.com/us/artist/moonfuzz/1178448200?uo=4",
+"checked": "2026-11-10T13:20:43+00:00",
+"fans": 38,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/8b6be282cb6e37da1ea434f8f87ee7d5/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-10T13:21:10+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Moon Fuzz",
+"related": []
+},
 "moonpanda": {
 "appleUrl": "https://music.apple.com/us/artist/moon-panda/1174384136?uo=4",
 "checked": "2026-11-05T04:50:49+00:00",
@@ -63141,6 +63201,16 @@
 "Nick Lutsko",
 "Kick the Robot"
 ]
+},
+"notesversion": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/american-notes-version-2/id6788191671"
+},
+"linksChecked": "2026-11-10T13:25:04+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Notes Version"
 },
 "nothing": {
 "appleUrl": "https://music.apple.com/us/artist/nothing/593213453?uo=4",
@@ -69838,6 +69908,23 @@
 "linksMatch": "ambiguous",
 "linksVersion": 2,
 "name": "RAFAEL MOREIRA",
+"related": []
+},
+"ragamuffs": {
+"appleUrl": "https://music.apple.com/us/artist/ragamuffs/1440375774?uo=4",
+"checked": "2026-11-10T13:20:43+00:00",
+"fans": 47,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/d1e2ea9d2daaf3703b3b814fc562c60e/250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/ragamuffs/",
+"spotify": "https://open.spotify.com/artist/0IIb8Xf1ZDISXLSntUDMRq",
+"website": "https://www.ragamuffs.com/"
+},
+"linksChecked": "2026-11-10T13:21:10+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Ragamuffs",
 "related": []
 },
 "rahm": {
@@ -76725,6 +76812,13 @@
 "name": "SHAWN ROHLF",
 "related": []
 },
+"shawnryanliveinhohoholidaze": {
+"checked": "2026-11-10T13:20:43+00:00",
+"linksChecked": "2026-11-10T13:21:10+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Shawn Ryan Live in Ho-Ho-Holidaze"
+},
 "shawnwayans": {
 "checked": "1970-01-01T00:00:00+00:00",
 "links": {
@@ -82905,6 +82999,37 @@
 "Fit For An Autopsy",
 "Spite",
 "Infant Annihilator"
+]
+},
+"suitcasejunket": {
+"appleUrl": "https://music.apple.com/us/artist/the-suitcase-junket/357354608?uo=4",
+"checked": "2026-11-10T13:20:43+00:00",
+"fans": 444,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/6059f300a952e8a96d15073d64d3bacc/250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/suitcasejunket/",
+"spotify": "https://open.spotify.com/artist/7Iew8GtdYcaznLxIJpJxeS",
+"website": "http://www.thesuitcasejunket.com/",
+"youtube": "https://www.youtube.com/channel/UC1oQfK1XSswFOnISagweo9A"
+},
+"linksChecked": "2026-11-10T13:21:10+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "The Suitcase Junket",
+"related": [
+"The Bones of J.R. Jones",
+"John Craigie",
+"The Avett Brothers",
+"Elephant Revival",
+"Shovels & Rope",
+"Mipso",
+"Ryan Montbleau",
+"Chadwick Stokes",
+"Miner",
+"The Wood Brothers",
+"Rayland Baxter",
+"Kuinka"
 ]
 },
 "sully": {
