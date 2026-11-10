@@ -21,6 +21,7 @@ struct TonightView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 12) {
+                    CenteredScreenTitle(text: title)
                     DayStrip(days: upcomingDays, selected: day) { selectedDay = $0 }
                     CategoryChips(selection: category)
 
@@ -54,7 +55,7 @@ struct TonightView: View {
             }
             .refreshable { await store.refresh() }
             .screenBackground()
-            .navigationTitle(title)
+            .screenTitle(title)
             .marqueeDestinations()
         }
     }

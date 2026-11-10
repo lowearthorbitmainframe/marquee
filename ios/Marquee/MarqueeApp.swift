@@ -22,6 +22,22 @@ struct MarqueeApp: App {
             UITabBar.appearance().scrollEdgeAppearance = appearance
             UITabBar.appearance().unselectedItemTintColor = unselected
         }
+        if let titleColor = Theme.titleColor {
+            // Red, centered screen titles. The paragraph style centers the large title too.
+            let centered = NSMutableParagraphStyle()
+            centered.alignment = .center
+            let bar = UINavigationBarAppearance()
+            bar.configureWithTransparentBackground()
+            bar.largeTitleTextAttributes = [.foregroundColor: titleColor, .paragraphStyle: centered]
+            bar.titleTextAttributes = [.foregroundColor: titleColor]
+            let scrolled = UINavigationBarAppearance()
+            scrolled.configureWithDefaultBackground()
+            scrolled.titleTextAttributes = [.foregroundColor: titleColor]
+            scrolled.largeTitleTextAttributes = bar.largeTitleTextAttributes
+            UINavigationBar.appearance().scrollEdgeAppearance = bar
+            UINavigationBar.appearance().standardAppearance = scrolled
+            UINavigationBar.appearance().compactAppearance = scrolled
+        }
     }
 
     var body: some Scene {

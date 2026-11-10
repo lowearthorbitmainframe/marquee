@@ -16,6 +16,7 @@ struct YouView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
+                    CenteredScreenTitle(text: "You")
                     VStack(alignment: .leading, spacing: 10) {
                         SectionHeader(title: "Saved shows")
                         if saved.isEmpty {
@@ -38,7 +39,7 @@ struct YouView: View {
                 .padding(16)
             }
             .screenBackground()
-            .navigationTitle("You")
+            .screenTitle("You")
             .marqueeDestinations()
         }
     }

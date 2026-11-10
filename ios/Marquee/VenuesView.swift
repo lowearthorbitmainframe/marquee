@@ -34,6 +34,23 @@ struct VenuesView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(spacing: 10) {
+                    CenteredScreenTitle(text: "Venues")
+                    if Theme.style == .red {
+                        // The red theme's title sits in the page, so search goes under it.
+                        HStack(spacing: 8) {
+                            Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
+                            TextField("Venue or neighborhood", text: $search)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                            if !search.isEmpty {
+                                Button { search = "" } label: { Image(systemName: "xmark.circle.fill").foregroundStyle(.secondary) }
+                                    .accessibilityLabel("Clear search")
+                            }
+                        }
+                        .padding(.horizontal, 14)
+                        .frame(height: 44)
+                        .background(Theme.card, in: Capsule())
+                    }
                     CategoryChips(selection: $category)
                     ForEach(filtered) { venue in
                         NavigationLink(value: venue) {
@@ -57,7 +74,7 @@ struct VenuesView: View {
                 .padding(16)
             }
             .screenBackground()
-            .navigationTitle("Venues")
+            .screenTitle("Venues")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button { suggestName = search; isSuggesting = true } label: { Image(systemName: "plus") }
@@ -65,7 +82,7 @@ struct VenuesView: View {
                 }
             }
             .sheet(isPresented: $isSuggesting) { SuggestVenueView(initialName: suggestName) }
-            .searchable(text: $search, prompt: "Venue or neighborhood")
+            .venueSearch(text: $search)
             .marqueeDestinations()
         }
     }
@@ -180,5 +197,17 @@ struct VenueDetailView: View {
         guard let address = venue.address else { return nil }
         let query = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         return URL(string: "https://maps.apple.com/?q=\(query)")
+    }
+}
+
+
+private extension View {
+    /// The system search bar, except in the red theme, which draws its own under the title.
+    @ViewBuilder func venueSearch(text: Binding<String>) -> some View {
+        if Theme.style == .red {
+            self
+        } else {
+            searchable(text: text, prompt: "Venue or neighborhood")
+        }
     }
 }

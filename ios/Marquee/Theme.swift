@@ -25,6 +25,8 @@ enum Theme {
     static let separator = Color.white.opacity(0.08)
     /// The selected tab's icon; the others use `tabUnselected`.
     static var tabSelected: Color { style == .red ? Color(white: 0.95) : accent }
+    /// Screen titles; nil keeps the system's white.
+    static var titleColor: UIColor? { style == .red ? UIColor(red: 0.86, green: 0.11, blue: 0.16, alpha: 1) : nil }
     static var tabUnselected: UIColor? { style == .red ? UIColor(red: 0.86, green: 0.11, blue: 0.16, alpha: 1) : nil }
 }
 
@@ -199,5 +201,37 @@ struct FlowLayout: Layout {
             rowHeight = max(rowHeight, size.height)
         }
         return (origins, CGSize(width: maxWidth, height: y + rowHeight))
+    }
+}
+
+/// The red theme's screen title: large, red and centered. iOS can't center its own large
+/// titles, so the red theme draws this at the top of the content and hides the system one.
+struct CenteredScreenTitle: View {
+    var text: String
+
+    var body: some View {
+        if Theme.style == .red {
+            Text(text)
+                .font(.largeTitle.weight(.bold))
+                .foregroundStyle(Theme.accent)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 4)
+                .accessibilityAddTraits(.isHeader)
+        }
+    }
+}
+
+extension View {
+    /// A main screen's title: the system large title, or in the red theme a centered one
+    /// drawn by `CenteredScreenTitle` with the system title kept small and out of sight.
+    @ViewBuilder func screenTitle(_ text: String) -> some View {
+        if Theme.style == .red {
+            navigationTitle(text)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar { ToolbarItem(placement: .principal) { Color.clear.frame(width: 1, height: 1) } }
+        } else {
+            navigationTitle(text)
+        }
     }
 }

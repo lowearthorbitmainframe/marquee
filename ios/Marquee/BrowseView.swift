@@ -74,6 +74,7 @@ struct BrowseView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 10, pinnedViews: [.sectionHeaders]) {
+                    CenteredScreenTitle(text: "Browse")
                     controls
                     let groups = groups
                     if groups.isEmpty {
@@ -98,7 +99,7 @@ struct BrowseView: View {
             }
             .refreshable { await store.refresh() }
             .screenBackground()
-            .navigationTitle("Browse")
+            .screenTitle("Browse")
             .searchable(text: $query.search, prompt: "Artist, show, venue or genre")
             .marqueeDestinations()
         }
