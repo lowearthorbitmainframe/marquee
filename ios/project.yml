@@ -23,12 +23,14 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_STYLE: Automatic
-        # CloudKit for venue suggestions goes back on once the App ID has the iCloud container in the developer portal:
-        # CODE_SIGN_ENTITLEMENTS: Marquee/Scenester.entitlements
+        CODE_SIGN_ENTITLEMENTS: Marquee/Scenester.entitlements
     info:
       path: Marquee/Info.plist
       properties:
         CFBundleDisplayName: Scenester
+        # Read from build settings so each TestFlight upload can carry its own build number.
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSAppleMusicUsageDescription: Scenester reads the artists in your library to find their shows and similar bands near you.
@@ -36,4 +38,4 @@ targets:
         BGTaskSchedulerPermittedIdentifiers: [com.bryanstage.marquee.refresh]
         # Only HTTPS through Apple's own networking, so no export compliance paperwork is needed.
         ITSAppUsesNonExemptEncryption: false
-        SuggestionsUseCloudKit: false
+        SuggestionsUseCloudKit: true

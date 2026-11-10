@@ -22,5 +22,8 @@ xcodebuild -project Marquee.xcodeproj -scheme Marquee -configuration Release \
 rm -rf build/export
 xcodebuild -exportArchive -archivePath build/Scenester.xcarchive -exportOptionsPlist ExportOptions.plist \
   -exportPath build/export -allowProvisioningUpdates
-xcrun altool --upload-app --type ios --file build/export/*.ipa --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"
+# altool can report a rejected upload without failing, so check what it says.
+OUT=$(xcrun altool --upload-app --type ios --file build/export/Marquee.ipa --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID" 2>&1)
+echo "$OUT" | grep -E "UPLOAD SUCCEEDED|ERROR|error|Failed" || true
+if ! echo "$OUT" | grep -q "UPLOAD SUCCEEDED"; then echo "Upload failed."; exit 1; fi
 echo "Uploaded build $BUILD. It shows in App Store Connect > TestFlight after Apple finishes processing (usually 5-30 minutes)."
