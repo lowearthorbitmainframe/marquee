@@ -17,7 +17,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>Scenester</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -29,7 +29,7 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Scenester reads the artists in your library to find their shows and similar bands near you.</string>
 	<key>SpotifyClientID</key>
-	<string></string>
+	<string>505e4293b99b46d2b51aaeb489da271c</string>
 	<key>SuggestionsUseCloudKit</key>
 	<true/>
 	<key>UIBackgroundModes</key>

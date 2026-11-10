@@ -28,6 +28,8 @@ targets:
       path: Marquee/Info.plist
       properties:
         CFBundleDisplayName: Scenester
+        # iOS shows this name in permission prompts such as "wants to use spotify.com to sign in".
+        CFBundleName: Scenester
         # Read from build settings so each TestFlight upload can carry its own build number.
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
@@ -40,4 +42,4 @@ targets:
         ITSAppUsesNonExemptEncryption: false
         SuggestionsUseCloudKit: true
         # From the Spotify app at developer.spotify.com; the Import from Spotify button stays hidden while it's empty.
-        SpotifyClientID: ""
+        SpotifyClientID: "505e4293b99b46d2b51aaeb489da271c"
