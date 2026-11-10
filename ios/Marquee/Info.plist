@@ -28,6 +28,8 @@
 	<false/>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Scenester reads the artists in your library to find their shows and similar bands near you.</string>
+	<key>SpotifyClientID</key>
+	<string></string>
 	<key>SuggestionsUseCloudKit</key>
 	<true/>
 	<key>UIBackgroundModes</key>

@@ -1,3 +1,4 @@
+import AuthenticationServices
 import SwiftUI
 #if os(iOS)
 import MediaPlayer
@@ -136,7 +137,7 @@ struct YourArtistsShows: View {
 
     var body: some View {
         let result = taste.profile.shows(in: store.feed)
-        if !taste.profile.favoriteArtists.isEmpty || !taste.profile.libraryArtists.isEmpty {
+        if !taste.profile.favoriteArtists.isEmpty || !taste.profile.importedArtists.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 SectionHeader(title: "Your artists in \(store.city?.name ?? "town")", subtitle: subtitle(result))
                 ForEach(showsAll ? result.events : Array(result.events.prefix(previewCount))) {
@@ -211,6 +212,8 @@ struct SetupView: View {
 
 struct ArtistsEditor: View {
     @EnvironmentObject private var taste: TasteStore
+    @Environment(\.webAuthenticationSession) private var webAuthenticationSession
+    @State private var importingSpotify = false
 
     @State private var draft = ""
     @State private var importMessage: String?
@@ -248,8 +251,24 @@ struct ArtistsEditor: View {
             .buttonStyle(.bordered)
             #endif
 
+            if SpotifyImport.isAvailable {
+                Button {
+                    Task { await importSpotify() }
+                } label: {
+                    Label(importingSpotify ? "Reading your Spotify library…" : "Import from Spotify", systemImage: "waveform")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.bordered)
+                .disabled(importingSpotify)
+            }
+
             if !taste.profile.libraryArtists.isEmpty {
-                Text("\(taste.profile.libraryArtists.count) artists imported from your library")
+                Text("\(taste.profile.libraryArtists.count) artists imported from your Apple Music library")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            if let spotify = taste.profile.spotifyArtists, !spotify.isEmpty {
+                Text("\(spotify.count) artists imported from Spotify")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -264,6 +283,20 @@ struct ArtistsEditor: View {
         guard !name.isEmpty else { return }
         if !taste.isFavorite(name) { taste.toggleFavorite(name) }
         draft = ""
+    }
+
+    private func importSpotify() async {
+        importingSpotify = true
+        defer { importingSpotify = false }
+        do {
+            let names = try await SpotifyImport.artists(using: webAuthenticationSession)
+            taste.profile.spotifyArtists = names
+            importMessage = names.isEmpty ? "No artists found in that Spotify library." : nil
+        } catch SpotifyImport.ImportError.cancelled {
+            importMessage = nil
+        } catch {
+            importMessage = error.localizedDescription
+        }
     }
 
     #if os(iOS)

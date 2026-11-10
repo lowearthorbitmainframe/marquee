@@ -17,18 +17,23 @@ struct TasteProfile: Codable, Equatable {
     var homeRegion: String?
     /// Artists you never want to see. Their shows are hidden.
     var dislikedArtists: [String]?
+    /// Artists from a Spotify import, kept apart so re-importing Apple Music doesn't erase them.
+    var spotifyArtists: [String]?
+
+    /// Everyone imported from a music library, Apple Music or Spotify.
+    var importedArtists: [String] { libraryArtists + (spotifyArtists ?? []) }
 
     var alertRegion: String { homeRegion ?? FeedConfig.defaultRegion.id }
 
     /// The artists whose new shows trigger an alert.
     var watchedArtistKeys: Set<String> {
-        Set((favoriteArtists + libraryArtists + (savedArtists ?? [])).map(ArtistKey.make))
+        Set((favoriteArtists + importedArtists + (savedArtists ?? [])).map(ArtistKey.make))
     }
 
     var dislikedKeys: Set<String> { Set((dislikedArtists ?? []).map(ArtistKey.make)) }
 
     var isEmpty: Bool {
-        followedVenues.isEmpty && favoriteArtists.isEmpty && libraryArtists.isEmpty && genres.isEmpty
+        followedVenues.isEmpty && favoriteArtists.isEmpty && importedArtists.isEmpty && genres.isEmpty
     }
 }
 
@@ -109,7 +114,7 @@ extension Set {
 extension TasteProfile {
     /// Upcoming shows by artists you follow or have in your library, soonest first.
     func shows(in feed: Feed?) -> (events: [Event], artists: Set<String>) {
-        let keys = Set((favoriteArtists + libraryArtists).map(ArtistKey.make))
+        let keys = Set((favoriteArtists + importedArtists).map(ArtistKey.make))
         var artists = Set<String>()
         let events = (feed?.events ?? []).filter { event in
             let matches = event.artists.filter { keys.contains(ArtistKey.make($0)) }
@@ -151,7 +156,7 @@ struct Recommender {
 
     init(taste: TasteProfile, feed: Feed?) {
         favorites = Dictionary(taste.favoriteArtists.map { (ArtistKey.make($0), $0) }, uniquingKeysWith: { first, _ in first })
-        library = Dictionary(taste.libraryArtists.map { (ArtistKey.make($0), $0) }, uniquingKeysWith: { first, _ in first })
+        library = Dictionary(taste.importedArtists.map { (ArtistKey.make($0), $0) }, uniquingKeysWith: { first, _ in first })
         genres = taste.genres
         followed = taste.followedVenues
         dismissed = taste.dismissedEvents

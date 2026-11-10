@@ -13,6 +13,7 @@
 		52442763865210EF4C34BBE5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */; };
 		5DC7367BF15CA094AB4DC69A /* EventViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04647A7D08704C8BE7154CEA /* EventViews.swift */; };
 		5DD4A65A6A609BDBDDC9DA6B /* MarqueeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3413C2E9C99ECE927901879E /* MarqueeApp.swift */; };
+		6F3E205FFAB9DF1D7C447584 /* Spotify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 307D175668F982B2FE029942 /* Spotify.swift */; };
 		717D50B230579DC03C9F4969 /* EventTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B44A7884A946BCB8D4D21B /* EventTags.swift */; };
 		76988A275A5073991ABC9E0A /* Taste.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7450B03CBD8BE29FA55F87 /* Taste.swift */; };
 		953FFFF8E0F789E5D3BADB55 /* YouView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CB46A01065AD90A6CD9422 /* YouView.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		04647A7D08704C8BE7154CEA /* EventViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViews.swift; sourceTree = "<group>"; };
+		307D175668F982B2FE029942 /* Spotify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spotify.swift; sourceTree = "<group>"; };
 		3413C2E9C99ECE927901879E /* MarqueeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeApp.swift; sourceTree = "<group>"; };
 		38CB46A01065AD90A6CD9422 /* YouView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouView.swift; sourceTree = "<group>"; };
 		4008A22CC8C03698DEEBF42E /* Marquee.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Marquee.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +76,7 @@
 				E8565B4EB381A8141F953928 /* MusicLinks.swift */,
 				6AFED27CD3FF1E062137241F /* PrivacyInfo.xcprivacy */,
 				8CAA2D433B55A56B36536F0A /* Scenester.entitlements */,
+				307D175668F982B2FE029942 /* Spotify.swift */,
 				A1C7949E1273A4FDC4FF6B46 /* Suggestions.swift */,
 				BD7450B03CBD8BE29FA55F87 /* Taste.swift */,
 				AF786A89C8F867B2A20C028E /* Theme.swift */,
@@ -182,6 +185,7 @@
 				5DD4A65A6A609BDBDDC9DA6B /* MarqueeApp.swift in Sources */,
 				0AACEB3C4D145678316D0C95 /* Models.swift in Sources */,
 				A5834D39850094007DD7F59E /* MusicLinks.swift in Sources */,
+				6F3E205FFAB9DF1D7C447584 /* Spotify.swift in Sources */,
 				D5973E37BDA9B00009820D0B /* Suggestions.swift in Sources */,
 				76988A275A5073991ABC9E0A /* Taste.swift in Sources */,
 				F612E0894D2D5F75624E2677 /* Theme.swift in Sources */,

@@ -39,3 +39,5 @@ targets:
         # Only HTTPS through Apple's own networking, so no export compliance paperwork is needed.
         ITSAppUsesNonExemptEncryption: false
         SuggestionsUseCloudKit: true
+        # From the Spotify app at developer.spotify.com; the Import from Spotify button stays hidden while it's empty.
+        SpotifyClientID: ""
