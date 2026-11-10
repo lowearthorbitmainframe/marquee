@@ -45,8 +45,12 @@ struct TonightView: View {
                                 .id("\(item.event.id)-\(item.reason ?? "")")
                         }
                     }
-                    OnViewSection(exhibitions: store.exhibitions(on: day), expanded: category.wrappedValue == .museum) {
-                        category.wrappedValue = .museum
+                    // Exhibitions belong under All (as one summary row) and Museums (in full),
+                    // not under Music, Comedy and the other show filters.
+                    if category.wrappedValue == nil || category.wrappedValue == .museum {
+                        OnViewSection(exhibitions: store.exhibitions(on: day), expanded: category.wrappedValue == .museum) {
+                            category.wrappedValue = .museum
+                        }
                     }
                     FreshnessFooter().padding(.top, 8)
                 }
@@ -188,7 +192,7 @@ extension View {
     }
 }
 
-/// Exhibitions on view this day. Under "Museums" they're listed in full; elsewhere
+/// Exhibitions on view this day. Under "Museums" they're listed in full; under "All"
 /// they fold into one row that switches to that filter.
 struct OnViewSection: View {
     var exhibitions: [Event]
