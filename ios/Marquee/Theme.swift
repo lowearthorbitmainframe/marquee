@@ -393,7 +393,15 @@ extension EventCategory {
 
     /// A dark, see-through wash of the color for card backgrounds. The red theme keeps
     /// cards red-black, so the category shows only in the stripe and label.
-    var wash: Color { color.opacity(Theme.style == .amber ? 0.14 : Theme.style == .red ? 0.05 : 0) }
+    var wash: Color {
+        switch Theme.style {
+        case .amber: color.opacity(0.14)
+        case .red: color.opacity(0.05)
+        // Tokyo fills each card with a light, see-through version of its color.
+        case .tokyo: color.opacity(0.16)
+        default: .clear
+        }
+    }
 }
 
 /// The small colored tag that names an event's kind.
