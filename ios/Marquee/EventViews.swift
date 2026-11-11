@@ -111,7 +111,7 @@ struct EventRow: View {
     private var badge: (text: String, color: Color)? {
         if event.cancelled { return ("Cancelled", .red) }
         if event.soldOut { return ("Sold out", .orange) }
-        if let reason { return (reason, Theme.accent) }
+        if let reason { return (reason, Theme.style == .tokyoNight ? event.kind.color : Theme.accent) }
         if event.kind.hasMusicLinks, let genre = store.genres(for: event).first { return (genre, Theme.style == .tokyoNight ? event.kind.color : .secondary) }
         if event.kind != .music { return (event.kind.label, event.kind.color) }
         return nil
