@@ -17176,6 +17176,13 @@
 "checked": "2026-11-05T04:24:06+00:00",
 "name": "Christmas Holiday"
 },
+"christmasshowdown": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Christmas Showdown"
+},
 "christopherowenstbatba": {
 "checked": "2026-11-09T08:00:23+00:00",
 "linksChecked": "2026-11-09T08:00:48+00:00",
@@ -38225,6 +38232,16 @@
 "linksVersion": 2,
 "name": "Heather McMahan"
 },
+"heatherwinter": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/can-i-get-some-ranch/id1574117253"
+},
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Heather Winter"
+},
 "heavensgate": {
 "appleUrl": "https://music.apple.com/us/artist/heavensgate/1402901618?uo=4",
 "checked": "2026-11-05T04:37:18+00:00",
@@ -40843,6 +40860,18 @@
 "Tritonal",
 "Krewella"
 ]
+},
+"illshowyoumagic": {
+"appleUrl": "https://music.apple.com/us/artist/ill-show-you-magic/1808732992?uo=4",
+"checked": "2026-11-11T04:20:07+00:00",
+"fans": 0,
+"genre": "Indie Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/6eeed24787329145002e7900f6076f28/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "I'll show you magic",
+"related": []
 },
 "illumishade": {
 "appleUrl": "https://music.apple.com/us/artist/illumishade/1494763050?uo=4",
@@ -44356,6 +44385,16 @@
 "name": "JessX",
 "related": []
 },
+"jesustrejo": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/jesus-trejo-book-club/id1787003808"
+},
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Jesus Trejo"
+},
 "jfharris": {
 "checked": "1970-01-01T00:00:00+00:00",
 "linksChecked": "2026-11-05T23:07:53+00:00",
@@ -47801,6 +47840,14 @@
 "fans": 232,
 "genre": "Pop",
 "image": "https://cdn-images.dzcdn.net/images/artist/b5cebfc0f92e9a0b46825ef38dc88ddd/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/kayla-divenere/1128423470",
+"instagram": "https://www.instagram.com/kayladivenere/",
+"spotify": "https://open.spotify.com/artist/6LmymAfsFtt2CaJSj9hdCn",
+"tiktok": "https://www.tiktok.com/@kayladivenere",
+"website": "https://kayladivenere.com/",
+"youtube": "https://www.youtube.com/@kayladivenere"
+},
 "linksChecked": "2026-11-11T01:23:11+00:00",
 "linksMatch": "only",
 "linksVersion": 2,
@@ -50332,6 +50379,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "The K-Tel All-Stars 70s Soundtrack"
+},
+"ktellallstars": {
+"checked": "2026-11-11T04:20:07+00:00",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "The K-Tell All-Stars"
 },
 "ktmelodiesandallieteilz": {
 "checked": "2026-11-06T01:25:57+00:00",
@@ -62880,6 +62934,13 @@
 "Mouth of the Architect"
 ]
 },
+"natecraig": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Nate Craig"
+},
 "natejackson": {
 "checked": "1970-01-01T00:00:00+00:00",
 "links": {
@@ -66924,6 +66985,19 @@
 "Navy Blue"
 ]
 },
+"owensmith": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"instagram": "https://www.instagram.com/owenbenjam/",
+"podcast": "https://podcasts.apple.com/us/podcast/nb-eh-a-canadians-take-on-professional-hoops/id1615242898",
+"website": "https://owenbenjamin.com",
+"youtube": "https://www.youtube.com/channel/UCyQsQSKayfcZoHaCjqxxSlg"
+},
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "wikidata",
+"linksVersion": 2,
+"name": "Owen Smith"
+},
 "oza": {
 "appleUrl": "https://music.apple.com/us/artist/oza/1632759360?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -68140,6 +68214,18 @@
 "Grace Ives",
 "Girlfriend, Wife"
 ]
+},
+"pcs": {
+"appleUrl": "https://music.apple.com/us/artist/pcs/277783178?uo=4",
+"checked": "2026-11-11T04:20:07+00:00",
+"fans": 15,
+"genre": "Dance",
+"image": "https://cdn-images.dzcdn.net/images/artist/b6d824ec4bb585c283dff668e8ce5ef0/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "PCS",
+"related": []
 },
 "peacecross": {
 "appleUrl": "https://music.apple.com/us/artist/peace-cross/6784511005?uo=4",
@@ -74896,6 +74982,16 @@
 "linksVersion": 2,
 "name": "ronfunches"
 },
+"rong": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/pressure-word-podcast/id1527051211"
+},
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Ron G"
+},
 "ronikaspi": {
 "appleUrl": "https://music.apple.com/us/artist/roni-kaspi/1511615653?uo=4",
 "checked": "2026-11-07T01:34:14+00:00",
@@ -75535,6 +75631,13 @@
 "linksVersion": 2,
 "name": "RUGGIERO QUARTET"
 },
+"rumbaton": {
+"checked": "2026-11-11T04:20:07+00:00",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Rumbat\u00f3n"
+},
 "rumgold": {
 "appleUrl": "https://music.apple.com/us/artist/rum-gold/1387886053?uo=4",
 "checked": "2026-11-07T13:33:45+00:00",
@@ -75689,6 +75792,13 @@
 "linksMatch": "wikidata",
 "linksVersion": 2,
 "name": "Ryan Hamilton"
+},
+"ryanjacksonembolasextet": {
+"checked": "2026-11-11T04:20:07+00:00",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Ryan Jackson-Embola Sextet"
 },
 "ryanmcmullan": {
 "appleUrl": "https://music.apple.com/us/artist/ryan-mcmullan/555105493?uo=4",
@@ -76276,6 +76386,9 @@
 "fans": 0,
 "genre": "Hip-Hop/Rap",
 "image": "https://cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/saintxrufio/"
+},
 "linksChecked": "2026-11-11T01:23:11+00:00",
 "linksMatch": "no match",
 "linksVersion": 2,
@@ -76671,6 +76784,13 @@
 "JANIS",
 "CH\u00c9RI"
 ]
+},
+"samsandersshowlive": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Sam Sanders Show Live"
 },
 "samshure": {
 "appleUrl": "https://music.apple.com/us/artist/sam-shure/1118525028?uo=4",
@@ -83475,6 +83595,35 @@
 "genre": "Dance",
 "name": "Star Lady"
 },
+"starmonster": {
+"appleUrl": "https://music.apple.com/us/artist/star-monster/1446645690?uo=4",
+"checked": "2026-11-11T04:23:58+00:00",
+"fans": 296,
+"genre": "Dubstep",
+"image": "https://cdn-images.dzcdn.net/images/artist/2a90f51a6fdf63aec4a362fe1d63f1d3/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/1446645690",
+"spotify": "https://open.spotify.com/artist/0FEKqcauPtfB5Wi2JD3hJB"
+},
+"linksChecked": "2026-11-11T04:24:06+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "STAR MONSTER",
+"related": [
+"Know Good",
+"Whipped Cream",
+"Yookie",
+"Sh\u00f6ckface",
+"MEMBA",
+"TroyBoi",
+"Apashe",
+"Isoxo",
+"Wasiu",
+"Deathpact",
+"Rezz",
+"Captain Joz"
+]
+},
 "starvingwolves": {
 "appleUrl": "https://music.apple.com/us/artist/starving-wolves/1458989253?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -89599,6 +89748,11 @@
 "fans": 244,
 "genre": "Hip-Hop/Rap",
 "image": "https://cdn-images.dzcdn.net/images/artist/e58dd773fed41bb9cbb44576d453a25f/250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/tommyzuko/",
+"website": "https://www.tommyzuko.com/about",
+"youtube": "https://www.youtube.com/c/TommyZuko/about"
+},
 "linksChecked": "2026-11-11T01:23:11+00:00",
 "linksMatch": "only",
 "linksVersion": 2,
@@ -89948,6 +90102,13 @@
 "MAF Teeski",
 "Lil Dre6o"
 ]
+},
+"toriovangrol": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Torio Van Grol"
 },
 "torirozeandthehotmess": {
 "appleUrl": "https://music.apple.com/us/artist/tori-roze-and-the-hot-mess/415982728?uo=4",
@@ -91725,6 +91886,13 @@
 "Delta Spirit"
 ]
 },
+"twogallantsthewindups": {
+"checked": "2026-11-11T04:23:58+00:00",
+"linksChecked": "2026-11-11T04:24:06+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Two Gallants ~ The Wind-Ups"
+},
 "twolanes": {
 "appleUrl": "https://music.apple.com/us/artist/two-lanes/1336614616?uo=4",
 "checked": "2026-11-02T19:06:58+00:00",
@@ -93050,6 +93218,27 @@
 "Alfie Jukes"
 ]
 },
+"valleyqueen": {
+"appleUrl": "https://music.apple.com/us/artist/valley-queen/878527621?uo=4",
+"checked": "2026-11-11T04:20:07+00:00",
+"fans": 236,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/26495394fdb9c5fe6c953393b2953105/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/878527621",
+"bandcamp": "https://valleyqueen.bandcamp.com/",
+"instagram": "https://www.instagram.com/valleyqueenmusic/",
+"spotify": "https://open.spotify.com/artist/5ut6fi3lFL2TBpLfHK7wZp",
+"tiktok": "https://www.tiktok.com/@valley_queen_",
+"website": "https://www.valleyqueenmusic.com/",
+"youtube": "https://www.youtube.com/channel/UCzUNddpUfDwVhvRT86G8l0w"
+},
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Valley Queen",
+"related": []
+},
 "valleywolf": {
 "appleUrl": "https://music.apple.com/us/artist/valley-wolf/1437040882?uo=4",
 "checked": "2026-11-07T19:16:35+00:00",
@@ -93691,6 +93880,17 @@
 "Your Anxiety Buddy",
 "Flawed Mangoes"
 ]
+},
+"vickibarbolak": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"instagram": "https://www.instagram.com/vickibarbolak/",
+"website": "https://www.vickibarbolakcomedy.com/"
+},
+"linksChecked": "2026-11-11T04:20:30+00:00",
+"linksMatch": "wikidata",
+"linksVersion": 2,
+"name": "Vicki Barbolak"
 },
 "vickiray": {
 "appleUrl": "https://music.apple.com/us/artist/vicki-ray/160299312?uo=4",
