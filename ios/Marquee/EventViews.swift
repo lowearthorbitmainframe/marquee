@@ -58,7 +58,7 @@ struct EventRow: View {
                 if let badge {
                     Text(badge.text)
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(badge.color)
+                        .foregroundStyle(Theme.badgeInk(badge.color))
                         .lineLimit(1)
                 }
             }
@@ -112,7 +112,7 @@ struct EventRow: View {
         if event.cancelled { return ("Cancelled", .red) }
         if event.soldOut { return ("Sold out", .orange) }
         if let reason { return (reason, Theme.accent) }
-        if event.kind.hasMusicLinks, let genre = store.genres(for: event).first { return (genre, .secondary) }
+        if event.kind.hasMusicLinks, let genre = store.genres(for: event).first { return (genre, Theme.style == .tokyoNight ? event.kind.color : .secondary) }
         if event.kind != .music { return (event.kind.label, event.kind.color) }
         return nil
     }
@@ -485,8 +485,8 @@ struct VenueSummary: View {
     }
 }
 
-/// A listing's title, shown in full where it can be: full size if it fits in three lines,
-/// otherwise a step smaller, down to 70% before the end is cut off.
+/// A listing's title, shown in full where it can be: full size if it fits in four lines,
+/// otherwise a little smaller, down to 85% before the end is cut off.
 struct ListingTitle: View {
     var text: String
     var cancelled = false
@@ -494,8 +494,8 @@ struct ListingTitle: View {
     @State private var width: CGFloat = 0
     @Environment(\.dynamicTypeSize) private var typeSize  // re-measure when text size changes
 
-    private static let scales: [CGFloat] = [1, 0.9, 0.8, 0.7]
-    private static let maxLines: CGFloat = 3
+    private static let scales: [CGFloat] = [1, 0.92, 0.85]
+    private static let maxLines: CGFloat = 4
 
     var body: some View {
         Text(text)
@@ -506,7 +506,7 @@ struct ListingTitle: View {
             .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
     }
 
-    /// The largest size at which the whole title fits in three lines.
+    /// The largest size at which the whole title fits in four lines.
     private var scale: CGFloat {
         _ = typeSize
         guard width > 0 else { return 1 }

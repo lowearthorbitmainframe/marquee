@@ -87,7 +87,7 @@ enum Theme {
         case .hipster: paper
         case .blade: Color(red: 0.04, green: 0.05, blue: 0.06)
         case .tokyo: Color(red: 0.97, green: 0.97, blue: 0.98)
-        case .tokyoNight: Color(red: 0.17, green: 0.20, blue: 0.22)
+        case .tokyoNight: Color(red: 0.12, green: 0.145, blue: 0.16)
         }
     }
     static var card: Color {
@@ -99,7 +99,7 @@ enum Theme {
         case .hipster: Color(red: 0.99, green: 0.97, blue: 0.93)
         case .blade: Color(red: 0.08, green: 0.09, blue: 0.10).opacity(0.85)
         case .tokyo: .white
-        case .tokyoNight: Color(red: 0.23, green: 0.26, blue: 0.29)
+        case .tokyoNight: Color(red: 0.18, green: 0.205, blue: 0.23)
         }
     }
     /// A hairline drawn around cards; the goth theme outlines rather than fills.
@@ -187,6 +187,17 @@ enum Theme {
         }
     }
     /// Event names on listings.
+    /// The color of a listing's bottom line (genre, category, sold out). On gunmetal the
+    /// category colors sit on a wash of themselves, so they're lifted most of the way to
+    /// white to stay readable while keeping their hue.
+    static func badgeInk(_ color: Color) -> Color {
+        guard style == .tokyoNight else { return color }
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        UIColor(color).getRed(&r, green: &g, blue: &b, alpha: &a)
+        let lift: CGFloat = 0.55
+        return Color(red: r + (1 - r) * lift, green: g + (1 - g) * lift, blue: b + (1 - b) * lift)
+    }
+
     static var eventTitleFont: Font { eventTitleFont(scale: 1) }
 
     /// The same font as UIKit, for measuring how many lines a title takes.
