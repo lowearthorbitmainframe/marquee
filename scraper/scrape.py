@@ -32,7 +32,29 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
 PAUSE_BETWEEN_SOURCES = 2
 # Apple sometimes matches a performer's name to a book author.
-NON_MUSIC_GENRES = {"Graphic Novels", "General Nonfiction for Kids", "Self-Development", "Poetry"}
+# Apple sometimes matches a performer to their book, film or comedy album, which brings a
+# genre that isn't music (Peter Hook -> "Biographies & Memoirs"). These are dropped.
+NON_MUSIC_GENRES = {
+    # Books and audiobooks
+    "Graphic Novels", "General Nonfiction for Kids", "Self-Development", "Poetry", "Fiction",
+    "Fiction & Literature", "Literary Fiction", "Biographies & Memoirs", "Reference",
+    "Small Business & Entrepreneurship", "Business & Personal Finance", "Nonfiction", "History",
+    "Mysteries & Thrillers", "Sci-Fi & Fantasy", "Science Fiction & Fantasy", "Romance",
+    "Humor", "Religion & Spirituality", "Health, Mind & Body", "Politics & Current Events",
+    "Arts & Entertainment", "Comics & Graphic Novels", "Young Adult", "Kids", "Cookbooks, Food & Wine",
+    "Travel & Adventure", "Sports & Outdoors", "Lifestyle & Home", "Professional & Technical",
+    "Parenting", "Science & Nature", "Computers & Internet", "Mysteries", "Thrillers",
+    # Films and TV
+    "Action & Adventure", "Drama", "Horror", "Thriller", "Documentary", "Kids & Family",
+    "Sci-Fi", "Western", "Independent", "Short Films", "Foreign", "Romantic Comedy",
+    "Concert Films", "Music Documentaries", "Special Interest", "Sports",
+    # Comedy and spoken word: a comedian's genre isn't a music genre
+    "Comedy", "Standup Comedy", "Spoken Word", "Audiobooks",
+    # Seasonal tags that were mostly mismatches
+    "Holiday",
+}
+# Apple genres renamed so they don't read as film genres.
+GENRE_RENAMES = {"Anime": "J-Pop"}
 
 
 def fetch(url, redirects=5):
@@ -224,8 +246,11 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
             record = cache.get(key)
             if record and (record.get("genre") or record.get("related") or record.get("links")):
                 used[key] = {k: v for k, v in record.items() if k not in ("checked", "linksChecked", "linksMatch", "linksVersion")}
-                if used[key].get("genre") in NON_MUSIC_GENRES:
+                genre = used[key].get("genre")
+                if genre in NON_MUSIC_GENRES:
                     del used[key]["genre"]
+                elif genre in GENRE_RENAMES:
+                    used[key]["genre"] = GENRE_RENAMES[genre]
 
     feed = {
         "version": 1,

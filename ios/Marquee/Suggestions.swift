@@ -1,7 +1,8 @@
 import CloudKit
 import SwiftUI
 
-/// A venue someone wants added. It goes to the app's CloudKit public database, where a
+/// A venue someone wants added (or, with a "feedback-…" kind, a problem report or feature
+/// idea). It goes to the app's CloudKit public database, where a
 /// job on the owner's Mac checks the place is real, finds its listings and a contact email,
 /// and starts the research for adding it.
 struct VenueSuggestion: Codable, Identifiable, Hashable {

@@ -555,6 +555,9 @@ struct FlowLayout: Layout {
 struct CenteredScreenTitle: View {
     var text: String
 
+    /// Marks the top of each screen, for the bar title's scroll-to-top.
+    static let topID = "screen-top"
+
     var body: some View {
         if Theme.style.isCustom {
             titleText
@@ -571,6 +574,7 @@ struct CenteredScreenTitle: View {
                 .onAppear { scroll?.settle() }
                 // Lazy lists drop rows that scroll far off screen, so disappearing counts as scrolled away.
                 .onDisappear { scroll?.progress = 1 }
+                .id(Self.topID)
         }
     }
 
@@ -628,20 +632,34 @@ private struct SmallTitleOnScroll: ViewModifier {
     @StateObject private var scroll = TitleScrollState()
 
     func body(content: Content) -> some View {
-        content
-            .navigationTitle(text)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    barTitle
-                        .lineLimit(1)
-                        // Grows into place as the big title leaves, in step with the scroll.
-                        .opacity(Double(scroll.progress))
-                        // Starts a little larger and settles to size, so it reads as the big line shrinking into place.
-                        .scaleEffect(1.25 - 0.25 * scroll.progress)
+        ScrollViewReader { proxy in
+            content
+                .navigationTitle(text)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        // Tapping the small title goes back to the top of the screen.
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.35)) {
+                                proxy.scrollTo(CenteredScreenTitle.topID, anchor: .top)
+                            }
+                        } label: {
+                            barTitle
+                                .lineLimit(1)
+                                // Grows into place as the big title leaves, in step with the scroll.
+                                .opacity(Double(scroll.progress))
+                                // Starts a little larger and settles to size, so it reads as the big line shrinking into place.
+                                .scaleEffect(1.25 - 0.25 * scroll.progress)
+                                .padding(.horizontal, 40)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .allowsHitTesting(scroll.progress > 0.5)
+                        .accessibilityHint("Scrolls to the top")
+                    }
                 }
-            }
-            .environmentObject(scroll)
+        }
+        .environmentObject(scroll)
     }
 
     /// The bar's small title. Blade Runner keeps just the lead word ("TONIGHT") in the big

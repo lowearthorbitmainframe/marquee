@@ -34,6 +34,7 @@ struct YouView: View {
                     ArtistsEditor()
                     GenresEditor()
                     HiddenArtistsSection()
+                    FeedbackSection()
                     StatusSection()
                 }
                 .padding(16)

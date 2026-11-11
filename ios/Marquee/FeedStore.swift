@@ -70,9 +70,16 @@ final class FeedStore: ObservableObject {
 
     var sortedDays: [Date] { eventsByDay.keys.sorted() }
 
+    /// Music genres for the Browse filter: only from acts playing music or dance nights, so a
+    /// comedian's or film's genre never shows up as a music genre.
     var genres: [String] {
-        let values = (feed?.artists.values).map { $0.compactMap(\.genre) } ?? []
-        return Array(Set(values)).sorted()
+        var values = Set<String>()
+        for event in events where event.kind == .music || event.kind == .party {
+            for artist in event.artists {
+                if let genre = info(forArtist: artist)?.genre { values.insert(genre) }
+            }
+        }
+        return values.sorted()
     }
 
     func loadLocal() {
