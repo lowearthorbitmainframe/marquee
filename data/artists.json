@@ -2632,6 +2632,26 @@
 "name": "Alex Ligertwood",
 "related": []
 },
+"alexluceroband": {
+"appleUrl": "https://music.apple.com/us/artist/the-alex-lucero-band/1691411196?uo=4",
+"checked": "2026-11-11T13:32:14+00:00",
+"fans": 20,
+"genre": "Americana",
+"image": "https://cdn-images.dzcdn.net/images/artist/337fd39ab74b9913db88445f1d171b44/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/1691411196",
+"bandcamp": "https://thealexluceroband.bandcamp.com/",
+"instagram": "https://www.instagram.com/thealexluceroband/",
+"spotify": "https://open.spotify.com/artist/4e2ZqZk4vYVIwisjBylEoY",
+"website": "https://thealexluceroband.com/",
+"youtube": "https://www.youtube.com/@thealexluceroband"
+},
+"linksChecked": "2026-11-11T13:32:25+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "The Alex Lucero Band",
+"related": []
+},
 "alexoconnor": {
 "checked": "1970-01-01T00:00:00+00:00",
 "links": {
@@ -13277,6 +13297,9 @@
 "fans": 1,
 "genre": "Pop",
 "image": "https://cdn-images.dzcdn.net/images/artist/4697b9f753aa1cdde93eadb5b4408bb9/250x250-000000-80-0-0.jpg",
+"links": {
+"spotify": "https://open.spotify.com/artist/4IiBh9OlsupE192ZUJNrBw"
+},
 "linksChecked": "2026-11-11T07:32:36+00:00",
 "linksMatch": "no match",
 "linksVersion": 2,
@@ -20660,8 +20683,10 @@
 "image": "https://cdn-images.dzcdn.net/images/artist/e6f72f2211498801f9ccac7fa30e1840/250x250-000000-80-0-0.jpg",
 "links": {
 "applemusic": "https://music.apple.com/us/artist/1752280809",
+"instagram": "http://www.instagram.com/dalvinmelody/",
 "soundcloud": "https://soundcloud.com/dalvinlamelodia",
-"spotify": "https://open.spotify.com/artist/6oYf3YTP3CaTNPlUqAK7xJ"
+"spotify": "https://open.spotify.com/artist/6oYf3YTP3CaTNPlUqAK7xJ",
+"youtube": "http://www.youtube.com/@DalvinLaMelodiaOfficial"
 },
 "linksChecked": "2026-11-08T18:59:46+00:00",
 "linksMatch": "apple",
@@ -21422,6 +21447,22 @@
 "linksMatch": "only",
 "linksVersion": 2,
 "name": "Dark Star Orchestra",
+"related": []
+},
+"darktea": {
+"appleUrl": "https://music.apple.com/us/artist/dark-tea/1268860582?uo=4",
+"checked": "2026-11-11T13:28:23+00:00",
+"fans": 64,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/d7255b42772b2632fd4f8cc4fe968b54/250x250-000000-80-0-0.jpg",
+"links": {
+"bandcamp": "https://darktea.bandcamp.com/",
+"spotify": "https://open.spotify.com/artist/0SO6u4EIHwkr2Vpn0jfJeW"
+},
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Dark Tea",
 "related": []
 },
 "darlingside": {
@@ -29266,6 +29307,18 @@
 "Marauder"
 ]
 },
+"emo": {
+"appleUrl": "https://music.apple.com/us/artist/emo/1545393342?uo=4",
+"checked": "2026-11-11T13:33:39+00:00",
+"fans": 12,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/eb84bb0333176458ac337a38865dfcb9/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-11T13:33:54+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Emo",
+"related": []
+},
 "emonightbrooklyn": {
 "appleUrl": "https://music.apple.com/us/artist/emo-night-brooklyn/1414554226?uo=4",
 "checked": "2026-11-05T20:57:05+00:00",
@@ -34197,6 +34250,18 @@
 "linksMatch": "only",
 "linksVersion": 2,
 "name": "The Garcia Project",
+"related": []
+},
+"garrettgloom": {
+"appleUrl": "https://music.apple.com/us/artist/garrett-gloom/1545697195?uo=4",
+"checked": "2026-11-11T13:28:23+00:00",
+"fans": 21,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/bb5d725da04ab34384eedfc0a648099b/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Garrett Gloom",
 "related": []
 },
 "garrettmadertrio": {
@@ -39228,6 +39293,13 @@
 "Jeebanoff"
 ]
 },
+"holidayedition": {
+"checked": "2026-11-11T13:28:23+00:00",
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Holiday Edition"
+},
 "holidayinconcert": {
 "checked": "2026-11-05T07:32:25+00:00",
 "linksChecked": "2026-11-07T18:59:27+00:00",
@@ -39649,6 +39721,16 @@
 "Babydrill",
 "Real Boston Richey"
 ]
+},
+"hopethishelps": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/i-hope-this-helps/id1824076259"
+},
+"linksChecked": "2026-11-11T13:33:54+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Hope This Helps"
 },
 "hormozrashidi": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -54368,6 +54450,13 @@
 "SkyDxddy"
 ]
 },
+"loveactuallyliveinconcert": {
+"checked": "2026-11-11T13:28:23+00:00",
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Love Actually Live in Concert"
+},
 "loveatfirstfight": {
 "checked": "2026-11-08T13:06:55+00:00",
 "linksChecked": "2026-11-08T13:08:52+00:00",
@@ -54977,6 +55066,22 @@
 "Michael Barrow & the Tourists",
 "Children of Indigo"
 ]
+},
+"luisconte": {
+"appleUrl": "https://music.apple.com/us/artist/luis-conte/5191678?uo=4",
+"checked": "2026-11-11T13:28:23+00:00",
+"fans": 239,
+"genre": "Jazz",
+"image": "https://cdn-images.dzcdn.net/images/artist/e82fd0e45a5ab28af9e5dbddf1e1641c/250x250-000000-80-0-0.jpg",
+"links": {
+"spotify": "https://open.spotify.com/artist/0ztqSAprO9RSPrjxYCnbpI",
+"website": "http://www.luisconte.com/"
+},
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "LUIS CONTE",
+"related": []
 },
 "luisjgomez": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -56610,7 +56715,8 @@
 "image": "https://cdn-images.dzcdn.net/images/artist/3e4c21515673a624c4134aca96f1892e/250x250-000000-80-0-0.jpg",
 "links": {
 "instagram": "https://www.instagram.com/therealmarclo/",
-"spotify": "https://open.spotify.com/artist/3Aa8vv6PuVakY8yP8tpi2X"
+"spotify": "https://open.spotify.com/artist/3Aa8vv6PuVakY8yP8tpi2X",
+"youtube": "https://www.youtube.com/channel/UCX8ggbutka_IUxGKbymwvVA"
 },
 "linksChecked": "2026-11-11T07:35:30+00:00",
 "linksMatch": "only",
@@ -56837,12 +56943,15 @@
 "genre": "Country",
 "image": "https://cdn-images.dzcdn.net/images/artist/f339290041ab94d524b9a85288f90f62/250x250-000000-80-0-0.jpg",
 "links": {
+"applemusic": "https://music.apple.com/se/artist/988096342",
 "bandcamp": "https://margocilker.bandcamp.com/",
 "instagram": "https://www.instagram.com/margocilker/",
+"spotify": "https://open.spotify.com/artist/5E9q1sbVJ2MCiI8MMdPvj7",
 "website": "https://www.margocilkermusic.com/"
 },
-"linksChecked": "2026-11-05T05:12:57+00:00",
+"linksChecked": "2026-11-11T13:29:04+00:00",
 "linksMatch": "apple",
+"linksVersion": 2,
 "name": "Margo Cilker",
 "related": [
 "Townes Van Zandt",
@@ -62341,6 +62450,13 @@
 "linksVersion": 2,
 "name": "Music Guest"
 },
+"musichallclosedforprivateevent": {
+"checked": "2026-11-11T13:32:14+00:00",
+"linksChecked": "2026-11-11T13:32:25+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Music Hall Closed for Private Event"
+},
 "musicmattersbeyondthenotes": {
 "checked": "2026-11-06T13:40:19+00:00",
 "linksChecked": "2026-11-06T13:43:58+00:00",
@@ -66594,6 +66710,40 @@
 "checked": "2026-10-31T03:16:23+00:00",
 "name": "Orchestra and Live Q&A"
 },
+"orgone": {
+"appleUrl": "https://music.apple.com/us/artist/orgone/41500528?uo=4",
+"checked": "2026-11-11T13:32:14+00:00",
+"fans": 3958,
+"genre": "R&B/Soul",
+"image": "https://cdn-images.dzcdn.net/images/artist/fca27e288af70559a989302e1dba8b74/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/41500528",
+"bandcamp": "https://orgonemusic.bandcamp.com/",
+"instagram": "https://www.instagram.com/orgonemusic/",
+"soundcloud": "https://soundcloud.com/orgone",
+"spotify": "https://open.spotify.com/artist/4WmMnGO1nLIsE85XwcBAZE",
+"website": "http://orgonespace.com/",
+"youtube": "https://www.youtube.com/channel/UCAKkj13BcxKnmcRZxF-w_gg"
+},
+"linksChecked": "2026-11-11T13:32:25+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "ORG\u014cNE",
+"related": [
+"The New Mastersounds",
+"Speedometer",
+"The Bamboos",
+"The Poets Of Rhythm",
+"Breakestra",
+"The Sure Fire Soul Ensemble",
+"Chris Joss",
+"Cookin' On 3 Burners",
+"The Haggis Horns",
+"The Brooks",
+"Diplomats of Solid Sound",
+"Mr President"
+]
+},
 "orgy": {
 "appleUrl": "https://music.apple.com/us/artist/orgy/148215?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -70511,6 +70661,18 @@
 "name": "POPFREE",
 "related": []
 },
+"poppunk": {
+"appleUrl": "https://music.apple.com/us/artist/pop-punk/1791653760?uo=4",
+"checked": "2026-11-11T13:33:39+00:00",
+"fans": 362,
+"genre": "Pop",
+"image": "https://cdn-images.dzcdn.net/images/artist/305a1cb9f89c4c8a9bf4beeaf86364f7/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-11T13:33:54+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Pop-Punk",
+"related": []
+},
 "popularkidsclub": {
 "checked": "2026-11-04T19:09:57+00:00",
 "linksChecked": "2026-11-05T22:01:58+00:00",
@@ -72743,8 +72905,8 @@
 ]
 },
 "razarage": {
-"checked": "1970-01-01T00:00:00+00:00",
-"linksChecked": "2026-11-11T07:32:36+00:00",
+"checked": "2026-11-11T13:28:23+00:00",
+"linksChecked": "2026-11-11T13:29:04+00:00",
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Raza Rage"
@@ -75067,6 +75229,18 @@
 "linksChecked": "2026-11-05T07:57:20+00:00",
 "linksMatch": "no match",
 "name": "Roman Candle/ Postdrome/ The American Dream"
+},
+"romancenocturno": {
+"appleUrl": "https://music.apple.com/us/artist/romance-nocturno/6789292962?uo=4",
+"checked": "2026-11-11T13:28:23+00:00",
+"fans": 35,
+"genre": null,
+"image": "https://cdn-images.dzcdn.net/images/artist/de9ea2f0c607ca5d947bd8e7ae3b50fa/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Romance Nocturno",
+"related": []
 },
 "romarelive": {
 "checked": "2026-11-07T01:34:14+00:00",
@@ -77840,6 +78014,21 @@
 "Inverness"
 ]
 },
+"scarletbandit": {
+"appleUrl": "https://music.apple.com/us/artist/scarlet-bandit/1680258635?uo=4",
+"checked": "2026-11-11T13:28:23+00:00",
+"fans": 22,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/2345d850ef18dbe47eb5dca14e18831c/250x250-000000-80-0-0.jpg",
+"links": {
+"spotify": "https://open.spotify.com/artist/0Gd8IlJj2iLP5o0oCCaoUn"
+},
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Scarlet Bandit",
+"related": []
+},
 "scarletdemore": {
 "appleUrl": "https://music.apple.com/us/artist/scarlet-demore/1476938393?uo=4",
 "checked": "2026-11-05T06:20:40+00:00",
@@ -77954,6 +78143,13 @@
 "The Radio Dept.",
 "Sweet Trip"
 ]
+},
+"schoolhouserocks": {
+"checked": "2026-11-11T13:28:23+00:00",
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "School House Rocks"
 },
 "scottarford": {
 "appleUrl": "https://music.apple.com/us/artist/scott-arford/1229463462?uo=4",
@@ -87497,6 +87693,31 @@
 "Julian Fijma"
 ]
 },
+"tash": {
+"appleUrl": "https://music.apple.com/us/artist/tash/1819034992?uo=4",
+"checked": "2026-11-11T13:33:39+00:00",
+"fans": 163,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/703388f42a477304f0a8281d5a9f3106/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-11T13:33:54+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Tash",
+"related": [
+"Mac Ayres",
+"rum.gold",
+"Fana Hues",
+"Loony",
+"Malia",
+"Sam Wills",
+"Kyle Dion",
+"Kwaku Asante",
+"Xavier Om\u00e4r",
+"Christian Kuria",
+"Alex Isley",
+"Kirby"
+]
+},
 "taskmasterliveonstage": {
 "checked": "2026-11-05T06:20:40+00:00",
 "linksChecked": "2026-11-09T07:43:11+00:00",
@@ -88400,6 +88621,13 @@
 "linksVersion": 2,
 "name": "Thee Almighty Majestics",
 "related": []
+},
+"theealmightymajesticsanderendiraizguerra": {
+"checked": "2026-11-11T13:28:23+00:00",
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Thee Almighty Majestics & Erendira Izguerra"
 },
 "theehearttones": {
 "appleUrl": "https://music.apple.com/us/artist/thee-heart-tones/1587263949?uo=4",
@@ -92672,6 +92900,21 @@
 "The Frights"
 ]
 },
+"ultravioletcommunication": {
+"appleUrl": "https://music.apple.com/us/artist/ultraviolet-communication/1476595854?uo=4",
+"checked": "2026-11-11T13:28:23+00:00",
+"fans": 15,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/70183b29db6b1c1594881b359ed94d48/250x250-000000-80-0-0.jpg",
+"links": {
+"bandcamp": "https://ultravioletcommunication.bandcamp.com/"
+},
+"linksChecked": "2026-11-11T13:29:04+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Ultraviolet Communication",
+"related": []
+},
 "ulyssesowens": {
 "appleUrl": "https://music.apple.com/us/artist/ulysses-owens/430393951?uo=4",
 "checked": "2026-11-07T19:16:35+00:00",
@@ -95769,6 +96012,13 @@
 "linksVersion": 2,
 "name": "What I Bleed Is Yours",
 "related": []
+},
+"whatsgolden": {
+"checked": "2026-11-11T13:33:39+00:00",
+"linksChecked": "2026-11-11T13:33:54+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "What\u2019s Golden"
 },
 "whatsyourbaggagelivedatingshow": {
 "checked": "1970-01-01T00:00:00+00:00",
