@@ -87,7 +87,7 @@ enum Theme {
         case .hipster: paper
         case .blade: Color(red: 0.04, green: 0.05, blue: 0.06)
         case .tokyo: Color(red: 0.97, green: 0.97, blue: 0.98)
-        case .tokyoNight: Color(red: 0.12, green: 0.145, blue: 0.16)
+        case .tokyoNight: Color(red: 0.08, green: 0.095, blue: 0.105)
         }
     }
     static var card: Color {
@@ -99,7 +99,7 @@ enum Theme {
         case .hipster: Color(red: 0.99, green: 0.97, blue: 0.93)
         case .blade: Color(red: 0.08, green: 0.09, blue: 0.10).opacity(0.85)
         case .tokyo: .white
-        case .tokyoNight: Color(red: 0.18, green: 0.205, blue: 0.23)
+        case .tokyoNight: Color(red: 0.135, green: 0.155, blue: 0.175)
         }
     }
     /// A hairline drawn around cards; the goth theme outlines rather than fills.
