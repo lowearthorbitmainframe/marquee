@@ -1,0 +1,33 @@
+name: Preview new cities
+
+# Scrapes the regions marked "preview" in scraper/venues.py, without artist lookups,
+# so their listings can be checked before they appear in the app's city picker.
+on:
+  schedule:
+    - cron: "47 10 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scrape.py --preview --no-enrich --link-minutes 0
+        working-directory: scraper
+        env:
+          TM_API_KEY: ${{ secrets.TM_API_KEY }}
+      - name: Publish
+        run: |
+          git config user.name "marquee-bot"
+          git config user.email "marquee-bot@users.noreply.github.com"
+          git add data/*.json
+          git diff --cached --quiet || git commit -m "Refresh preview cities"
+          git pull --rebase -X theirs origin main
+          git push

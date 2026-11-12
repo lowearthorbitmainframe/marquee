@@ -13,6 +13,7 @@ import re
 import time
 import unicodedata
 import urllib.parse
+import urllib.request
 from datetime import date, date as date_type, datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -69,6 +70,7 @@ VENUE_ALIASES = {
     "brea-improv-comedy-club": "brea-improv",
     "the-comedy-store-main-room": "the-comedy-store",
     "the-comedy-chateau-yorick-showroom": "the-comedy-chateau",
+    "the-observatory-north-park": "observatory-north-park",
     "comedy-chateau": "the-comedy-chateau",
     "bram-goldsmith-theater": "the-wallis",
     "the-wallis-annenberg-center-for-the-performing-arts": "the-wallis",
@@ -1686,4 +1688,58 @@ def thundertix(source, fetch, today):
             "image": image.group(1) if image else None,
             "sold_out": "sold out" in box.lower(),
         })
+    return events
+
+
+VENUEPILOT_QUERY = """{ paginatedEvents(arguments: {accountIds: [%s], startDate: "%s", page: %d, limit: 100}) {
+  collection { id name date doorTime startTime status ticketsUrl minimumAge images support
+               announceArtists { name } venue { name street1 city state } }
+  metadata { totalCount } } }"""
+
+
+def venuepilot(source, fetch, today):
+    """VenuePilot, the ticketing behind many independent rooms (Ivy Room and others).
+    Its public events API is what each venue's own calendar widget reads."""
+    from scrape import USER_AGENT
+    events = []
+    for page in range(1, 6):
+        body = json.dumps({"query": VENUEPILOT_QUERY % (",".join(str(a) for a in source["accounts"]), today.isoformat(), page)}).encode()
+        request = urllib.request.Request("https://www.venuepilot.co/graphql", data=body,
+                                         headers={"Content-Type": "application/json", "User-Agent": USER_AGENT})
+        with urllib.request.urlopen(request, timeout=30) as response:
+            data = json.loads(response.read())["data"]["paginatedEvents"]
+        for item in data["collection"]:
+            status = (item.get("status") or "").lower()
+            name = clean_text(item.get("name") or "")
+            if not name or "private" in status or "private" in name.lower() or "closed" in name.lower():
+                continue
+            day = date.fromisoformat(item["date"])
+            if day < today:
+                continue
+
+            def at(value):
+                # VenuePilot gives "20:00:00"; midnight means no time was set.
+                if not value or value == "00:00:00":
+                    return datetime(day.year, day.month, day.day)
+                hour, minute = int(value[:2]), int(value[3:5])
+                return datetime(day.year, day.month, day.day, hour, minute)
+            place = item.get("venue") or {}
+            artists = [a["name"] for a in item.get("announceArtists") or [] if a.get("name")]
+            events.append({
+                "venue": source.get("venue") or slugify(place.get("name") or ""),
+                "venue_info": {"name": place.get("name"), "address": ", ".join(filter(None, [place.get("street1"), place.get("city"), place.get("state")])), "city": place.get("city")},
+                "title": name,
+                "artists": artists,
+                "start": at(item.get("startTime")),
+                "doors": at(item.get("doorTime")) if item.get("doorTime") not in (None, "00:00:00") else None,
+                "url": item.get("ticketsUrl") or source.get("site"),
+                "ticket_url": item.get("ticketsUrl"),
+                "image": (item.get("images") or [None])[0],
+                "age": item.get("minimumAge"),
+                "sold_out": "sold out" in status,
+                "cancelled": "cancel" in status,
+            })
+        if page * 100 >= (data.get("metadata") or {}).get("totalCount", 0):
+            break
+        time.sleep(1)
     return events

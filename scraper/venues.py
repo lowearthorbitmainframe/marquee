@@ -286,6 +286,8 @@ BAY_AREA = {
         {"adapter": "webflow_shows", "url": "https://www.cornerstoneberkeley.com/", "venue": "cornerstone", "card": 'class="event-card', "title": "main-title-hover"},
         {"adapter": "yoshis", "url": "https://yoshis.com/", "venue": "yoshis"},
         {"adapter": "rockhouse", "url": "https://www.sweetwatermusichall.com/", "venue": "sweetwater-music-hall"},
+        {"adapter": "venuepilot", "accounts": [992], "venue": "ivy-room", "site": "https://www.ivyroom.com/", "url": "https://www.ivyroom.com/"},
+        {"adapter": "live_nation", "url": "https://montalvoarts.org/", "venue": "montalvo-arts-center"},
         # Santa Cruz
         {"adapter": "rockhouse", "url": "https://www.catalystclub.com/", "venue": "the-catalyst"},
         {"adapter": "ticketweb_plugin", "url": "https://www.moesalley.com/", "venue": "moes-alley"},
@@ -294,6 +296,7 @@ BAY_AREA = {
         {"adapter": "live_nation", "url": "https://www.cobbscomedy.com/", "venue": "cobbs-comedy-club", "category": "comedy"},
         {"adapter": "live_nation", "url": "https://www.punchlinecomedyclub.com/", "venue": "punch-line", "category": "comedy"},
         {"adapter": "improv", "url": "https://improv.com/sanjose/calendar/", "venue": "san-jose-improv", "category": "comedy"},
+        {"adapter": "seatengine", "url": "https://rooster-t-feathers.seatengine-sites.com/events", "venue": "rooster-t-feathers", "category": "comedy"},
         # Film
         {"adapter": "roxie", "url": "https://roxie.com/calendar/", "venue": "roxie-theater", "category": "film"},
         {"adapter": "bampfa", "url": "https://bampfa.org/visit/calendar", "venue": "bampfa"},
@@ -363,6 +366,9 @@ BAY_AREA = {
         "alamo-new-mission": {"name": "Alamo Drafthouse New Mission", "neighborhood": "Mission", "address": "2550 Mission St, San Francisco, CA 94110", "url": "https://drafthouse.com/sf"},
         "alamo-mountain-view": {"name": "Alamo Drafthouse Mountain View", "neighborhood": "Mountain View", "address": "2306 Charleston Rd, Mountain View, CA 94043", "url": "https://drafthouse.com/sf"},
         "alamo-valley-fair": {"name": "Alamo Drafthouse Valley Fair", "neighborhood": "San Jose", "address": "2855 Stevens Creek Blvd, Santa Clara, CA 95050", "url": "https://drafthouse.com/sf"},
+        "ivy-room": {"name": "Ivy Room", "neighborhood": "Albany", "address": "860 San Pablo Ave, Albany, CA 94706", "url": "https://www.ivyroom.com/"},
+        "montalvo-arts-center": {"name": "Montalvo Arts Center", "neighborhood": "Saratoga", "address": "15400 Montalvo Rd, Saratoga, CA 95070", "url": "https://montalvoarts.org/"},
+        "rooster-t-feathers": {"name": "Rooster T. Feathers", "neighborhood": "Sunnyvale", "address": "157 W El Camino Real, Sunnyvale, CA 94087", "url": "https://www.roostertfeathers.com/"},
         "magic-theatre": {"name": "Magic Theatre", "neighborhood": "Fort Mason", "address": "2 Marina Blvd, San Francisco, CA 94123", "url": "https://www.magictheatre.org/"},
     },
 }
@@ -414,4 +420,141 @@ SAN_DIEGO = {
     },
 }
 
-CITIES = [LOS_ANGELES, BAY_AREA, SAN_DIEGO]
+# --- New regions in preview -------------------------------------------------
+# "preview" regions are scraped by the separate Preview workflow (no artist lookups)
+# and stay out of the app's city picker until "ready" is set. Each starts from the
+# region-wide feeds (Ticketmaster, AEG, DICE) plus film and comedy where a reader exists.
+
+TICKETMASTER_URL = "https://app.ticketmaster.com/discovery/v2/events.json"
+
+
+def aeg_feeds(numbers, cities):
+    return [{"adapter": "aeg", "label": "aeg feed %d" % n, "url": "https://aegwebprod.blob.core.windows.net/json/events/%d/events.json" % n, "cities": cities}
+            for n in numbers]
+
+
+SEATTLE_CITIES = ["Seattle", "Tacoma", "Bellevue", "Redmond", "Kirkland", "Everett", "Woodinville", "Auburn", "Renton",
+                  "Bothell", "Shoreline", "Kent", "Tukwila", "Issaquah", "Snoqualmie"]
+SEATTLE = {
+    "id": "seattle", "name": "Seattle", "timezone": "America/Los_Angeles", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/seattle-5e3c245c136e51081e406ed1", "categories": DICE_CATEGORIES},
+        *aeg_feeds([23], SEATTLE_CITIES),
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 385, "cities": SEATTLE_CITIES},
+    ],
+    "venues": {},
+}
+
+PORTLAND_CITIES = ["Portland", "Beaverton", "Hillsboro", "Gresham", "Lake Oswego", "Tigard", "Vancouver", "Milwaukie",
+                   "Troutdale", "Ridgefield", "Oregon City", "Tualatin"]
+PORTLAND = {
+    "id": "portland", "name": "Portland", "timezone": "America/Los_Angeles", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "dice_venues", "label": "dice.fm venues", "url": "https://dice.fm/venue/", "venues": ["holocene-xql3", "swan-dive-k6xx8"]},
+        *aeg_feeds([23], PORTLAND_CITIES),
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 372, "cities": PORTLAND_CITIES},
+    ],
+    "venues": {},
+}
+
+LAS_VEGAS_CITIES = ["Las Vegas", "Henderson", "North Las Vegas", "Paradise", "Spring Valley", "Summerlin", "Boulder City"]
+LAS_VEGAS = {
+    "id": "las-vegas", "name": "Las Vegas", "timezone": "America/Los_Angeles", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/lasvegas-5e3c232c136e51081e406ece", "categories": DICE_CATEGORIES},
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 319, "cities": LAS_VEGAS_CITIES},
+    ],
+    "venues": {},
+}
+
+DENVER_CITIES = ["Denver", "Englewood", "Aurora", "Lakewood", "Boulder", "Morrison", "Broomfield", "Littleton", "Westminster",
+                 "Golden", "Commerce City", "Greenwood Village", "Arvada", "Wheat Ridge", "Louisville", "Fort Collins"]
+DENVER = {
+    "id": "denver", "name": "Denver", "timezone": "America/Denver", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "dice_venues", "label": "dice.fm venues", "url": "https://dice.fm/venue/",
+         "venues": ["hi-dive-8kwv", "skylark-lounge-7x7b", "esp-hi-fi-bbdlo", "1134-broadway-53d2k"]},
+        *aeg_feeds([2, 7, 37, 44, 89], DENVER_CITIES),
+        {"adapter": "improv", "url": "https://improv.com/denver/calendar/", "venue": "denver-improv", "category": "comedy"},
+        {
+            "adapter": "alamo", "label": "alamo denver", "category": "film",
+            "url": "https://drafthouse.com/s/mother/v2/schedule/market/denver", "site": "https://drafthouse.com/denver",
+            "cinemas": {"Sloans Lake": "alamo-sloans-lake", "Westminster": "alamo-westminster", "Littleton": "alamo-littleton"},
+        },
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 264, "cities": DENVER_CITIES},
+    ],
+    "venues": {
+        "denver-improv": {"name": "Denver Improv", "neighborhood": "Central Park", "address": "8246 Northfield Blvd, Denver, CO 80238", "url": "https://improv.com/denver/"},
+        "alamo-sloans-lake": {"name": "Alamo Drafthouse Sloans Lake", "neighborhood": "Sloan's Lake", "address": "4255 W Colfax Ave, Denver, CO 80204", "url": "https://drafthouse.com/denver"},
+        "alamo-westminster": {"name": "Alamo Drafthouse Westminster", "neighborhood": "Westminster", "address": "8905 Westminster Blvd, Westminster, CO 80031", "url": "https://drafthouse.com/denver"},
+        "alamo-littleton": {"name": "Alamo Drafthouse Littleton", "neighborhood": "Littleton", "address": "7301 S Santa Fe Dr, Littleton, CO 80120", "url": "https://drafthouse.com/denver"},
+    },
+}
+
+AUSTIN_CITIES = ["Austin", "Round Rock", "Del Valle", "Cedar Park", "Pflugerville", "Dripping Springs", "Georgetown",
+                 "San Marcos", "Buda", "Spicewood", "Bee Cave", "Lakeway"]
+AUSTIN = {
+    "id": "austin", "name": "Austin", "timezone": "America/Chicago", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/austin-5e3c24db136e51081e406ed3", "categories": DICE_CATEGORIES},
+        {
+            "adapter": "alamo", "label": "alamo austin", "category": "film",
+            "url": "https://drafthouse.com/s/mother/v2/schedule/market/austin", "site": "https://drafthouse.com/austin",
+            "cinemas": {"Village": "alamo-village", "Slaughter Lane": "alamo-slaughter-lane", "South Lamar": "alamo-south-lamar",
+                        "Lakeline": "alamo-lakeline", "Mueller": "alamo-mueller"},
+        },
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 222, "cities": AUSTIN_CITIES},
+    ],
+    "venues": {
+        "alamo-village": {"name": "Alamo Drafthouse Village", "neighborhood": "Allandale", "address": "2700 W Anderson Ln, Austin, TX 78757", "url": "https://drafthouse.com/austin"},
+        "alamo-slaughter-lane": {"name": "Alamo Drafthouse Slaughter Lane", "neighborhood": "South Austin", "address": "5701 W Slaughter Ln, Austin, TX 78749", "url": "https://drafthouse.com/austin"},
+        "alamo-south-lamar": {"name": "Alamo Drafthouse South Lamar", "neighborhood": "South Lamar", "address": "1120 S Lamar Blvd, Austin, TX 78704", "url": "https://drafthouse.com/austin"},
+        "alamo-lakeline": {"name": "Alamo Drafthouse Lakeline", "neighborhood": "Cedar Park", "address": "14028 N US Hwy 183 Bldg F, Austin, TX 78717", "url": "https://drafthouse.com/austin"},
+        "alamo-mueller": {"name": "Alamo Drafthouse Mueller", "neighborhood": "Mueller", "address": "1911 Aldrich St, Austin, TX 78723", "url": "https://drafthouse.com/austin"},
+    },
+}
+
+PHOENIX_CITIES = ["Phoenix", "Tempe", "Scottsdale", "Mesa", "Chandler", "Glendale", "Gilbert", "Peoria", "Avondale",
+                  "Goodyear", "Surprise", "Tucson"]
+PHOENIX = {
+    "id": "phoenix", "name": "Phoenix", "timezone": "America/Phoenix", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 359, "cities": PHOENIX_CITIES},
+    ],
+    "venues": {},
+}
+
+DETROIT_CITIES = ["Detroit", "Royal Oak", "Ferndale", "Hamtramck", "Pontiac", "Ann Arbor", "Clarkston", "Sterling Heights",
+                  "Dearborn", "Ypsilanti", "Auburn Hills", "Southfield", "Warren", "Clinton Township", "Rochester Hills", "Windsor"]
+DETROIT = {
+    "id": "detroit", "name": "Detroit", "timezone": "America/Detroit", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/detroit-5e3c22d9136e51081e406ecd", "categories": DICE_CATEGORIES},
+        *aeg_feeds([40], DETROIT_CITIES),
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 266, "cities": DETROIT_CITIES},
+    ],
+    "venues": {},
+}
+
+NEW_YORK_CITIES = ["New York", "Brooklyn", "Queens", "Long Island City", "Bronx", "Staten Island", "Jersey City", "Hoboken",
+                   "Astoria", "Flushing", "Ridgewood", "Forest Hills", "Manhattan"]
+NEW_YORK = {
+    "id": "new-york", "name": "New York City", "timezone": "America/New_York", "ready": False, "preview": True,
+    "sources": [
+        {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/new_york-5bbf4db0f06331478e9b2c59", "categories": DICE_CATEGORIES},
+        *aeg_feeds([15, 58, 59, 85], NEW_YORK_CITIES),
+        {
+            "adapter": "alamo", "label": "alamo nyc", "category": "film",
+            "url": "https://drafthouse.com/s/mother/v2/schedule/market/nyc", "site": "https://drafthouse.com/nyc",
+            "cinemas": {"Lower Manhattan": "alamo-lower-manhattan", "Staten Island": "alamo-staten-island", "Downtown Brooklyn": "alamo-downtown-brooklyn"},
+        },
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 345, "cities": NEW_YORK_CITIES, "pages": 10},
+    ],
+    "venues": {
+        "alamo-lower-manhattan": {"name": "Alamo Drafthouse Lower Manhattan", "neighborhood": "Financial District", "address": "28 Liberty St, New York, NY 10005", "url": "https://drafthouse.com/nyc"},
+        "alamo-staten-island": {"name": "Alamo Drafthouse Staten Island", "neighborhood": "Staten Island", "address": "2655 Richmond Ave, Staten Island, NY 10314", "url": "https://drafthouse.com/nyc"},
+        "alamo-downtown-brooklyn": {"name": "Alamo Drafthouse Downtown Brooklyn", "neighborhood": "Downtown Brooklyn", "address": "445 Albee Square W, Brooklyn, NY 11201", "url": "https://drafthouse.com/nyc"},
+    },
+}
+
+CITIES = [LOS_ANGELES, BAY_AREA, SAN_DIEGO, SEATTLE, PORTLAND, LAS_VEGAS, DENVER, AUSTIN, PHOENIX, DETROIT, NEW_YORK]
