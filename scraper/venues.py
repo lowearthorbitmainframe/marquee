@@ -452,7 +452,8 @@ PORTLAND = {
     "sources": [
         {"adapter": "dice_venues", "label": "dice.fm venues", "url": "https://dice.fm/venue/", "venues": ["holocene-xql3", "swan-dive-k6xx8"]},
         *aeg_feeds([23], PORTLAND_CITIES),
-        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 372, "cities": PORTLAND_CITIES},
+        # Portland's market number is one of these; only Portland-area venues are kept.
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": [370, 371, 373, 374], "cities": PORTLAND_CITIES},
     ],
     "venues": {},
 }
@@ -548,7 +549,7 @@ NEW_YORK = {
             "url": "https://drafthouse.com/s/mother/v2/schedule/market/nyc", "site": "https://drafthouse.com/nyc",
             "cinemas": {"Lower Manhattan": "alamo-lower-manhattan", "Staten Island": "alamo-staten-island", "Downtown Brooklyn": "alamo-downtown-brooklyn"},
         },
-        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 345, "cities": NEW_YORK_CITIES, "pages": 10},
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 345, "cities": NEW_YORK_CITIES, "split_segments": True},
     ],
     "venues": {
         "alamo-lower-manhattan": {"name": "Alamo Drafthouse Lower Manhattan", "neighborhood": "Financial District", "address": "28 Liberty St, New York, NY 10005", "url": "https://drafthouse.com/nyc"},

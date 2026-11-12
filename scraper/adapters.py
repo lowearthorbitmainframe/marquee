@@ -756,24 +756,31 @@ def ticketmaster(source, fetch, today):
     if not key:
         raise Skip()
     cities = set(source["cities"])
-    events = []
-    for page in range(source.get("pages", 5)):
-        query = urllib.parse.urlencode({
-            "apikey": key, "dmaId": source["dma"], "segmentId": ",".join(TICKETMASTER_SEGMENTS),
-            "size": 200, "page": page, "sort": "date,asc", "locale": "en-us",
-        })
-        try:
-            data = json.loads(fetch("https://app.ticketmaster.com/discovery/v2/events.json?" + query))
-        except Exception as error:
-            raise ValueError(type(error).__name__ + ": " + str(error).replace(key, "***"))
-        for item in (data.get("_embedded") or {}).get("events") or []:
-            event = parse_ticketmaster(item)
-            if event and event["venue_info"]["city"] in cities:
-                events.append(event)
-        info = data.get("page") or {}
-        if page + 1 >= (info.get("totalPages") or 0):
-            break
-        time.sleep(0.3)
+    dmas = source["dma"] if isinstance(source["dma"], list) else [source["dma"]]
+    # Ticketmaster stops at 1,000 results per search, so big markets search each segment
+    # (music, arts, film...) on its own to reach further ahead.
+    segment_groups = [[s] for s in TICKETMASTER_SEGMENTS] if source.get("split_segments") else [TICKETMASTER_SEGMENTS]
+    events, seen = [], set()
+    for dma in dmas:
+        for segments in segment_groups:
+            for page in range(5):  # 5 pages of 200 is Ticketmaster's limit
+                query = urllib.parse.urlencode({
+                    "apikey": key, "dmaId": dma, "segmentId": ",".join(segments),
+                    "size": 200, "page": page, "sort": "date,asc", "locale": "en-us",
+                })
+                try:
+                    data = json.loads(fetch("https://app.ticketmaster.com/discovery/v2/events.json?" + query))
+                except Exception as error:
+                    raise ValueError(type(error).__name__ + ": " + str(error).replace(key, "***"))
+                for item in (data.get("_embedded") or {}).get("events") or []:
+                    event = parse_ticketmaster(item)
+                    if event and event["venue_info"]["city"] in cities and item.get("id") not in seen:
+                        seen.add(item.get("id"))
+                        events.append(event)
+                info = data.get("page") or {}
+                time.sleep(0.3)
+                if page + 1 >= (info.get("totalPages") or 0):
+                    break
     return events
 
 
