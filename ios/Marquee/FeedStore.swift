@@ -153,7 +153,19 @@ final class FeedStore: ObservableObject {
         self.feed = feed
     }
 
-    func venue(for event: Event) -> Venue? { venuesById[event.venueId] }
+    func venue(for event: Event) -> Venue? { venuesById[event.venueId] ?? savedFromElsewhere[event.id]?.venue }
+
+    /// Saved shows from other cities, kept in step with your profile by RootView, so their
+    /// venue and local time still show while another city is loaded.
+    @Published var savedFromElsewhere: [String: SavedShow] = [:]
+
+    /// The time zone a show's times are shown in: its own city's.
+    func timeZone(for event: Event) -> TimeZone {
+        if let saved = savedFromElsewhere[event.id], saved.regionId != regionId, let zone = TimeZone(identifier: saved.timeZone) {
+            return zone
+        }
+        return city?.timeZone ?? .current
+    }
 
     func info(forArtist name: String) -> ArtistInfo? { feed?.artists[ArtistKey.make(name)] }
 

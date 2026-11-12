@@ -41,7 +41,7 @@ struct EventRow: View {
     var reason: String?
     var showsDate = false
 
-    private var zone: TimeZone { store.city?.timeZone ?? .current }
+    private var zone: TimeZone { store.timeZone(for: event) }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -149,7 +149,7 @@ struct EventDetailView: View {
 
     var event: Event
 
-    private var zone: TimeZone { store.city?.timeZone ?? .current }
+    private var zone: TimeZone { store.timeZone(for: event) }
     private var venue: Venue? { store.venue(for: event) }
     private var isSaved: Bool { taste.profile.savedEvents.contains(event.id) }
 

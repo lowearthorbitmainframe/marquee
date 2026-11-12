@@ -8,8 +8,22 @@ struct YouView: View {
     @EnvironmentObject private var store: FeedStore
     @EnvironmentObject private var taste: TasteStore
 
+    /// Saved shows from the loaded city, plus copies of ones saved in other cities.
     private var saved: [Event] {
-        store.events.filter { taste.profile.savedEvents.contains($0.id) }
+        let here = store.events.filter { taste.profile.savedEvents.contains($0.id) }
+        let hereIds = Set(here.map(\.id))
+        let cutoff = Calendar.current.startOfDay(for: Date())
+        let elsewhere = (taste.profile.savedShows ?? [:]).values
+            .filter { taste.profile.savedEvents.contains($0.event.id) && !hereIds.contains($0.event.id) && $0.regionId != store.regionId }
+            .map(\.event)
+            .filter { ($0.end ?? $0.start) >= cutoff }
+        return (here + elsewhere).sorted { $0.start < $1.start }
+    }
+
+    /// "Bay Area" under a saved show from a city other than the one loaded.
+    private func otherCity(_ event: Event) -> String? {
+        guard let show = taste.profile.savedShows?[event.id], show.regionId != store.regionId else { return nil }
+        return show.regionName
     }
 
     /// Where the city picker sits in the visible screen (0 = top, 1 = bottom), tracked so that
@@ -33,7 +47,7 @@ struct YouView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
-                        ForEach(saved) { EventLink(event: $0, showsDate: true) }
+                        ForEach(saved) { EventLink(event: $0, reason: otherCity($0), showsDate: true) }
                     }
                     NewShowsSection()
                     YourArtistsShows()

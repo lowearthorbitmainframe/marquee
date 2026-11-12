@@ -149,6 +149,14 @@ struct RootView: View {
         .onChange(of: taste.profile.dislikedKeys, initial: true) { _, keys in
             store.hiddenArtistKeys = keys
         }
+        // Copy saved shows whenever a city's listings load or you save something, so they
+        // stay on the You page while you browse elsewhere.
+        .onChange(of: "\(store.regionId)-\(store.events.count)-\(taste.profile.savedEvents.count)", initial: true) {
+            taste.rememberSaved(from: store)
+        }
+        .onChange(of: taste.profile.savedShows, initial: true) { _, shows in
+            store.savedFromElsewhere = shows ?? [:]
+        }
     }
 
     private var setupBinding: Binding<Bool> {

@@ -19,6 +19,8 @@ struct TasteProfile: Codable, Equatable {
     var dislikedArtists: [String]?
     /// Artists from a Spotify import, kept apart so re-importing Apple Music doesn't erase them.
     var spotifyArtists: [String]?
+    /// A copy of each saved show, so it still shows on the You page while you browse another city.
+    var savedShows: [String: SavedShow]?
 
     /// Everyone imported from a music library, Apple Music or Spotify.
     var importedArtists: [String] { libraryArtists + (spotifyArtists ?? []) }
@@ -35,6 +37,15 @@ struct TasteProfile: Codable, Equatable {
     var isEmpty: Bool {
         followedVenues.isEmpty && favoriteArtists.isEmpty && importedArtists.isEmpty && genres.isEmpty
     }
+}
+
+/// What the You page needs to list a saved show from a city that isn't loaded.
+struct SavedShow: Codable, Equatable {
+    var event: Event
+    var venue: Venue?
+    var regionId: String
+    var regionName: String
+    var timeZone: String
 }
 
 @MainActor
@@ -74,6 +85,20 @@ final class TasteStore: ObservableObject {
         }
     }
     func toggleGenre(_ genre: String) { profile.genres.toggle(genre) }
+
+    /// Keeps a copy of every saved show in the loaded city, and drops copies of shows that
+    /// were unsaved or ended more than a day ago.
+    func rememberSaved(from store: FeedStore) {
+        guard let city = store.city else { return }
+        var shows = profile.savedShows ?? [:]
+        for event in store.events where profile.savedEvents.contains(event.id) {
+            shows[event.id] = SavedShow(event: event, venue: store.venue(for: event), regionId: store.regionId,
+                                        regionName: city.name, timeZone: city.timeZone.identifier)
+        }
+        let cutoff = Date().addingTimeInterval(-86_400)
+        shows = shows.filter { profile.savedEvents.contains($0.key) && ($0.value.event.end ?? $0.value.event.start) > cutoff }
+        if shows != (profile.savedShows ?? [:]) { profile.savedShows = shows }
+    }
 
     func isDisliked(_ artist: String) -> Bool { profile.dislikedKeys.contains(ArtistKey.make(artist)) }
 
