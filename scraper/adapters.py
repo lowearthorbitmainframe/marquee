@@ -756,18 +756,22 @@ def ticketmaster(source, fetch, today):
     if not key:
         raise Skip()
     cities = set(source["cities"])
-    dmas = source["dma"] if isinstance(source["dma"], list) else [source["dma"]]
+    # Each search is a market number, or a city and state for markets whose number isn't known.
+    if source.get("places"):
+        searches = [{"city": city, "stateCode": state} for city, state in source["places"]]
+    else:
+        searches = [{"dmaId": d} for d in (source["dma"] if isinstance(source["dma"], list) else [source["dma"]])]
     # Ticketmaster stops at 1,000 results per search, so big markets search each segment
     # (music, arts, film...) on its own to reach further ahead.
     segment_groups = [[s] for s in TICKETMASTER_SEGMENTS] if source.get("split_segments") else [TICKETMASTER_SEGMENTS]
     events, seen = [], set()
-    for dma in dmas:
+    for search in searches:
         for segments in segment_groups:
             for page in range(5):  # 5 pages of 200 is Ticketmaster's limit
-                query = urllib.parse.urlencode({
-                    "apikey": key, "dmaId": dma, "segmentId": ",".join(segments),
+                query = urllib.parse.urlencode(dict(search, **{
+                    "apikey": key, "segmentId": ",".join(segments),
                     "size": 200, "page": page, "sort": "date,asc", "locale": "en-us",
-                })
+                }))
                 try:
                     data = json.loads(fetch("https://app.ticketmaster.com/discovery/v2/events.json?" + query))
                 except Exception as error:

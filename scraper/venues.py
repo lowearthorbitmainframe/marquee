@@ -452,8 +452,8 @@ PORTLAND = {
     "sources": [
         {"adapter": "dice_venues", "label": "dice.fm venues", "url": "https://dice.fm/venue/", "venues": ["holocene-xql3", "swan-dive-k6xx8"]},
         *aeg_feeds([23], PORTLAND_CITIES),
-        # Portland's market number is one of these; only Portland-area venues are kept.
-        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": [370, 371, 373, 374], "cities": PORTLAND_CITIES},
+        {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "cities": PORTLAND_CITIES,
+         "places": [("Portland", "OR"), ("Beaverton", "OR"), ("Hillsboro", "OR"), ("Vancouver", "WA")]},
     ],
     "venues": {},
 }
