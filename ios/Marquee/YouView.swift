@@ -12,8 +12,17 @@ struct YouView: View {
         store.events.filter { taste.profile.savedEvents.contains($0.id) }
     }
 
+    /// Where the city picker sits in the visible screen (0 = top, 1 = bottom), tracked so that
+    /// switching cities, which changes the sections above it, doesn't move it under your finger.
+    @State private var regionAnchor = UnitPoint(x: 0.5, y: 0.3)
+    @State private var regionTop: CGFloat = 0
+    @State private var scrollFrame: CGRect = .zero
+    @State private var holdRegionUntil = Date.distantPast
+    @State private var frozenRegionTop: CGFloat = 0
+
     var body: some View {
         NavigationStack {
+            ScrollViewReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     CenteredScreenTitle(text: "You")
@@ -29,7 +38,26 @@ struct YouView: View {
                     NewShowsSection()
                     YourArtistsShows()
                     SuggestVenueSection()
-                    RegionSection()
+                    RegionSection {
+                        // Freeze where the picker is now, then keep it there while the new city loads.
+                        if scrollFrame.height > 0 {
+                            regionAnchor = UnitPoint(x: 0.5, y: (regionTop - scrollFrame.minY) / scrollFrame.height)
+                        }
+                        frozenRegionTop = regionTop
+                        holdRegionUntil = Date().addingTimeInterval(4)
+                    }
+                    // A one-point marker at the picker's top, so the anchor places its top exactly.
+                    .background(alignment: .top) { Color.clear.frame(height: 1).id(Self.regionID) }
+                    .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).minY } action: { top in
+                        regionTop = top
+                        // The anchor is measured against the whole scroll view, but scrolling works within
+                        // the area below the top bar, so the first restore can land a little off. Nudge it.
+                        guard Date() < holdRegionUntil, scrollFrame.height > 0, abs(top - frozenRegionTop) > 1 else { return }
+                        regionAnchor.y += (frozenRegionTop - top) / scrollFrame.height
+                        var instant = Transaction()
+                        instant.disablesAnimations = true
+                        withTransaction(instant) { proxy.scrollTo(Self.regionID, anchor: regionAnchor) }
+                    }
                     AlertsSection()
                     ArtistsEditor()
                     GenresEditor()
@@ -39,16 +67,29 @@ struct YouView: View {
                 }
                 .padding(16)
             }
+            .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { scrollFrame = $0 }
+            .onChange(of: "\(store.regionId)-\(store.events.count)-\(saved.count)") {
+                guard Date() < holdRegionUntil else { return }
+                var instant = Transaction()
+                instant.disablesAnimations = true
+                withTransaction(instant) { proxy.scrollTo(Self.regionID, anchor: regionAnchor) }
+            }
+            }
             .screenBackground()
             .screenTitle("You")
             .marqueeDestinations()
         }
     }
+
+    private static let regionID = "region-picker"
 }
 
 struct RegionSection: View {
     @EnvironmentObject private var store: FeedStore
     @EnvironmentObject private var taste: TasteStore
+
+    /// Called just before switching cities.
+    var willSwitch: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -56,6 +97,8 @@ struct RegionSection: View {
             FlowLayout {
                 ForEach(store.regions) { region in
                     Chip(title: region.name, isOn: region.id == store.regionId) {
+                        guard region.id != store.regionId else { return }
+                        willSwitch()
                         Task { await store.switchRegion(to: region.id) }
                     }
                 }
