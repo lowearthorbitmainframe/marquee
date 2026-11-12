@@ -1,25 +1,30 @@
-name: Preview new cities
+name: Refresh listings (more cities)
 
-# Scrapes the regions marked "preview" in scraper/venues.py, without artist lookups,
-# so their listings can be checked before they appear in the app's city picker.
+# The regions marked "second_run" in scraper/venues.py (Seattle, Portland, Las Vegas, Denver,
+# Austin, Phoenix, Detroit, New York). Runs three hours after the main refresh so the two
+# never overlap, since both update data/artists.json.
 on:
   schedule:
-    - cron: "47 10 * * *"
+    - cron: "47 3,9,15,21 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: listings
+  cancel-in-progress: false
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python scrape.py --preview --no-enrich --link-minutes 0
+      - run: python scrape.py --second-run --budget 120 --minutes 4 --link-minutes 3
         working-directory: scraper
         env:
           TM_API_KEY: ${{ secrets.TM_API_KEY }}
@@ -28,6 +33,6 @@ jobs:
           git config user.name "marquee-bot"
           git config user.email "marquee-bot@users.noreply.github.com"
           git add data/*.json
-          git diff --cached --quiet || git commit -m "Refresh preview cities"
+          git diff --cached --quiet || git commit -m "Refresh listings (more cities)"
           git pull --rebase -X theirs origin main
           git push

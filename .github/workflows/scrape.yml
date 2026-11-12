@@ -8,6 +8,11 @@ on:
 permissions:
   contents: write
 
+# Shares data/artists.json with refresh-more.yml, so the two never run at once.
+concurrency:
+  group: listings
+  cancel-in-progress: false
+
 jobs:
   scrape:
     runs-on: ubuntu-latest

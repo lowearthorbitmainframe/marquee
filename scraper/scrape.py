@@ -277,15 +277,15 @@ def main():
     parser.add_argument("--minutes", type=float, default=15, help="time limit for artist lookups")
     parser.add_argument("--link-minutes", type=float, default=8, help="time limit for website and social lookups")
     parser.add_argument("--city", action="append", help="only scrape these region ids, even ones not marked ready")
-    parser.add_argument("--preview", action="store_true", help="scrape the regions marked preview (not yet in the app)")
+    parser.add_argument("--second-run", action="store_true", help="scrape the regions refreshed by the second workflow")
     options = parser.parse_args()
     DATA_DIR.mkdir(exist_ok=True)
     if options.city:
         cities = [c for c in CITIES if c["id"] in options.city]
-    elif options.preview:
-        cities = [c for c in CITIES if c.get("preview")]
+    elif options.second_run:
+        cities = [c for c in CITIES if c.get("second_run")]
     else:
-        cities = [c for c in CITIES if c.get("ready", True)]
+        cities = [c for c in CITIES if c.get("ready", True) and not c.get("second_run")]
     for index, city in enumerate(cities):
         # The first region gets the full lookup time; the rest get a share, so a
         # run fits GitHub's limit. Artist lookups are shared, so they add up.

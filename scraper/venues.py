@@ -420,10 +420,11 @@ SAN_DIEGO = {
     },
 }
 
-# --- New regions in preview -------------------------------------------------
-# "preview" regions are scraped by the separate Preview workflow (no artist lookups)
-# and stay out of the app's city picker until "ready" is set. Each starts from the
-# region-wide feeds (Ticketmaster, AEG, DICE) plus film and comedy where a reader exists.
+# --- Regions added November 2026 -------------------------------------------
+# "second_run" regions are refreshed by their own workflow (refresh-more.yml), staggered
+# from the main one, so neither run outgrows GitHub's time limit. Each starts from the
+# region-wide feeds (Ticketmaster, AEG, DICE) plus film and comedy where a reader exists;
+# individual venues get added over time.
 
 TICKETMASTER_URL = "https://app.ticketmaster.com/discovery/v2/events.json"
 
@@ -436,7 +437,7 @@ def aeg_feeds(numbers, cities):
 SEATTLE_CITIES = ["Seattle", "Tacoma", "Bellevue", "Redmond", "Kirkland", "Everett", "Woodinville", "Auburn", "Renton",
                   "Bothell", "Shoreline", "Kent", "Tukwila", "Issaquah", "Snoqualmie"]
 SEATTLE = {
-    "id": "seattle", "name": "Seattle", "timezone": "America/Los_Angeles", "ready": False, "preview": True,
+    "id": "seattle", "name": "Seattle", "timezone": "America/Los_Angeles", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/seattle-5e3c245c136e51081e406ed1", "categories": DICE_CATEGORIES},
         *aeg_feeds([23], SEATTLE_CITIES),
@@ -448,7 +449,7 @@ SEATTLE = {
 PORTLAND_CITIES = ["Portland", "Beaverton", "Hillsboro", "Gresham", "Lake Oswego", "Tigard", "Vancouver", "Milwaukie",
                    "Troutdale", "Ridgefield", "Oregon City", "Tualatin"]
 PORTLAND = {
-    "id": "portland", "name": "Portland", "timezone": "America/Los_Angeles", "ready": False, "preview": True,
+    "id": "portland", "name": "Portland", "timezone": "America/Los_Angeles", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "dice_venues", "label": "dice.fm venues", "url": "https://dice.fm/venue/", "venues": ["holocene-xql3", "swan-dive-k6xx8"]},
         *aeg_feeds([23], PORTLAND_CITIES),
@@ -460,7 +461,7 @@ PORTLAND = {
 
 LAS_VEGAS_CITIES = ["Las Vegas", "Henderson", "North Las Vegas", "Paradise", "Spring Valley", "Summerlin", "Boulder City"]
 LAS_VEGAS = {
-    "id": "las-vegas", "name": "Las Vegas", "timezone": "America/Los_Angeles", "ready": False, "preview": True,
+    "id": "las-vegas", "name": "Las Vegas", "timezone": "America/Los_Angeles", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/lasvegas-5e3c232c136e51081e406ece", "categories": DICE_CATEGORIES},
         {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 319, "cities": LAS_VEGAS_CITIES},
@@ -471,7 +472,7 @@ LAS_VEGAS = {
 DENVER_CITIES = ["Denver", "Englewood", "Aurora", "Lakewood", "Boulder", "Morrison", "Broomfield", "Littleton", "Westminster",
                  "Golden", "Commerce City", "Greenwood Village", "Arvada", "Wheat Ridge", "Louisville", "Fort Collins"]
 DENVER = {
-    "id": "denver", "name": "Denver", "timezone": "America/Denver", "ready": False, "preview": True,
+    "id": "denver", "name": "Denver", "timezone": "America/Denver", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "dice_venues", "label": "dice.fm venues", "url": "https://dice.fm/venue/",
          "venues": ["hi-dive-8kwv", "skylark-lounge-7x7b", "esp-hi-fi-bbdlo", "1134-broadway-53d2k"]},
@@ -495,7 +496,7 @@ DENVER = {
 AUSTIN_CITIES = ["Austin", "Round Rock", "Del Valle", "Cedar Park", "Pflugerville", "Dripping Springs", "Georgetown",
                  "San Marcos", "Buda", "Spicewood", "Bee Cave", "Lakeway"]
 AUSTIN = {
-    "id": "austin", "name": "Austin", "timezone": "America/Chicago", "ready": False, "preview": True,
+    "id": "austin", "name": "Austin", "timezone": "America/Chicago", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/austin-5e3c24db136e51081e406ed3", "categories": DICE_CATEGORIES},
         {
@@ -518,7 +519,7 @@ AUSTIN = {
 PHOENIX_CITIES = ["Phoenix", "Tempe", "Scottsdale", "Mesa", "Chandler", "Glendale", "Gilbert", "Peoria", "Avondale",
                   "Goodyear", "Surprise", "Tucson"]
 PHOENIX = {
-    "id": "phoenix", "name": "Phoenix", "timezone": "America/Phoenix", "ready": False, "preview": True,
+    "id": "phoenix", "name": "Phoenix", "timezone": "America/Phoenix", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 359, "cities": PHOENIX_CITIES},
     ],
@@ -528,7 +529,7 @@ PHOENIX = {
 DETROIT_CITIES = ["Detroit", "Royal Oak", "Ferndale", "Hamtramck", "Pontiac", "Ann Arbor", "Clarkston", "Sterling Heights",
                   "Dearborn", "Ypsilanti", "Auburn Hills", "Southfield", "Warren", "Clinton Township", "Rochester Hills", "Windsor"]
 DETROIT = {
-    "id": "detroit", "name": "Detroit", "timezone": "America/Detroit", "ready": False, "preview": True,
+    "id": "detroit", "name": "Detroit", "timezone": "America/Detroit", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/detroit-5e3c22d9136e51081e406ecd", "categories": DICE_CATEGORIES},
         *aeg_feeds([40], DETROIT_CITIES),
@@ -540,7 +541,7 @@ DETROIT = {
 NEW_YORK_CITIES = ["New York", "Brooklyn", "Queens", "Long Island City", "Bronx", "Staten Island", "Jersey City", "Hoboken",
                    "Astoria", "Flushing", "Ridgewood", "Forest Hills", "Manhattan"]
 NEW_YORK = {
-    "id": "new-york", "name": "New York City", "timezone": "America/New_York", "ready": False, "preview": True,
+    "id": "new-york", "name": "New York City", "timezone": "America/New_York", "ready": True, "second_run": True,
     "sources": [
         {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/new_york-5bbf4db0f06331478e9b2c59", "categories": DICE_CATEGORIES},
         *aeg_feeds([15, 58, 59, 85], NEW_YORK_CITIES),
