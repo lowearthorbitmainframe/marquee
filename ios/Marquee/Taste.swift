@@ -23,6 +23,8 @@ struct TasteProfile: Codable, Equatable {
     var savedShows: [String: SavedShow]?
     /// When the Apple Music and Spotify libraries were last read (see LibrarySync).
     var librarySyncedAt: Date?
+    /// Set once the headliners of shows hearted before that feature existed were added.
+    var heartedHeadlinersAdded: Bool?
 
     /// Everyone imported from a music library, Apple Music or Spotify.
     var importedArtists: [String] { libraryArtists + (spotifyArtists ?? []) }
@@ -84,7 +86,29 @@ final class TasteStore: ObservableObject {
                 artists.append(name)
             }
             profile.savedArtists = artists
+            addHeadliner(of: event)
         }
+    }
+
+    /// Hearting a show adds its headliner to "Artists you love" (if they aren't there or in
+    /// your imported library already), so they count for recommendations from then on.
+    /// Unhearting leaves them; remove them from the list on the You page.
+    private func addHeadliner(of event: Event) {
+        guard let headliner = event.artists.first, !headliner.isEmpty else { return }
+        let key = ArtistKey.make(headliner)
+        let known = (profile.favoriteArtists + profile.importedArtists).contains { ArtistKey.make($0) == key }
+        guard !known, !profile.dislikedKeys.contains(key) else { return }
+        profile.favoriteArtists.insert(headliner, at: 0)
+    }
+
+    /// Shows hearted before hearting added headliners get theirs added once.
+    func addHeadlinersOfSavedShows() {
+        guard profile.heartedHeadlinersAdded != true else { return }
+        for show in (profile.savedShows ?? [:]).values.sorted(by: { $0.event.start < $1.event.start })
+        where show.event.kind.hasMusicLinks || show.event.kind == .comedy {
+            addHeadliner(of: show.event)
+        }
+        profile.heartedHeadlinersAdded = true
     }
     func toggleGenre(_ genre: String) { profile.genres.toggle(genre) }
 

@@ -164,6 +164,7 @@ struct RootView: View {
         // stay on the You page while you browse elsewhere.
         .onChange(of: "\(store.regionId)-\(store.events.count)-\(taste.profile.savedEvents.count)", initial: true) {
             taste.rememberSaved(from: store)
+            if store.feed != nil { taste.addHeadlinersOfSavedShows() }
         }
         .onChange(of: taste.profile.savedShows, initial: true) { _, shows in
             store.savedFromElsewhere = shows ?? [:]
