@@ -51,7 +51,6 @@ struct YouView: View {
                     }
                     NewShowsSection()
                     YourArtistsShows()
-                    SuggestVenueSection()
                     RegionSection {
                         // Freeze where the picker is now, then keep it there while the new city loads.
                         if scrollFrame.height > 0 {
@@ -74,8 +73,9 @@ struct YouView: View {
                     }
                     AlertsSection()
                     ArtistsEditor()
-                    GenresEditor()
+                    GenresEditor(collapsible: true)
                     HiddenArtistsSection()
+                    SuggestVenueSection()
                     FeedbackSection()
                     StatusSection()
                 }
@@ -399,18 +399,51 @@ struct GenresEditor: View {
 
     private var everyGenre: Set<String> { Set(groups.flatMap(\.genres)) }
 
+    /// On the You page the long genre list folds away; setup always shows it.
+    var collapsible = false
+    @AppStorage("you.genresExpanded") private var expanded = false
+
+    private var showsGenres: Bool { !collapsible || expanded }
+
+    private var selectedSummary: String {
+        let count = taste.profile.genres.intersection(everyGenre).count
+        return count == 0 ? "None selected" : "\(count) selected"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                SectionHeader(title: "Genres")
+                if collapsible {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.25)) { expanded.toggle() }
+                    } label: {
+                        HStack(alignment: .firstTextBaseline, spacing: 10) {
+                            SectionHeader(title: "Genres", subtitle: selectedSummary)
+                                .fixedSize()
+                            Image(systemName: "chevron.down")
+                                .font(.subheadline.weight(.semibold))
+                                .rotationEffect(.degrees(expanded ? 0 : -90))
+                                .foregroundStyle(.secondary)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Genres, \(selectedSummary)")
+                    .accessibilityHint(expanded ? "Collapses the genre list" : "Shows the genre list")
+                } else {
+                    SectionHeader(title: "Genres")
+                }
                 Spacer()
-                Button("Select all") { taste.profile.genres.formUnion(everyGenre) }
-                    .disabled(everyGenre.isSubset(of: taste.profile.genres))
-                Button("Clear") { taste.profile.genres.removeAll() }
-                    .disabled(taste.profile.genres.isEmpty)
-                    .padding(.leading, 12)
+                if showsGenres {
+                    Button("Select all") { taste.profile.genres.formUnion(everyGenre) }
+                        .disabled(everyGenre.isSubset(of: taste.profile.genres))
+                    Button("Clear") { taste.profile.genres.removeAll() }
+                        .disabled(taste.profile.genres.isEmpty)
+                        .padding(.leading, 12)
+                }
             }
             .font(.subheadline.weight(.medium))
+            if showsGenres {
             ForEach(groups, id: \.title) { group in
                 if !group.genres.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
@@ -422,6 +455,7 @@ struct GenresEditor: View {
                         }
                     }
                 }
+            }
             }
         }
     }
