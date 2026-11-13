@@ -769,7 +769,7 @@ def ticketmaster(source, fetch, today):
     start = datetime.combine(today, datetime.min.time())
     windows = []
     for _ in range(source.get("months", 12)):
-        end = start + timedelta(days=31)
+        end = start + timedelta(days=source.get("window_days", 31))
         windows.append({"startDateTime": start.strftime("%Y-%m-%dT%H:%M:%SZ"), "endDateTime": end.strftime("%Y-%m-%dT%H:%M:%SZ")})
         start = end
     events, seen = [], set()

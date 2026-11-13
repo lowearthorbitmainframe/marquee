@@ -1,11 +1,22 @@
 """The venues Marquee watches. To add a city, add a new entry to CITIES."""
 
+TICKETMASTER_URL = "https://app.ticketmaster.com/discovery/v2/events.json"
+
 # Cities that count as greater Los Angeles, including the nearer parts of Orange County.
 GREATER_LA = [
     "Los Angeles", "Hollywood", "West Hollywood", "Inglewood", "Pasadena", "Long Beach", "Santa Monica",
     "Burbank", "Glendale", "Culver City", "North Hollywood", "Studio City", "Venice", "Pomona", "Universal City",
     "Santa Ana", "Anaheim", "Costa Mesa", "Garden Grove", "Fullerton", "Irvine", "Huntington Beach",
+    # Ventura County
+    "Ventura", "Oxnard", "Thousand Oaks", "Camarillo", "Simi Valley", "Ojai", "Moorpark", "Westlake Village",
+    "Agoura Hills", "Port Hueneme", "Santa Paula", "Newbury Park",
+    # Inland Empire, on the way to the desert
+    "Riverside", "San Bernardino", "Ontario", "Rancho Cucamonga", "Redlands", "Temecula", "Corona", "Fontana",
 ]
+
+# The Coachella Valley is its own Ticketmaster market, so it gets a city-by-city search.
+COACHELLA_VALLEY = ["Palm Springs", "Indio", "Palm Desert", "Rancho Mirage", "Cathedral City", "La Quinta",
+                    "Indian Wells", "Thermal", "Desert Hot Springs", "Coachella"]
 
 # DICE city pages show only the soonest 20 or so shows per page, so genre pages
 # reach further into raves, after-hours, hip hop, jazz and classical.
@@ -36,7 +47,7 @@ LOS_ANGELES = {
         {
             "adapter": "aeg",
             "url": "https://aegwebprod.blob.core.windows.net/json/events/19/events.json",
-            "cities": GREATER_LA,
+            "cities": GREATER_LA + COACHELLA_VALLEY,
         },
         {"adapter": "ticketweb_plugin", "url": "https://teragramballroom.com/calendar/", "venue": "teragram-ballroom"},
         {"adapter": "ticketweb_plugin", "url": "https://www.whiskyagogo.com/", "venue": "whisky-a-go-go"},
@@ -168,6 +179,12 @@ LOS_ANGELES = {
             "url": "https://app.ticketmaster.com/discovery/v2/events.json",
             "dma": 324,
             "cities": GREATER_LA,
+        },
+        {
+            "adapter": "ticketmaster", "label": "ticketmaster coachella valley", "url": TICKETMASTER_URL,
+            "places": [(city, "CA") for city in COACHELLA_VALLEY], "cities": COACHELLA_VALLEY,
+            # Few shows per town, so one search covers the whole year.
+            "months": 1, "window_days": 366,
         },
     ],
     # Venues the AEG feed adds on its own come with an address but no map pin.
@@ -426,7 +443,6 @@ SAN_DIEGO = {
 # region-wide feeds (Ticketmaster, AEG, DICE) plus film and comedy where a reader exists;
 # individual venues get added over time.
 
-TICKETMASTER_URL = "https://app.ticketmaster.com/discovery/v2/events.json"
 
 
 def aeg_feeds(numbers, cities):

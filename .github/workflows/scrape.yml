@@ -24,7 +24,7 @@ jobs:
           python-version: "3.12"
       - run: python -m unittest test_titles
         working-directory: scraper
-      - run: python scrape.py --budget 150 --minutes 12 --link-minutes 15
+      - run: python scrape.py --budget 150 --minutes 12 --link-minutes 10
         working-directory: scraper
         env:
           TM_API_KEY: ${{ secrets.TM_API_KEY }}
