@@ -126,6 +126,8 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task {
+                    // New library artists first, so this refresh's alerts already watch them.
+                    await LibrarySync.runIfDue(taste: taste)
                     if await store.refreshIfNeeded() {
                         await Alerts.check(feed: store.feed, region: store.regionId, taste: taste.profile)
                     }
@@ -146,6 +148,15 @@ struct RootView: View {
                 Task { await store.switchRegion(to: taste.profile.alertRegion) }
             }
         }
+        // Asked once, after setup: testers didn't know alerts existed.
+        .alert("Get alerts for new shows?", isPresented: alertsQuestion) {
+            Button("Turn On") {
+                Task { taste.profile.alertsEnabled = await Alerts.requestPermission() }
+            }
+            Button("Not Now", role: .cancel) { taste.profile.alertsEnabled = false }
+        } message: {
+            Text("Scenester can let you know when artists from your music library, artists you follow, or bands from shows you've saved announce a new show in your home area. You can change this anytime on the You page.")
+        }
         .onChange(of: taste.profile.dislikedKeys, initial: true) { _, keys in
             store.hiddenArtistKeys = keys
         }
@@ -157,6 +168,14 @@ struct RootView: View {
         .onChange(of: taste.profile.savedShows, initial: true) { _, shows in
             store.savedFromElsewhere = shows ?? [:]
         }
+    }
+
+    /// Shown once setup is done, to anyone who hasn't turned alerts on or off yet.
+    private var alertsQuestion: Binding<Bool> {
+        Binding(
+            get: { taste.profile.finishedSetup && taste.profile.alertsEnabled == nil && store.feed != nil && router.opened == nil },
+            set: { _ in }
+        )
     }
 
     private var setupBinding: Binding<Bool> {

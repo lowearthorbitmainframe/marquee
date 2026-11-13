@@ -54,7 +54,9 @@ struct EventRow: View {
                 Text(detailLine)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                    // Long venue names wrap rather than being cut off.
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                 if let badge {
                     Text(badge.text)
                         .font(.caption.weight(.semibold))

@@ -21,6 +21,8 @@ struct TasteProfile: Codable, Equatable {
     var spotifyArtists: [String]?
     /// A copy of each saved show, so it still shows on the You page while you browse another city.
     var savedShows: [String: SavedShow]?
+    /// When the Apple Music and Spotify libraries were last read (see LibrarySync).
+    var librarySyncedAt: Date?
 
     /// Everyone imported from a music library, Apple Music or Spotify.
     var importedArtists: [String] { libraryArtists + (spotifyArtists ?? []) }

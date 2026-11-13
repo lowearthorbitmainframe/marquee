@@ -1,11 +1,13 @@
 import AuthenticationServices
 import CryptoKit
 import Foundation
+import Security
 import SwiftUI
 
 /// Reads the artists in someone's Spotify library: who they follow, their top artists and
 /// the artists on their Liked Songs. Uses Spotify's sign-in with PKCE, so the app needs no
-/// secret, and keeps no token: each import is a fresh, read-only sign-in.
+/// secret. The read-only refresh token is kept in the phone's keychain so the library can be
+/// re-read weekly without signing in again; "Disconnect" (or a failed refresh) deletes it.
 enum SpotifyImport {
     /// From developer.spotify.com. Empty until the Spotify app is set up, which hides the button.
     static var clientID: String { Bundle.main.object(forInfoDictionaryKey: "SpotifyClientID") as? String ?? "" }
@@ -54,29 +56,57 @@ enum SpotifyImport {
             if let error = items.first(where: { $0.name == "error" })?.value, error == "access_denied" { throw ImportError.cancelled }
             throw ImportError.signInFailed
         }
-        let token = try await exchange(code: code, verifier: verifier)
-        return try await collectArtists(token: token)
-    }
-
-    // MARK: Sign-in
-
-    private static func exchange(code: String, verifier: String) async throws -> String {
-        var request = URLRequest(url: URL(string: "https://accounts.spotify.com/api/token")!)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        var form = URLComponents()
-        form.queryItems = [
+        let token = try await exchange(form: [
             .init(name: "grant_type", value: "authorization_code"),
             .init(name: "code", value: code),
             .init(name: "redirect_uri", value: redirectURI),
             .init(name: "client_id", value: clientID),
             .init(name: "code_verifier", value: verifier),
-        ]
+        ])
+        return try await collectArtists(token: token)
+    }
+
+    /// Whether the app can re-read the library without a new sign-in.
+    static var isConnected: Bool { Keychain.read(refreshKey) != nil }
+
+    /// Re-reads the library with the saved refresh token. Returns nil when there's no
+    /// connection or Spotify no longer accepts it (the token is then forgotten).
+    static func refreshArtists() async -> [String]? {
+        guard let refresh = Keychain.read(refreshKey) else { return nil }
+        do {
+            let token = try await exchange(form: [
+                .init(name: "grant_type", value: "refresh_token"),
+                .init(name: "refresh_token", value: refresh),
+                .init(name: "client_id", value: clientID),
+            ])
+            return try await collectArtists(token: token)
+        } catch ImportError.server {
+            disconnect()
+            return nil
+        } catch {
+            return nil  // Offline and the like: try again next time.
+        }
+    }
+
+    static func disconnect() { Keychain.delete(refreshKey) }
+
+    private static let refreshKey = "spotify.refresh"
+
+    // MARK: Sign-in
+
+    private static func exchange(form items: [URLQueryItem]) async throws -> String {
+        var request = URLRequest(url: URL(string: "https://accounts.spotify.com/api/token")!)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        var form = URLComponents()
+        form.queryItems = items
         request.httpBody = form.percentEncodedQuery?.data(using: .utf8)
         let (data, _) = try await URLSession.shared.data(for: request)
-        struct Token: Decodable { var access_token: String?; var error_description: String? }
+        struct Token: Decodable { var access_token: String?; var refresh_token: String?; var error_description: String? }
         let token = try JSONDecoder().decode(Token.self, from: data)
         guard let access = token.access_token else { throw ImportError.server(token.error_description ?? "no access token") }
+        // Spotify may hand out a new refresh token each time; keep the latest.
+        if let refresh = token.refresh_token { Keychain.save(refresh, for: refreshKey) }
         return access
     }
 
@@ -137,5 +167,35 @@ enum SpotifyImport {
             throw ImportError.server(message)
         }
         return try JSONDecoder().decode(T.self, from: data)
+    }
+}
+
+/// A few strings in the keychain, readable only on this device after first unlock.
+enum Keychain {
+    private static let service = "com.bryanstage.marquee"
+
+    static func save(_ value: String, for key: String) {
+        delete(key)
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword, kSecAttrService as String: service, kSecAttrAccount as String: key,
+            kSecValueData as String: Data(value.utf8),
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
+        ]
+        SecItemAdd(query as CFDictionary, nil)
+    }
+
+    static func read(_ key: String) -> String? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword, kSecAttrService as String: service, kSecAttrAccount as String: key,
+            kSecReturnData as String: true, kSecMatchLimit as String: kSecMatchLimitOne,
+        ]
+        var result: AnyObject?
+        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess, let data = result as? Data else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
+    static func delete(_ key: String) {
+        let query: [String: Any] = [kSecClass as String: kSecClassGenericPassword, kSecAttrService as String: service, kSecAttrAccount as String: key]
+        SecItemDelete(query as CFDictionary)
     }
 }

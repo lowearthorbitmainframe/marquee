@@ -26,6 +26,7 @@
 		F2C7AC243A0B47704BF035CC /* TonightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5AF6B61A045787712D8698 /* TonightView.swift */; };
 		F612E0894D2D5F75624E2677 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF786A89C8F867B2A20C028E /* Theme.swift */; };
 		FC3464F625FA90F508B42247 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EB71EE659BD7A4B8BD1931 /* Alerts.swift */; };
+		FDB9AD34FF4F0DA081278C62 /* LibrarySync.swift in Sources */ = {isa = PBXBuildFile; fileRef = E468607135C98CF02FD77DFB /* LibrarySync.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		D5D738D3CAF12A2BEB7CD13D /* FeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStore.swift; sourceTree = "<group>"; };
 		DF3B3EF94B2D6DA1954D0882 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		E16560576CC455AB9E6B3847 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E468607135C98CF02FD77DFB /* LibrarySync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySync.swift; sourceTree = "<group>"; };
 		E7C30CB4C12D7FA83933CCD2 /* VenuesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuesView.swift; sourceTree = "<group>"; };
 		E8565B4EB381A8141F953928 /* MusicLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicLinks.swift; sourceTree = "<group>"; };
 		F4B44A7884A946BCB8D4D21B /* EventTags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTags.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				ABC359872EFB1417AB3F15FE /* Feedback.swift */,
 				D5D738D3CAF12A2BEB7CD13D /* FeedStore.swift */,
 				CF096D5085E762C5220A0CF0 /* Info.plist */,
+				E468607135C98CF02FD77DFB /* LibrarySync.swift */,
 				3413C2E9C99ECE927901879E /* MarqueeApp.swift */,
 				DF3B3EF94B2D6DA1954D0882 /* Models.swift */,
 				E8565B4EB381A8141F953928 /* MusicLinks.swift */,
@@ -186,6 +189,7 @@
 				5DC7367BF15CA094AB4DC69A /* EventViews.swift in Sources */,
 				966190BBCDB2516F58037021 /* FeedStore.swift in Sources */,
 				C0AF674AD40616EC27F83FD5 /* Feedback.swift in Sources */,
+				FDB9AD34FF4F0DA081278C62 /* LibrarySync.swift in Sources */,
 				5DD4A65A6A609BDBDDC9DA6B /* MarqueeApp.swift in Sources */,
 				0AACEB3C4D145678316D0C95 /* Models.swift in Sources */,
 				A5834D39850094007DD7F59E /* MusicLinks.swift in Sources */,

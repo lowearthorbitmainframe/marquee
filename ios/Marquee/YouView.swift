@@ -331,6 +331,19 @@ struct ArtistsEditor: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
+            if let synced = taste.profile.librarySyncedAt, !taste.profile.importedArtists.isEmpty {
+                Text("Checked for new artists \(synced.formatted(.relative(presentation: .named))). Scenester checks again about once a week.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            if SpotifyImport.isConnected {
+                Button("Disconnect Spotify") {
+                    SpotifyImport.disconnect()
+                    taste.profile.spotifyArtists = nil
+                }
+                .font(.footnote)
+                .frame(minHeight: 44)
+            }
             if let importMessage {
                 Text(importMessage).font(.footnote).foregroundStyle(.secondary)
             }
@@ -350,6 +363,7 @@ struct ArtistsEditor: View {
         do {
             let names = try await SpotifyImport.artists(using: webAuthenticationSession)
             taste.profile.spotifyArtists = names
+            taste.profile.librarySyncedAt = Date()
             importMessage = names.isEmpty ? "No artists found in that Spotify library." : nil
         } catch SpotifyImport.ImportError.cancelled {
             importMessage = nil
@@ -369,6 +383,7 @@ struct ArtistsEditor: View {
         }
         let names = (MPMediaQuery.artists().collections ?? []).compactMap { $0.representativeItem?.artist }
         taste.profile.libraryArtists = Array(Set(names)).sorted()
+        taste.profile.librarySyncedAt = Date()
         importMessage = names.isEmpty ? "No artists found. Check that Sync Library is on in the Music section of Settings." : nil
     }
     #endif
