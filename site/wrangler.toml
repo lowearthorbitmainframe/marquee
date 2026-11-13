@@ -1,0 +1,16 @@
+# The heyscenester.app site: a landing page and the "List your venue" form.
+# Deploy with: npx wrangler pages deploy (from this folder).
+name = "scenester-site"
+pages_build_output_dir = "public"
+compatibility_date = "2026-11-01"
+
+[vars]
+SITE_URL = "https://heyscenester.app"
+FROM_EMAIL = "Scenester <venues@heyscenester.app>"
+REPLY_TO = "venues@heyscenester.app"
+TURNSTILE_SITEKEY = "0x4AAAAAAGAGME6DXUtpxn7L"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "scenester-venues"
+database_id = "77917db2-e596-42f4-abd0-c7b0cb9fb557"

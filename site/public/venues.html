@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>List your venue · Scenester</title>
+  <meta name="description" content="Add your venue to Scenester and we'll list your public shows for free.">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <main class="narrow">
+    <a class="wordmark" href="/">SCENESTER</a>
+    <h1 class="sign">List your venue</h1>
+    <p>Tell us about your venue and where your calendar lives. We confirm it's really you, check that we can read your calendar, and add your shows, usually within a few days. It's free.</p>
+
+    <form id="venue-form" novalidate>
+      <label>Venue name
+        <input type="text" name="venue" required maxlength="120" autocomplete="organization">
+      </label>
+      <label>Street address
+        <input type="text" name="address" required maxlength="200" autocomplete="street-address">
+      </label>
+      <label>City
+        <select name="region" required>
+          <option value="">Choose a city</option>
+          <option value="los-angeles">Los Angeles (incl. Ventura, Inland Empire, Palm Springs)</option>
+          <option value="bay-area">Bay Area</option>
+          <option value="san-diego">San Diego</option>
+          <option value="seattle">Seattle</option>
+          <option value="portland">Portland</option>
+          <option value="las-vegas">Las Vegas</option>
+          <option value="denver">Denver</option>
+          <option value="austin">Austin</option>
+          <option value="phoenix">Phoenix</option>
+          <option value="detroit">Detroit</option>
+          <option value="new-york">New York City</option>
+        </select>
+      </label>
+      <label>Venue website
+        <input type="url" name="website" required maxlength="300" placeholder="https://" inputmode="url">
+      </label>
+      <label>Where we can find your shows <span class="hint">A calendar link (iCal or Google Calendar), your page on DICE, Eventbrite, Ticketmaster, AXS, SeeTickets, VenuePilot, Etix and so on, or your website's events page.</span>
+        <input type="url" name="calendar_url" maxlength="500" placeholder="https://" inputmode="url">
+      </label>
+      <fieldset>
+        <legend>What happens there</legend>
+        <div class="checks">
+          <label><input type="checkbox" name="kinds" value="music"> Music</label>
+          <label><input type="checkbox" name="kinds" value="comedy"> Comedy</label>
+          <label><input type="checkbox" name="kinds" value="film"> Film</label>
+          <label><input type="checkbox" name="kinds" value="theater"> Theater</label>
+          <label><input type="checkbox" name="kinds" value="party"> Dance nights</label>
+          <label><input type="checkbox" name="kinds" value="museum"> Exhibitions</label>
+        </div>
+      </fieldset>
+      <label>Your name
+        <input type="text" name="contact_name" required maxlength="100" autocomplete="name">
+      </label>
+      <label>Your email <span class="hint">An address on your venue's website domain (like booking@yourvenue.com) is the fastest way to confirm it's you.</span>
+        <input type="email" name="contact_email" required maxlength="200" autocomplete="email">
+      </label>
+      <label>Your role <span class="hint">Optional, for example talent buyer, owner or marketing</span>
+        <input type="text" name="contact_role" maxlength="100">
+      </label>
+      <label>Anything else? <span class="hint">Optional</span>
+        <textarea name="notes" rows="3" maxlength="1000"></textarea>
+      </label>
+      <label class="trap" aria-hidden="true">Fax <input type="text" name="company_fax" tabindex="-1" autocomplete="off"></label>
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>I'm authorized to represent this venue, and Scenester may list its public events with links to its own tickets.</span>
+      </label>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAAGAGME6DXUtpxn7L" data-theme="dark"></div>
+      <div id="result" role="status" aria-live="polite"></div>
+      <p><button class="button" type="submit">Send</button></p>
+    </form>
+
+    <footer><p><a href="/">Scenester</a> · <a href="mailto:venues@heyscenester.app">venues@heyscenester.app</a> · <a href="/privacy">Privacy</a></p></footer>
+  </main>
+  <script>
+    const form = document.getElementById("venue-form");
+    const result = document.getElementById("result");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      data.kinds = [...form.querySelectorAll('input[name="kinds"]:checked')].map((box) => box.value);
+      data.consent = form.consent.checked;
+      data.turnstile = data["cf-turnstile-response"] || "";
+      const button = form.querySelector("button");
+      button.disabled = true;
+      button.textContent = "Sending…";
+      try {
+        const reply = await fetch("/api/submit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+        const body = await reply.json();
+        if (body.ok) {
+          form.querySelectorAll("label, fieldset, .cf-turnstile, p:has(button)").forEach((el) => el.remove());
+          result.className = "message ok";
+          result.textContent = body.emailed === false
+            ? "Thanks! We got your venue. Our confirmation email didn't go out just now, so we'll follow up by email."
+            : "Thanks! Check your inbox for a confirmation link from Scenester." +
+              (body.domainMatch ? "" : " Because your email isn't on your venue's website, the email also explains one quick extra step.");
+        } else {
+          result.className = "message error";
+          result.textContent = body.error || "Something went wrong. Please try again.";
+          if (window.turnstile) turnstile.reset();
+        }
+      } catch {
+        result.className = "message error";
+        result.textContent = "We couldn't send the form. Check your connection and try again.";
+      }
+      button.disabled = false;
+      button.textContent = "Send";
+    });
+  </script>
+</body>
+</html>
