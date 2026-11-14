@@ -514,6 +514,15 @@ AUSTIN_CITIES = ["Austin", "Round Rock", "Del Valle", "Cedar Park", "Pflugervill
 AUSTIN = {
     "id": "austin", "name": "Austin", "timezone": "America/Chicago", "ready": True, "second_run": True,
     "sources": [
+        # Venues' own calendars (found via Visit Austin's venue guides)
+        {"adapter": "live_nation", "url": "https://thesaxonpub.com/", "venue": "saxon-pub"},
+        {"adapter": "live_nation", "url": "https://donnsdepot.com/", "venue": "donns-depot"},
+        {"adapter": "tribe_events", "url": "https://flamingocantina.com", "venue": "flamingo-cantina", "name": "Flamingo Cantina"},
+        {"adapter": "ical_feed", "label": "little longhorn saloon",
+         "url": "https://calendar.google.com/calendar/ical/littlelonghorncalendar%40gmail.com/public/basic.ics", "venue": "little-longhorn-saloon"},
+        {"adapter": "live_nation", "url": "https://eastaustincomedy.com/", "venue": "east-austin-comedy-club", "category": "comedy"},
+        {"adapter": "live_nation", "url": "https://the-velveeta-room-the-velveeta-room.seatengine.com/calendar", "venue": "velveeta-room", "category": "comedy"},
+        {"adapter": "tribe_events", "url": "https://thecontemporaryaustin.org", "venue": "the-contemporary-austin", "name": "The Contemporary Austin", "category": "museum"},
         {"adapter": "dice_city", "label": "dice.fm city", "url": "https://dice.fm/browse/austin-5e3c24db136e51081e406ed3", "categories": DICE_CATEGORIES},
         {
             "adapter": "alamo", "label": "alamo austin", "category": "film",
@@ -524,6 +533,13 @@ AUSTIN = {
         {"adapter": "ticketmaster", "url": TICKETMASTER_URL, "dma": 222, "cities": AUSTIN_CITIES},
     ],
     "venues": {
+        "saxon-pub": {"name": "The Saxon Pub", "neighborhood": "South Lamar", "address": "1320 S Lamar Blvd, Austin, TX 78704", "url": "https://thesaxonpub.com/"},
+        "donns-depot": {"name": "Donn's Depot", "neighborhood": "Clarksville", "address": "1600 W 5th St, Austin, TX 78703", "url": "https://donnsdepot.com/"},
+        "flamingo-cantina": {"name": "Flamingo Cantina", "neighborhood": "6th Street", "address": "515 E 6th St, Austin, TX 78701", "url": "https://flamingocantina.com/"},
+        "little-longhorn-saloon": {"name": "Little Longhorn Saloon", "neighborhood": "Burnet Road", "address": "5434 Burnet Rd, Austin, TX 78756", "url": "https://www.thelittlelonghornsaloon.com/"},
+        "east-austin-comedy-club": {"name": "East Austin Comedy Club", "neighborhood": "East Austin", "address": "2505 E 6th St Suite D, Austin, TX 78702", "url": "https://eastaustincomedy.com/"},
+        "velveeta-room": {"name": "The Velveeta Room", "neighborhood": "6th Street", "address": "521 E 6th St, Austin, TX 78701", "url": "https://thevelveetaroom.com/"},
+        "the-contemporary-austin": {"name": "The Contemporary Austin", "neighborhood": "Downtown", "address": "700 Congress Ave, Austin, TX 78701", "url": "https://thecontemporaryaustin.org/"},
         "alamo-village": {"name": "Alamo Drafthouse Village", "neighborhood": "Allandale", "address": "2700 W Anderson Ln, Austin, TX 78757", "url": "https://drafthouse.com/austin"},
         "alamo-slaughter-lane": {"name": "Alamo Drafthouse Slaughter Lane", "neighborhood": "South Austin", "address": "5701 W Slaughter Ln, Austin, TX 78749", "url": "https://drafthouse.com/austin"},
         "alamo-south-lamar": {"name": "Alamo Drafthouse South Lamar", "neighborhood": "South Lamar", "address": "1120 S Lamar Blvd, Austin, TX 78704", "url": "https://drafthouse.com/austin"},
