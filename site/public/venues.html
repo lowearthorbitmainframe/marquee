@@ -81,6 +81,16 @@
   <script>
     const form = document.getElementById("venue-form");
     const result = document.getElementById("result");
+    // Links in our emails fill in what we already know, e.g. /venues?venue=Troubadour&website=...&region=los-angeles
+    const known = new URLSearchParams(location.search);
+    for (const field of ["venue", "address", "region", "website", "calendar_url", "contact_name", "contact_email"]) {
+      const value = known.get(field);
+      if (value && form.elements[field]) form.elements[field].value = value.slice(0, 300);
+    }
+    for (const kind of (known.get("kinds") || "").split(",")) {
+      const box = form.querySelector(`input[name="kinds"][value="${CSS.escape(kind)}"]`);
+      if (box) box.checked = true;
+    }
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = Object.fromEntries(new FormData(form));
