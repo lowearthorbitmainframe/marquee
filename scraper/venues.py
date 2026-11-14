@@ -7,6 +7,11 @@ GREATER_LA = [
     "Los Angeles", "Hollywood", "West Hollywood", "Inglewood", "Pasadena", "Long Beach", "Santa Monica",
     "Burbank", "Glendale", "Culver City", "North Hollywood", "Studio City", "Venice", "Pomona", "Universal City",
     "Santa Ana", "Anaheim", "Costa Mesa", "Garden Grove", "Fullerton", "Irvine", "Huntington Beach",
+    # More of Orange County
+    "Newport Beach", "Newport Coast", "Laguna Beach", "Laguna Hills", "Laguna Niguel", "San Juan Capistrano",
+    "Dana Point", "San Clemente", "Mission Viejo", "Lake Forest", "Aliso Viejo", "Yorba Linda", "Orange", "Tustin",
+    "Buena Park", "Brea", "Placentia", "La Habra", "Cypress", "Seal Beach", "Westminster", "Fountain Valley",
+    "Los Alamitos", "Rancho Santa Margarita",
     # Ventura County
     "Ventura", "Oxnard", "Thousand Oaks", "Camarillo", "Simi Valley", "Ojai", "Moorpark", "Westlake Village",
     "Agoura Hills", "Port Hueneme", "Santa Paula", "Newbury Park",
@@ -167,6 +172,10 @@ LOS_ANGELES = {
                 "permanent-records-roadhouse-olyg", "1720-mvpw",
             ],
         },
+        # Orange County (found via feverup.com's Orange County pages)
+        {"adapter": "ticketweb_widget", "url": "https://thecoachhouse.com/concert-schedule/", "venue": "the-coach-house", "category": "music"},
+        {"adapter": "live_nation", "url": "https://www.scr.org/", "venue": "south-coast-repertory", "category": "theater"},
+        {"adapter": "fever", "label": "fever candlelight oc", "url": "https://feverup.com/en/orange-county/candlelight", "category": "music"},
         # City-wide sources run last, so a venue's own listing wins any duplicate.
         {
             "adapter": "dice_city",
@@ -189,6 +198,8 @@ LOS_ANGELES = {
     ],
     # Venues the AEG feed adds on its own come with an address but no map pin.
     "venues": {
+        "the-coach-house": {"name": "The Coach House", "neighborhood": "San Juan Capistrano", "address": "33157 Camino Capistrano, San Juan Capistrano, CA 92675", "url": "https://thecoachhouse.com/"},
+        "south-coast-repertory": {"name": "South Coast Repertory", "neighborhood": "Costa Mesa", "address": "655 Town Center Dr, Costa Mesa, CA 92626", "url": "https://www.scr.org/"},
         "echoplex": {"name": "Echoplex", "neighborhood": "Echo Park", "address": "1154 Glendale Blvd, Los Angeles, CA 90026", "lat": 34.0778, "lon": -118.2600, "url": "https://www.theecho.com/shows/rooms/echoplex"},
         "the-belasco": {"name": "The Belasco", "neighborhood": "Downtown", "url": "https://www.thebelasco.com/shows"},
         "the-peppermint-club": {"name": "The Peppermint Club", "neighborhood": "Beverly Grove", "url": "https://www.peppermintclub.com/shows"},

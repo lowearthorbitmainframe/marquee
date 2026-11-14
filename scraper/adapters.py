@@ -1908,3 +1908,83 @@ def ticketsauce(source, fetch, today):
             "image": image.group(1) if image else None,
         })
     return events
+
+
+def ticketweb_widget(source, fetch, today):
+    """TicketWeb's newer WordPress event widget ("tw-widget-event"), as on The Coach House."""
+    events = []
+    # Both widget layouts give each event an image box, then its name, date and links.
+    for block in re.split(r'<div class="tw-event-image', fetch(source["url"]))[1:]:
+        name = re.search(r'tw-event-name[^>]*>\s*<a href="([^"]+)"[^>]*>(.*?)</a>', block, re.S)
+        stamp = re.search(r'tw-event-date-time[^>]*>(.*?)(?:tw-event-price|tw-event-links|</li>)', block, re.S)
+        text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", stamp.group(1))) if stamp else ""
+        date_part = re.search(r"([A-Z][a-z]{2}) (\d{1,2})(?:st|nd|rd|th)?", text)
+        clock = re.search(r"(?:Show|@)\s*(\d{1,2}:\d{2}\s*[ap]m)", text) or re.search(r"(\d{1,2}:\d{2}\s*[ap]m)", text)
+        if not (name and date_part):
+            continue
+        day = parse_month_day("%s %s" % date_part.groups(), today)
+        artists = [clean_text(html.unescape(a)) for a in re.findall(r'class="tw-billing-\d+">\s*([^<]+?)\s*</a>', block)]
+        tickets = re.search(r'tw-event-ticketing-link.*?href="([^"]+)"', block, re.S)
+        image = re.search(r'<img src="([^"]+)"', block)
+        prefix = re.search(r'tw-event-prefix-text[^>]*>(.*?)</div>', block, re.S)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(html.unescape(re.sub(r"<[^>]+>", "", name.group(2)))),
+            "tour": clean_text(re.sub(r"<[^>]+>", "", prefix.group(1))) if prefix and prefix.group(1).strip() else None,
+            "start": combine(day, parse_clock(clock.group(1)) if clock else None),
+            "artists": artists or None,
+            "url": name.group(1).split("#")[0],
+            "ticket_url": tickets.group(1) if tickets else None,
+            "image": image.group(1) if image else None,
+            "sold_out": "sold out" in block.lower(),
+        })
+    return events
+
+
+def fever(source, fetch, today):
+    """Fever (feverup.com) city category pages, such as Candlelight concerts in Orange County.
+    Each concert ("plan") page gives its next date and venue in JSON-LD; venues are created
+    from the plans themselves. robots.txt allows these pages."""
+    page = fetch(source["url"])
+    plans = ["/m/" + n for n in dict.fromkeys(re.findall(r'feverup\.com/(?:[a-z]{2}/)?m/(\d+)|href="/m/(\d+)"', page) and
+             [a or b for a, b in re.findall(r'feverup\.com/(?:[a-z]{2}/)?m/(\d+)|href="/m/(\d+)"', page)])][: source.get("max_plans", 40)]
+    events = []
+    for path in plans:
+        time.sleep(1.5)
+        try:
+            plan = fetch("https://feverup.com" + path)
+        except Exception:
+            continue
+        found = None
+        for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', plan, re.S):
+            try:
+                data = json.loads(block)
+            except ValueError:
+                continue
+            for item in data if isinstance(data, list) else [data]:
+                if item.get("@type") == "Event" and item.get("startDate"):
+                    found = item
+        if not found:
+            continue
+        place = found.get("location") or {}
+        venue_name = clean_text(place.get("name") or "")
+        if not venue_name or "secret" in venue_name.lower():
+            continue
+        street = re.search(r'"address"\s*:\s*"([^"]{5,120})"', plan)
+        address = street.group(1) if street else None
+        if address and "secret" in address.lower():
+            continue
+        city = re.search(r",\s*([A-Za-z .]+),\s*(?:CA,?\s*)?\d{5}", address or "")
+        if source.get("cities") and city and city.group(1).strip() not in source["cities"]:
+            continue
+        events.append({
+            "venue": slugify(venue_name),
+            "venue_info": {"name": venue_name, "address": address, "city": city.group(1).strip() if city else None},
+            "title": clean_text(html.unescape(found["name"])),
+            "start": datetime.fromisoformat(found["startDate"]),
+            "url": found.get("url") or "https://feverup.com" + path,
+            "ticket_url": found.get("url") or "https://feverup.com" + path,
+            "image": found.get("image") if isinstance(found.get("image"), str) else None,
+            "sold_out": "SoldOut" in str((found.get("offers") or [{}])[0].get("availability", "")),
+        })
+    return events
