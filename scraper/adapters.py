@@ -1762,3 +1762,149 @@ def venuepilot(source, fetch, today):
             break
         time.sleep(1)
     return events
+
+
+def tnew(source, fetch, today):
+    """Tessitura's TNEW ticketing (tickets.<theater>.org), used by many theaters and arts
+    centers. The /events page loads its list from this endpoint, which robots.txt allows."""
+    from scrape import USER_AGENT
+    base = source["url"].rstrip("/")
+    body = json.dumps({
+        "startDate": today.isoformat() + "T00:00:00",
+        "endDate": (today + timedelta(days=source.get("days", 365))).isoformat() + "T00:00:00",
+        "keywordIds": None, "productionSeasonIdFilter": [],
+    }).encode()
+    request = urllib.request.Request(base + "/api/products/productionseasons", data=body,
+                                     headers={"Content-Type": "application/json", "User-Agent": USER_AGENT})
+    with urllib.request.urlopen(request, timeout=30) as response:
+        productions = json.loads(response.read())
+    categories = source.get("product_types", {})
+    events = []
+    for production in productions:
+        if not production.get("isVisible", True):
+            continue
+        for performance in production.get("performances") or []:
+            if not performance.get("isPerformanceVisible", True):
+                continue
+            status = (performance.get("performanceStatusMessage") or "").lower()
+            event = {
+                "venue": source["venue"],
+                "title": clean_text(performance.get("performanceTitle") or production.get("productionTitle") or ""),
+                "start": datetime.fromisoformat(performance["performanceDate"]),
+                "url": performance.get("actionUrl") or production.get("productionSeasonActionUrl"),
+                "ticket_url": performance.get("actionUrl"),
+                "image": production.get("listingImageUrl"),
+                "sold_out": "sold out" in status,
+                "cancelled": "cancel" in status,
+            }
+            category = categories.get(str(performance.get("productTypeId")))
+            if category:
+                event["category"] = category
+            events.append(event)
+    return events
+
+
+def bandzoogle(source, fetch, today):
+    """Bandzoogle sites' calendar pages (the Elephant Room and many small rooms and artists)."""
+    events = []
+    for block in fetch(source["url"]).split('<div class="event-detail"')[1:]:
+        title = re.search(r'event-title[^>]*>\s*<a href="([^"]+)">(.*?)</a>', block, re.S)
+        when = re.search(r'class="date-long">.*?<span class="date">([^<]+)</span>(?:\s*@\s*<span class="time">([^<]+)</span>)?', block, re.S)
+        if not (title and when):
+            continue
+        day = parse_month_day(re.sub(r"^\w+,\s*", "", when.group(1)), today)
+        image = re.search(r'<img[^>]+src="([^"]+)"', block)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(html.unescape(re.sub(r"<[^>]+>", "", title.group(2)))),
+            "start": combine(day, parse_clock(when.group(2)) if when.group(2) else None),
+            "url": title.group(1),
+            "ticket_url": title.group(1),
+            "image": ("https:" + image.group(1)) if image and image.group(1).startswith("//") else (image.group(1) if image else None),
+        })
+    return events
+
+
+def turntable(source, fetch, today):
+    """Turntable Tickets (<venue>.turntabletickets.com), used by jazz and supper clubs such as
+    Parker Jazz Club. The show list page carries each show's date and set times."""
+    page = fetch(source["url"])
+    base = source["url"].rstrip("/")
+    events = []
+    chunks = re.split(r'(?=<h2[^>]*id="show-\d+-name")', page)[1:]
+    for chunk in chunks:
+        title = re.search(r'id="show-\d+-name">(.*?)</h2>', chunk, re.S)
+        link = re.search(r'href="(/shows/\d+/(\d{4}-\d{2}-\d{2}))"', chunk)
+        if not (title and link):
+            continue
+        day = date.fromisoformat(link.group(2))
+        image = re.search(r'<img src="([^"]+)"', chunk)
+        times = re.findall(r'(\d{1,2}:\d{2}\s*[AP]M)\s*SHOW', re.sub(r"<[^>]+>", " ", chunk))
+        url = base + link.group(1)
+        for clock in dict.fromkeys(times) or [None]:
+            events.append({
+                "venue": source["venue"],
+                "title": clean_text(html.unescape(title.group(1))),
+                "start": combine(day, parse_clock(clock) if clock else None),
+                "url": url,
+                "ticket_url": url,
+                "image": image.group(1) if image else None,
+                "sold_out": "sold out" in chunk.lower(),
+            })
+    return events
+
+
+def creek_calendar(source, fetch, today):
+    """The Creek and The Cave's /calendar page: one dialog per day listing each show and
+    its set times ("7:00 PM & 9:00 PM")."""
+    page = fetch(source["url"])
+    base = re.match(r"https?://[^/]+", source["url"]).group(0)
+    events, seen = [], set()
+    for day_id, body in re.findall(r'<dialog id="show-calendar-day-(\d{4}-\d{2}-\d{2})"(.*?)</dialog>', page, re.S):
+        day = date.fromisoformat(day_id)
+        for href, title, times in re.findall(r'<a href="([^"]+)"[^>]*>\s*<span[^>]*>\s*<h4[^>]*>(.*?)</h4>\s*<p[^>]*>(.*?)</p>', body, re.S):
+            url = base + href.split("?")[0]
+            name = clean_text(html.unescape(title))
+            for clock in re.findall(r"\d{1,2}:\d{2}\s*[AP]M", html.unescape(times)) or [None]:
+                key = (day, name, clock)
+                if key in seen:
+                    continue
+                seen.add(key)
+                events.append({
+                    "venue": source["venue"],
+                    "title": name,
+                    "start": combine(day, parse_clock(clock) if clock else None),
+                    "url": url,
+                    "ticket_url": url,
+                })
+    return events
+
+
+def ticketsauce(source, fetch, today):
+    """Ticketsauce organizer pages (<org>.ticketsauce.com), such as Vulcan Gas Company."""
+    page = fetch(source["url"])
+    base = re.match(r"https?://[^/]+", source["url"]).group(0)
+    events = []
+    for card in page.split('<div class="event-card ')[1:]:
+        text = [t.strip() for t in re.split(r"<[^>]+>", card) if t.strip() and t.strip() not in ("More details", "Tickets")]
+        when = next((t for t in text if re.search(r"\w+, \w{3} \d{1,2}, \d{4}", t)), None)
+        link = re.search(r'href="((?:https?://[^"]+)?/e/[^"/]+)"', card)
+        if not (when and link):
+            continue
+        i = text.index(when)
+        title = text[i - 1] if i else None
+        m = re.search(r"(\w{3} \d{1,2}, \d{4})(?: from (\d{1,2}:\d{2} [AP]M))?", when)
+        if not (title and m):
+            continue
+        day = datetime.strptime(m.group(1), "%b %d, %Y").date()
+        url = link.group(1) if link.group(1).startswith("http") else base + link.group(1)
+        image = re.search(r'<img src="([^"]+)"', card)
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(html.unescape(title)),
+            "start": combine(day, parse_clock(m.group(2)) if m.group(2) else None),
+            "url": url,
+            "ticket_url": url,
+            "image": image.group(1) if image else None,
+        })
+    return events
