@@ -176,6 +176,11 @@ LOS_ANGELES = {
         {"adapter": "ticketweb_widget", "url": "https://thecoachhouse.com/concert-schedule/", "venue": "the-coach-house", "category": "music"},
         {"adapter": "live_nation", "url": "https://www.scr.org/", "venue": "south-coast-repertory", "category": "theater"},
         {"adapter": "fever", "label": "fever candlelight oc", "url": "https://feverup.com/en/orange-county/candlelight", "category": "music"},
+        {"adapter": "squarespace_events", "url": "https://themuck.org/program", "venue": "the-muckenthaler"},
+        {"adapter": "squarespace_events", "label": "muckenthaler events", "url": "https://themuck.org/new-events", "venue": "the-muckenthaler"},
+        {"adapter": "event_booking", "url": "https://www.bowers.org/index.php/programs", "venue": "bowers-museum",
+         "categories": {"5": "music", "8": "film", "2": "museum", "3": "museum", "4": "museum", "6": "museum", "11": "museum"}},
+        {"adapter": "audienceview", "url": "https://www.thebarclay.org/Online/article/allevents", "venue": "irvine-barclay-theatre", "category": "theater"},
         # City-wide sources run last, so a venue's own listing wins any duplicate.
         {
             "adapter": "dice_city",
@@ -198,6 +203,9 @@ LOS_ANGELES = {
     ],
     # Venues the AEG feed adds on its own come with an address but no map pin.
     "venues": {
+        "the-muckenthaler": {"name": "The Muckenthaler Cultural Center", "neighborhood": "Fullerton", "address": "1201 W Malvern Ave, Fullerton, CA 92833", "url": "https://themuck.org/"},
+        "bowers-museum": {"name": "Bowers Museum", "neighborhood": "Santa Ana", "address": "2002 N Main St, Santa Ana, CA 92706", "url": "https://www.bowers.org/"},
+        "irvine-barclay-theatre": {"name": "Irvine Barclay Theatre", "neighborhood": "Irvine", "address": "4242 Campus Dr, Irvine, CA 92612", "url": "https://www.thebarclay.org/"},
         "the-coach-house": {"name": "The Coach House", "neighborhood": "San Juan Capistrano", "address": "33157 Camino Capistrano, San Juan Capistrano, CA 92675", "url": "https://thecoachhouse.com/"},
         "south-coast-repertory": {"name": "South Coast Repertory", "neighborhood": "Costa Mesa", "address": "655 Town Center Dr, Costa Mesa, CA 92626", "url": "https://www.scr.org/"},
         "echoplex": {"name": "Echoplex", "neighborhood": "Echo Park", "address": "1154 Glendale Blvd, Los Angeles, CA 90026", "lat": 34.0778, "lon": -118.2600, "url": "https://www.theecho.com/shows/rooms/echoplex"},

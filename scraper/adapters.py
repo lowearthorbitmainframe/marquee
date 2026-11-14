@@ -1988,3 +1988,92 @@ def fever(source, fetch, today):
             "sold_out": "SoldOut" in str((found.get("offers") or [{}])[0].get("availability", "")),
         })
     return events
+
+
+def event_booking(source, fetch, today):
+    """Joomla's Event Booking plugin ("eb-event-container" listings), as on the Bowers Museum.
+    Follows ?start= pages; `categories` maps the plugin's category ids to Scenester's, and
+    events in other categories are skipped when a map is given."""
+    base = re.match(r"https?://[^/]+", source["url"]).group(0)
+    categories = source.get("categories")
+    events, url, pages = [], source["url"], 0
+    while url and pages < source.get("pages", 5):
+        page = fetch(url)
+        pages += 1
+        for block in page.split("eb-event-container")[1:]:
+            category_id = re.search(r'eb-category-(\d+)', page[max(0, page.find(block) - 120):page.find(block)] + block[:0])
+            title = re.search(r'class="eb-event-title" href="([^"]+)">(.*?)</a>', block, re.S)
+            when = re.search(r'fa-calendar"></i>\s*(\d{2})\.(\d{2})\.(\d{4})\s*(?:<span class="eb-time">([^<]+)</span>)?', block)
+            if not (title and when):
+                continue
+            category = None
+            if categories is not None:
+                category = categories.get(category_id.group(1)) if category_id else None
+                if not category:
+                    continue
+            month, day, year = (int(x) for x in when.group(1, 2, 3))
+            image = re.search(r'<img src="([^"]+)"', block)
+            event = {
+                "venue": source["venue"],
+                "title": clean_text(html.unescape(title.group(2))),
+                "start": combine(date(year, month, day), parse_clock(when.group(4)) if when.group(4) else None),
+                "url": base + title.group(1) if title.group(1).startswith("/") else title.group(1),
+                "image": (base + urllib.parse.quote(image.group(1))) if image and image.group(1).startswith("/") else (image.group(1) if image else None),
+            }
+            event["ticket_url"] = event["url"]
+            if category:
+                event["category"] = category
+            events.append(event)
+        nxt = re.search(r'href="([^"]*[?&](?:start|limitstart)=(\d+))"', page)
+        url = None
+        if nxt and int(nxt.group(2)) == pages * 10:
+            url = base + html.unescape(nxt.group(1)) if nxt.group(1).startswith("/") else html.unescape(nxt.group(1))
+        time.sleep(1)
+    return events
+
+
+def audienceview(source, fetch, today):
+    """AudienceView Unlimited event pages (/Online/article/...), as at Irvine Barclay Theatre.
+    The page embeds its event list as `searchNames` (field names) and `searchResults` (rows)."""
+    page = fetch(source["url"])
+    base = re.match(r"https?://[^/]+", source["url"]).group(0)
+
+    def array_after(key):
+        start = page.find(key)
+        if start < 0:
+            return None
+        start = page.find("[", start)
+        depth = 0
+        for i in range(start, len(page)):
+            if page[i] == "[":
+                depth += 1
+            elif page[i] == "]":
+                depth -= 1
+                if depth == 0:
+                    return json.loads(re.sub(r",\s*\]", "]", page[start:i + 1]))
+        return None
+
+    names, rows = array_after("searchNames"), array_after("searchResults")
+    if not names or rows is None:
+        raise ValueError("no AudienceView search results on page")
+    events = []
+    for row in rows:
+        item = dict(zip(names, row))
+        stamp = re.match(r"(\d{2})-(\d{2})-(\d{2})$", item.get("data2") or "")
+        when = item.get("description") or ""
+        if not stamp:
+            continue
+        day = date(2000 + int(stamp.group(1)), int(stamp.group(2)), int(stamp.group(3)))
+        clock = re.search(r"\bat (\d{1,2}(?::\d{2})?\s*[ap]m)", when, re.I)
+        image = item.get("image1")
+        url = (base + "/Online/default.asp?doWork::WScontent::loadArticle=Load&BOparam::WScontent::loadArticle::article_id="
+               + item["id"])
+        events.append({
+            "venue": source["venue"],
+            "title": clean_text(html.unescape(item.get("name") or "")),
+            "start": combine(day, parse_clock(clock.group(1).replace(" ", "")) if clock else None),
+            "url": url,
+            "ticket_url": url,
+            "image": (base + image) if image and image.startswith("/") else image or None,
+        })
+    return events
