@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <title>Venue preview · Scenester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Matches the app's gunmetal Tokyo look (ios/Marquee/Theme.swift). */
+    :root {
+      --bg: #14181b; --card: #232830; --border: #9e9e9e; --ink: #fff; --muted: #a2a9b1;
+      --pink: #ff2e87; --cyan: #00ccf2; --yellow: #ffe500;
+      --round: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; background: #0d1012; color: var(--ink); font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; }
+    a { color: inherit; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px 16px 56px; display: grid; gap: 28px; grid-template-columns: 1fr; }
+    @media (min-width: 860px) { .wrap { grid-template-columns: 1fr 420px; align-items: start; padding-top: 40px; } }
+
+    /* The note to the venue */
+    .note .wordmark { font: 26px/1 Anton, Impact, sans-serif; letter-spacing: 2px; text-decoration: none; text-shadow: -2px 0 var(--cyan), 2px 0 var(--pink); }
+    .note h1 { font: 700 26px/1.2 var(--round); margin: 18px 0 10px; }
+    .note p { color: #cfd4da; margin: 0 0 14px; }
+    .note .small { font-size: 14px; color: var(--muted); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 8px; }
+    .btn { display: inline-block; text-decoration: none; font-weight: 700; border-radius: 999px; padding: 12px 20px; border: 2px solid var(--pink); }
+    .btn.yes { background: var(--pink); color: #fff; }
+    .btn.alt { color: #fff; border-color: #4a525c; }
+    @media (min-width: 860px) { .note { position: sticky; top: 40px; } }
+
+    /* The phone */
+    .phone { background: var(--bg); border-radius: 44px; border: 6px solid #2c3238; box-shadow: 0 0 0 2px #9e9e9e, 0 30px 60px rgba(0,0,0,.5); overflow: hidden; min-height: 700px; position: relative; }
+    @media (max-width: 480px) { .phone { border-radius: 28px; border-width: 4px; } }
+    .screen { padding: 18px 16px 28px; }
+    .navbar { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; margin: 4px 0 18px; }
+    .circle { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #3a414a; background: #1b2024; display: grid; place-items: center; cursor: pointer; }
+    .circle svg { width: 18px; height: 18px; }
+    .navbar h2 { margin: 0; text-align: center; font: 700 19px/1.2 var(--round); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .address { color: var(--muted); font-size: 15px; margin: 0 0 10px; }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+    .chip { border-radius: 999px; padding: 10px 18px; font-size: 16px; text-decoration: none; background: #4a1f37; color: #fff; }
+    .chip.on { background: var(--pink); }
+    .sign { display: inline-block; background: var(--yellow); color: #121417; font: 22px/1.1 Anton, Impact, sans-serif; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; }
+    .sign::after { content: ""; display: inline-block; width: 18px; height: 3px; background: var(--pink); vertical-align: middle; transform: translateX(28px); }
+    .count { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
+    .list { display: grid; gap: 12px; }
+    .card { position: relative; display: grid; grid-template-columns: 84px 1fr 32px; gap: 12px; align-items: center; padding: 10px 10px 10px 14px; border-radius: 14px; border: 1.5px solid var(--border); overflow: hidden; cursor: pointer; text-align: left; color: inherit; font: inherit; width: 100%; }
+    .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--k); opacity: .8; }
+    .poster { width: 84px; height: 84px; border-radius: 10px; overflow: hidden; display: grid; place-items: center; }
+    .poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .poster svg { width: 26px; height: 26px; opacity: .5; }
+    .title { font: 700 18px/1.2 var(--round); margin: 0 0 3px; overflow-wrap: anywhere; }
+    .title.x { text-decoration: line-through; opacity: .6; }
+    .detail { color: var(--muted); font-size: 15px; }
+    .badge { font-weight: 600; font-size: 13px; margin-top: 2px; }
+    .heart { width: 22px; height: 22px; opacity: .7; }
+    .more { margin: 16px auto 0; display: block; background: #232830; color: #fff; border: 1px solid #3a414a; border-radius: 999px; padding: 10px 18px; font: inherit; cursor: pointer; }
+    .empty { color: var(--muted); padding: 24px 4px; }
+
+    /* Show page */
+    .hero { width: 100%; aspect-ratio: 1.7; border-radius: 16px; overflow: hidden; display: grid; place-items: center; margin-bottom: 16px; }
+    .hero img { width: 100%; height: 100%; object-fit: cover; }
+    .tag { display: inline-flex; gap: 6px; align-items: center; border-radius: 999px; padding: 4px 12px; font-weight: 700; font-size: 14px; }
+    .show h3 { font: 700 26px/1.2 var(--round); margin: 10px 0 6px; overflow-wrap: anywhere; }
+    .when { color: var(--pink); font: 600 20px/1.3 var(--round); }
+    .times { color: var(--muted); margin: 4px 0 18px; }
+    .tickets { display: block; text-align: center; background: var(--pink); color: #fff; text-decoration: none; font: 700 19px/1 var(--round); border-radius: 16px; padding: 17px; margin-bottom: 22px; }
+    .lineup { display: grid; gap: 8px; margin-top: 8px; }
+    .artist { background: #232830; border-radius: 14px; padding: 12px 14px; display: flex; justify-content: space-between; gap: 10px; }
+    .artist span { color: var(--muted); font-size: 14px; }
+    .status { padding: 40px 0; text-align: center; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="note">
+      <a class="wordmark" href="/">SCENESTER</a>
+      <h1 id="note-title">Your venue in Scenester</h1>
+      <p id="note-body">This is exactly how your venue appears in Scenester, a free iPhone app that shows what's happening tonight. It's built from the app's live listings, so it updates as your calendar changes. Tap any show to see its page.</p>
+      <div class="actions" id="actions"></div>
+      <p class="small">Each "Get tickets" button goes straight to your own ticket page. Scenester doesn't sell tickets, charge venues or take a cut.</p>
+    </section>
+    <div class="phone"><div class="screen" id="screen"><div class="status">Loading the listings…</div></div></div>
+  </div>
+
+<script>
+const FEEDS = "https://raw.githubusercontent.com/lowearthorbitmainframe/marquee/main/data/";
+const KINDS = {
+  music: ["Music", "#00a8d9"], comedy: ["Comedy", "#ff2e87"], film: ["Film", "#7a2bff"],
+  theater: ["Theater", "#ff7300"], party: ["Nightlife", "#21bf4a"], museum: ["Museums", "#dbad00"], other: ["Other", "#737373"],
+};
+const ICON = {
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  heart: '<svg class="heart" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3 5 6.3 5c2 0 3.2 1.1 3.7 2.1.5-1 1.7-2.1 3.7-2.1 3.3 0 5 3.4 3.5 6.4C19 15.6 12 20 12 20z" transform="translate(1 0)"/></svg>',
+  mic: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><circle cx="15" cy="8" r="4"/><path d="M12.2 10.8L5 18l1 1 7.2-7.2"/></svg>',
+};
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Same rule as ArtistKey.make in the app and artist_key in the scraper.
+function artistKey(name) {
+  let t = name.normalize("NFKD").replace(/[^\x00-\x7f]/g, "").toLowerCase().trim();
+  if (t.startsWith("the ")) t = t.slice(4);
+  return t.replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
+}
+// Theme.badgeInk: the color lifted 55% toward white so it reads on the dark card.
+function lift(hex) {
+  const n = parseInt(hex.slice(1), 16), c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => Math.round(v + (255 - v) * 0.55));
+  return `rgb(${c.join(",")})`;
+}
+function wash(hex) { return `linear-gradient(${hex}38, ${hex}38), var(--card)`; }
+
+const path = location.pathname.replace(/^\/v\//, "").split("/");
+const params = new URLSearchParams(location.search);
+const region = params.get("region") || (path.length >= 2 ? path[0] : "los-angeles");
+const ids = (params.get("v") || path[path.length - 1] || "").split(/[,+]/).map(decodeURIComponent).filter(Boolean);
+let feed, zone, venues = [], events = [], shown = 40;
+
+const fmt = (opts) => new Intl.DateTimeFormat("en-US", { timeZone: zone, ...opts });
+const monthDay = (d) => fmt({ month: "short", day: "numeric" }).format(d);
+const time = (d) => fmt({ hour: "numeric", minute: "2-digit" }).format(d);
+const longDay = (d) => fmt({ weekday: "long", month: "long", day: "numeric" }).format(d);
+
+function badge(e) {
+  if (e.cancelled) return ["Cancelled", "#ff3b30"];
+  if (e.soldOut) return ["Sold out", "#ff9500"];
+  const [label, color] = KINDS[e.category] || KINDS.other;
+  if (e.category === "music" || e.category === "party") {
+    const genre = (e.artists || []).map((a) => feed.artists[artistKey(a)]?.genre).find(Boolean);
+    if (genre) return [genre, color];
+  }
+  return e.category === "music" ? null : [label, color];
+}
+function poster(e, big) {
+  const [, color] = KINDS[e.category] || KINDS.other;
+  const bg = `background:linear-gradient(135deg, ${color}8c, ${color}2e)`;
+  const img = e.image ? `<img src="${esc(e.image)}" alt="" loading="lazy" onerror="this.remove()">` : "";
+  return `<div class="${big ? "hero" : "poster"}" style="${bg}">${img || ICON.mic}</div>`;
+}
+function detail(e, venue) {
+  const start = new Date(e.start);
+  if (e.exhibition && e.end) return [start > new Date() ? "Opens " + monthDay(start) : "Through " + monthDay(new Date(e.end)), venue.name].join(" · ");
+  return [monthDay(start), e.timeTBA ? "Time TBA" : time(start), venue.name].join(" · ");
+}
+
+function renderVenue() {
+  const v = venues[0];
+  const name = venues.map((x) => x.name).join(" & ");
+  const maps = v.address ? "https://maps.apple.com/?q=" + encodeURIComponent(v.address) : null;
+  const cards = events.slice(0, shown).map((e, i) => {
+    const venue = venues.find((x) => x.id === e.venueId) || v;
+    const [, color] = KINDS[e.category] || KINDS.other;
+    const b = badge(e);
+    return `<button class="card" style="--k:${color};background:${wash(color)}" onclick="openShow(${i})">
+      ${poster(e)}
+      <div><p class="title${e.cancelled ? " x" : ""}">${esc(e.title)}</p>
+        <div class="detail">${esc(detail(e, venue))}</div>
+        ${b ? `<div class="badge" style="color:${lift(b[1])}">${esc(b[0])}</div>` : ""}</div>
+      ${ICON.heart}</button>`;
+  }).join("");
+  document.getElementById("screen").innerHTML = `
+    <div class="navbar"><span class="circle" aria-hidden="true">${ICON.back}</span><h2>${esc(name)}</h2><span></span></div>
+    ${v.address ? `<p class="address">${esc(v.address)}</p>` : ""}
+    <div class="chips"><span class="chip on">Follow</span>${maps ? `<a class="chip" href="${maps}" target="_blank" rel="noopener">Directions</a>` : ""}${v.url ? `<a class="chip" href="${esc(v.url)}" target="_blank" rel="noopener">Website</a>` : ""}</div>
+    <span class="sign">Upcoming</span>
+    <div class="count">${events.length} ${events.length === 1 ? "show" : "shows"}</div>
+    <div class="list">${cards || `<div class="empty">No upcoming shows right now. Yours appear here as soon as they're on your calendar.</div>`}</div>
+    ${events.length > shown ? `<button class="more" onclick="shown += 40; renderVenue()">Show more (${events.length - shown} left)</button>` : ""}`;
+}
+
+function openShow(i) {
+  const e = events[i], venue = venues.find((x) => x.id === e.venueId) || venues[0];
+  const [label, color] = KINDS[e.category] || KINDS.other;
+  const start = new Date(e.start);
+  const times = e.exhibition ? "" : [e.doors ? "Doors " + time(new Date(e.doors)) : "", e.timeTBA ? "Time TBA" : "Show " + time(start)].filter(Boolean).join(" · ");
+  const lineup = (e.artists || []).map((a) => {
+    const genre = feed.artists[artistKey(a)]?.genre;
+    return `<div class="artist"><strong>${esc(a)}</strong>${genre ? `<span>${esc(genre)}</span>` : ""}</div>`;
+  }).join("");
+  document.getElementById("screen").innerHTML = `
+    <div class="navbar"><button class="circle" onclick="renderVenue()" aria-label="Back to ${esc(venue.name)}">${ICON.back}</button><span></span><span></span></div>
+    <div class="show">
+      ${poster(e, true)}
+      <span class="tag" style="background:${color}33;color:${lift(color)}">${esc(label)}</span>
+      <h3>${esc(e.title)}</h3>
+      <div class="when">${esc(e.exhibition && e.end ? "Through " + longDay(new Date(e.end)) : longDay(start))}</div>
+      <div class="times">${esc(times)}${times ? " · " : ""}${esc(venue.name)}</div>
+      ${e.ticketUrl || e.url ? `<a class="tickets" href="${esc(e.ticketUrl || e.url)}" target="_blank" rel="noopener">${e.soldOut ? "Sold out · " : ""}Get tickets</a>` : ""}
+      ${lineup ? `<span class="sign">Lineup</span><div class="lineup">${lineup}</div>` : ""}
+    </div>`;
+  document.querySelector(".phone").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function setNote() {
+  const name = venues.map((x) => x.name).join(" & ");
+  document.title = `${name} on Scenester`;
+  document.getElementById("note-title").textContent = `${name} in Scenester`;
+  document.getElementById("note-body").textContent =
+    `This is exactly how ${name} appears in Scenester, a free iPhone app that shows what's happening tonight. ` +
+    `It's built from the app's live listings, so it updates as your calendar changes. Tap any show to see its page.`;
+  const subject = `${name}: OK to list on Scenester`;
+  const yes = `mailto:venues@heyscenester.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Yes, ${name} is OK to list on Scenester.`)}`;
+  const fix = `mailto:venues@heyscenester.app?subject=${encodeURIComponent(name + ": a change to our Scenester listing")}`;
+  const details = `/venues?${new URLSearchParams({ venue: name, region })}`;
+  document.getElementById("actions").innerHTML =
+    `<a class="btn yes" href="${yes}">Looks good. Reply &ldquo;Yes&rdquo;</a>` +
+    `<a class="btn alt" href="${fix}">Something's wrong</a>` +
+    `<a class="btn alt" href="${details}">Update your details</a>`;
+}
+
+async function load() {
+  const screen = document.getElementById("screen");
+  if (!/^[a-z-]+$/.test(region) || !ids.length) { screen.innerHTML = `<div class="status">This preview link is missing its venue.</div>`; return; }
+  try {
+    feed = await (await fetch(FEEDS + region + ".json", { cache: "no-cache" })).json();
+  } catch {
+    screen.innerHTML = `<div class="status">We couldn't load the listings just now. Please try again in a minute.</div>`;
+    return;
+  }
+  zone = feed.city?.timezone || "America/Los_Angeles";
+  venues = ids.map((id) => feed.venues.find((v) => v.id === id)).filter(Boolean);
+  if (!venues.length) { screen.innerHTML = `<div class="status">We couldn't find this venue in the listings.</div>`; return; }
+  const now = Date.now(), keep = new Set(venues.map((v) => v.id));
+  events = feed.events
+    .filter((e) => keep.has(e.venueId) && new Date(e.end || e.start).getTime() + 3 * 3600e3 > now)
+    .sort((a, b) => a.start.localeCompare(b.start));
+  setNote();
+  renderVenue();
+}
+load();
+</script>
+</body>
+</html>
