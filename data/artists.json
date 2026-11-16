@@ -5162,6 +5162,18 @@
 "name": "Alley Girl",
 "related": []
 },
+"allhopelost": {
+"appleUrl": "https://music.apple.com/us/artist/all-hope-lost/6796738961?uo=4",
+"checked": "2026-11-16T01:46:17+00:00",
+"fans": 0,
+"genre": null,
+"image": "https://cdn-images.dzcdn.net/images/artist/0e981c8c33bc987e4b96134dcc699fd9/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-16T01:46:29+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "All Hope Lost",
+"related": []
+},
 "alliepaige": {
 "appleUrl": "https://music.apple.com/us/artist/allie-paige/1312882125?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -13136,6 +13148,13 @@
 "The Wombats",
 "lovelytheband"
 ]
+},
+"bagdestroyers": {
+"checked": "2026-11-16T01:42:40+00:00",
+"linksChecked": "2026-11-16T01:43:02+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "The Bag Destroyers"
 },
 "bagraiders": {
 "appleUrl": "https://music.apple.com/us/artist/bag-raiders/262804084?uo=4",
@@ -22335,6 +22354,27 @@
 "Hottub"
 ]
 },
+"broncoforte": {
+"appleUrl": "https://music.apple.com/us/artist/bronco-forte/1663646281?uo=4",
+"checked": "2026-11-16T01:46:17+00:00",
+"fans": 11,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/57c8ef3760f12e2fccd441921dbc6545/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/1663646281",
+"bandcamp": "https://broncoforte.bandcamp.com/",
+"instagram": "https://www.instagram.com/broncoforte/",
+"spotify": "https://open.spotify.com/artist/63JLt3uYyUMXfjgAmEemtr",
+"tiktok": "https://www.tiktok.com/@broncoforte",
+"website": "https://broncoforte.com/",
+"youtube": "https://www.youtube.com/@broncoforte"
+},
+"linksChecked": "2026-11-16T01:46:29+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Bronco Forte",
+"related": []
+},
 "bronxwanderers": {
 "appleUrl": "https://music.apple.com/us/artist/the-bronx-wanderers/407692257?uo=4",
 "checked": "2026-11-12T22:37:43+00:00",
@@ -22820,6 +22860,19 @@
 "Ian Munsick",
 "Zandi Holup"
 ]
+},
+"bryancallen": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"instagram": "https://www.instagram.com/bryancallen/",
+"podcast": "https://podcasts.apple.com/us/podcast/off-limits-w-bryan-callen/id1645604857",
+"website": "http://bryancallen.com",
+"youtube": "https://www.youtube.com/channel/UCQMLxN4gj_PI-USw7eiTKIw"
+},
+"linksChecked": "2026-11-16T01:47:54+00:00",
+"linksMatch": "wikidata",
+"linksVersion": 2,
+"name": "BRYAN CALLEN"
 },
 "bryankearney": {
 "appleUrl": "https://music.apple.com/us/artist/bryan-kearney/211285064?uo=4",
@@ -30952,6 +31005,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Club Cielo"
+},
+"clubdirtyla": {
+"checked": "2026-11-16T01:42:40+00:00",
+"linksChecked": "2026-11-16T01:43:02+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Club Dirty LA"
 },
 "clubflush": {
 "checked": "2026-11-14T04:55:38+00:00",
@@ -53456,6 +53516,31 @@
 "Ratboys"
 ]
 },
+"feedthefire": {
+"appleUrl": "https://music.apple.com/us/artist/feed-the-fire/1166742065?uo=4",
+"checked": "2026-11-16T01:42:40+00:00",
+"fans": 124,
+"genre": "Dance",
+"image": "https://cdn-images.dzcdn.net/images/artist/4761af0eb4f8b788759b024d55003106/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-16T01:43:02+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Feed The Fire",
+"related": [
+"T & Sugah",
+"Flowidus",
+"Georgie Riot",
+"AC13",
+"Tantrum Desire",
+"Rene LaVice",
+"Subsonic",
+"Yussi",
+"Pirapus",
+"sless",
+"Dux n Bass",
+"Rova"
+]
+},
 "feefawfum": {
 "appleUrl": "https://music.apple.com/us/artist/feefawfum/1678816106?uo=4",
 "checked": "2026-11-05T20:49:32+00:00",
@@ -53930,6 +54015,18 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Field Guide and Georgia Harmer"
+},
+"fieldoffear": {
+"appleUrl": "https://music.apple.com/us/artist/field-of-fear/1316232246?uo=4",
+"checked": "2026-11-16T01:46:17+00:00",
+"fans": 9,
+"genre": "Ambient",
+"image": "https://cdn-images.dzcdn.net/images/artist/4543c7890b3265526b3072d19f4df5cb/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-16T01:46:29+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Field of Fear",
+"related": []
 },
 "fieldz": {
 "appleUrl": "https://music.apple.com/us/artist/fieldz/1685739486?uo=4",
@@ -60197,6 +60294,9 @@
 "fans": 2,
 "genre": null,
 "image": "https://cdn-images.dzcdn.net/images/artist/6a9458b3a843d2f117d4caaf5da048f4/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-16T01:43:02+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "Giulio Xavier",
 "related": []
 },
@@ -79232,6 +79332,16 @@
 "instagram": "https://www.instagram.com/jtloux/"
 },
 "name": "JT Loux"
+},
+"jtparr": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/after-school-program-with-jt-parr/id1771996295"
+},
+"linksChecked": "2026-11-16T01:47:54+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "JT PARR"
 },
 "judastongue": {
 "appleUrl": "https://music.apple.com/us/artist/judastongue/1555684406?uo=4",
@@ -107811,6 +107921,9 @@
 },
 "newyearsevesanfrancisco": {
 "checked": "2026-11-15T19:09:11+00:00",
+"linksChecked": "2026-11-16T01:46:29+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "NEW YEARS EVE [San Francisco]"
 },
 "newyorkcomedyfestival": {
@@ -109982,6 +110095,23 @@
 "website": "https://nwsinfonietta.org/"
 },
 "name": "Northwest Sinfonietta"
+},
+"nosebleed": {
+"appleUrl": "https://music.apple.com/us/artist/nosebleed/1462425318?uo=4",
+"checked": "2026-11-16T01:42:40+00:00",
+"fans": 19,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/9b7087530dde01d70711e625c801cf80/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/1462425318",
+"bandcamp": "https://nosebleedband.bandcamp.com/",
+"spotify": "https://open.spotify.com/artist/45pckvjBJfsoqAR7WZ5cU4"
+},
+"linksChecked": "2026-11-16T01:43:02+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Nosebleed",
+"related": []
 },
 "noservice": {
 "appleUrl": "https://music.apple.com/us/artist/no-service/1602748584?uo=4",
@@ -128602,8 +128732,8 @@
 "name": "Sapphic Sounds.. Nothing Traditional"
 },
 "saragomezscuba": {
-"checked": "1970-01-01T00:00:00+00:00",
-"linksChecked": "2026-11-13T20:07:24+00:00",
+"checked": "2026-11-16T01:42:40+00:00",
+"linksChecked": "2026-11-16T01:43:02+00:00",
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Sara G\u00f3mez\u2019s Cuba"
@@ -132384,6 +132514,21 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "SILICA SUN"
+},
+"silicondeathray": {
+"appleUrl": "https://music.apple.com/us/artist/silicon-death-ray/1878461442?uo=4",
+"checked": "2026-11-16T01:42:40+00:00",
+"fans": 0,
+"genre": null,
+"image": "https://cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/silicondeathray/"
+},
+"linksChecked": "2026-11-16T01:43:02+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Silicon Death Ray",
+"related": []
 },
 "silkies": {
 "appleUrl": "https://music.apple.com/us/artist/the-silkies/534639733?uo=4",
@@ -146700,6 +146845,13 @@
 "linksVersion": 2,
 "name": "TMOTV: The Music of Tom Verlaine"
 },
+"tmurph": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-16T01:47:54+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "T. MURPH"
+},
 "toadies": {
 "appleUrl": "https://music.apple.com/us/artist/toadies/105638?uo=4",
 "checked": "2026-11-14T16:30:48+00:00",
@@ -158444,6 +158596,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Xanadu Day Disco"
+},
+"xanderbeltran": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-16T01:47:54+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "XANDER BELTRAN"
 },
 "xceptional": {
 "checked": "2026-11-10T19:23:50+00:00",
