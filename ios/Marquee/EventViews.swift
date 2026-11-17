@@ -169,12 +169,20 @@ struct EventDetailView: View {
                     if let tour = event.tour {
                         Text(tour).font(.subheadline).foregroundStyle(.secondary)
                     }
-                    if event.isExhibition, let end = event.end {
-                        Text("On view \(Format.monthDay(event.start, zone)) – \(Format.monthDay(end, zone)), \(Format.year(end, zone))")
-                            .font(.headline).foregroundStyle(Theme.accent)
-                    } else {
-                        Text(Format.fullDay(event.start, zone)).font(.headline).foregroundStyle(Theme.accent)
-                        Text(timeLine).font(.subheadline).foregroundStyle(.secondary)
+                    HStack(alignment: .center, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            if event.isExhibition, let end = event.end {
+                                Text("On view \(Format.monthDay(event.start, zone)) – \(Format.monthDay(end, zone)), \(Format.year(end, zone))")
+                                    .font(.headline).foregroundStyle(Theme.accent)
+                            } else {
+                                Text(Format.fullDay(event.start, zone)).font(.headline).foregroundStyle(Theme.accent)
+                                Text(timeLine).font(.subheadline).foregroundStyle(.secondary)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        if !event.cancelled {
+                            AddToCalendarButton(event: event, venue: venue, zone: zone)
+                        }
                     }
                 }
 

@@ -36,6 +36,7 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSAppleMusicUsageDescription: Scenester reads the artists in your library to find their shows and similar bands near you.
+        NSCalendarsWriteOnlyAccessUsageDescription: Scenester adds the shows you choose to your calendar.
         UIBackgroundModes: [fetch]
         BGTaskSchedulerPermittedIdentifiers: [com.bryanstage.marquee.refresh]
         # Only HTTPS through Apple's own networking, so no export compliance paperwork is needed.

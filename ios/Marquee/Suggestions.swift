@@ -78,27 +78,6 @@ final class SuggestionService: ObservableObject {
     }
 }
 
-struct SuggestVenueSection: View {
-    @State private var isPresented = false
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(title: "Missing a venue?", subtitle: "Tell us about a room, theater, club or museum that isn't listed")
-            Button {
-                isPresented = true
-            } label: {
-                Label("Suggest a venue", systemImage: "plus.bubble")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 12))
-            }
-            .buttonStyle(.plain)
-        }
-        .sheet(isPresented: $isPresented) { SuggestVenueView() }
-    }
-}
-
 struct SuggestVenueView: View {
     @EnvironmentObject private var store: FeedStore
     @EnvironmentObject private var suggestions: SuggestionService

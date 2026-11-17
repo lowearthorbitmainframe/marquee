@@ -75,7 +75,6 @@ struct YouView: View {
                     ArtistsEditor()
                     GenresEditor(collapsible: true)
                     HiddenArtistsSection()
-                    SuggestVenueSection()
                     FeedbackSection()
                     StatusSection()
                 }
@@ -484,6 +483,8 @@ struct HiddenArtistsSection: View {
 /// Shows that alerts told you about, newest first.
 struct NewShowsSection: View {
     @EnvironmentObject private var store: FeedStore
+    @State private var showsAll = false
+    private let previewCount = 10
 
     var body: some View {
         let events = AlertHistory.recentEvents(in: store.feed)
@@ -494,7 +495,11 @@ struct NewShowsSection: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-            ForEach(events) { EventLink(event: $0, showsDate: true) }
+            ForEach(showsAll ? events : Array(events.prefix(previewCount))) { EventLink(event: $0, showsDate: true) }
+            if events.count > previewCount {
+                Button(showsAll ? "Show fewer" : "Show all \(events.count)") { showsAll.toggle() }
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
         }
     }
 }

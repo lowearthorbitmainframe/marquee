@@ -13,26 +13,39 @@ enum FeedbackKind: String, CaseIterable, Identifiable {
     var symbol: String { self == .problem ? "exclamationmark.bubble" : "lightbulb" }
 }
 
+/// Feedback on the You page: suggesting a missing venue, then reporting a problem or an idea.
 struct FeedbackSection: View {
-    @State private var isPresented = false
+    @State private var showsFeedback = false
+    @State private var showsVenue = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(title: "Feedback", subtitle: "Something broken, or an idea for Scenester? Tell us.")
-            Button {
-                isPresented = true
-            } label: {
-                Label("Suggest a feature / report a problem", systemImage: "bubble.left.and.text.bubble.right")
-                    .font(.headline)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 8)
-                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 12))
-            }
-            .buttonStyle(.plain)
+            SectionHeader(title: "Feedback")
+            Text("Missing a venue? Tell us about a room, theater, club or museum that isn't listed.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            wideButton("Suggest a venue", symbol: "plus.bubble") { showsVenue = true }
+                .padding(.bottom, 8)
+            Text("Something broken, or an idea for Scenester? Tell us.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            wideButton("Suggest a feature / report a problem", symbol: "bubble.left.and.text.bubble.right") { showsFeedback = true }
         }
-        .sheet(isPresented: $isPresented) { FeedbackView() }
+        .sheet(isPresented: $showsFeedback) { FeedbackView() }
+        .sheet(isPresented: $showsVenue) { SuggestVenueView() }
+    }
+
+    private func wideButton(_ title: String, symbol: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Label(title, systemImage: symbol)
+                .font(.headline)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .padding(.horizontal, 8)
+                .background(Theme.card, in: RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
     }
 }
 

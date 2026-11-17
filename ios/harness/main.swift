@@ -90,6 +90,26 @@ import SwiftUI
     await render("you", YouView())
     await render("setup", SetupView())
     await render("icon", AppIconArt(), height: 512)
+    // New-show alerts: shows are remembered across updates, and repeat dates count up.
+    if let first = feed.events.first(where: { $0.start > Date() && !$0.cancelled && !$0.artists.isEmpty }) {
+        let alerts = UserDefaults(suiteName: "marquee.harness.alerts")!
+        alerts.removePersistentDomain(forName: "marquee.harness.alerts")
+        let watching: Set<String> = [ArtistKey.make(first.artists[0])]
+        var missing = feed; missing.events.removeAll { $0.id == first.id }
+        var added = feed; var second = first
+        second.id = "harness-second"; second.start = first.start.addingTimeInterval(2 * 24 * 3600)
+        added.events.append(second)
+        check(Alerts.newShows(in: feed, region: "h", watching: watching, defaults: alerts).isEmpty, "alerts: first feed only sets the baseline")
+        check(Alerts.newShows(in: missing, region: "h", watching: watching, defaults: alerts).isEmpty, "alerts: a show dropping out isn't news")
+        check(Alerts.newShows(in: feed, region: "h", watching: watching, defaults: alerts).isEmpty, "alerts: a show coming back after a failed update isn't announced again")
+        check(Alerts.newShows(in: added, region: "h", watching: watching, defaults: alerts).map(\.id) == ["harness-second"], "alerts: an added date is found")
+        let place: (Event) -> String = { _ in "Venue · Sat Nov 21" }
+        check(Alerts.wording(artist: "Wrabel", new: [second], alreadyListed: 1, place: place).title == "Wrabel: Second show added!", "alerts: second date says Second show added!")
+        check(Alerts.wording(artist: "Wrabel", new: [second], alreadyListed: 2, place: place).title == "Wrabel: Third show added!", "alerts: third date says Third show added!")
+        check(Alerts.wording(artist: "Wrabel", new: [first], alreadyListed: 0, place: place).title == "New show: \(first.title)", "alerts: a first date says New show")
+        check(Alerts.wording(artist: "Wrabel", new: [first, second], alreadyListed: 1, place: place).title == "Wrabel: 2 more shows added!", "alerts: several at once make one alert")
+    }
+
     print(failures == 0 ? "ALL CHECKS PASSED" : "\(failures) CHECKS FAILED")
     exit(failures == 0 ? 0 : 1)
 }

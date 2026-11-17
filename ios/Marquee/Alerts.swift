@@ -8,53 +8,141 @@ enum Alerts {
     private static let maxPerRun = 6
 
     private static func seenKey(_ region: String) -> String { "alerts.seen.\(region)" }
+    private static func knownKey(_ region: String) -> String { "alerts.known.\(region)" }
+    private static let announcedKey = "alerts.announced"
 
     static func requestPermission() async -> Bool {
         (try? await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])) ?? false
     }
 
-    /// The new shows by watched artists in this feed. The first feed a region
-    /// sees only sets the baseline, so installing the app doesn't announce everything.
+    /// The same artist at the same venue on the same day, however the listing's title or ID changes.
+    private static func showKey(_ artist: String, _ event: Event, _ zone: TimeZone) -> String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = zone
+        let day = calendar.dateComponents([.year, .month, .day], from: event.start)
+        return "\(artist)|\(event.venueId)|\(day.year ?? 0)-\(day.month ?? 0)-\(day.day ?? 0)"
+    }
+
+    /// The new shows by watched artists in this feed. Every show ever seen is remembered (until it
+    /// has passed), so a venue whose calendar failed to load for one update doesn't come back as
+    /// "new" the next time. The first feed a region sees only sets the baseline, so installing the
+    /// app doesn't announce everything.
     static func newShows(in feed: Feed, region: String, watching: Set<String>, defaults: UserDefaults = .standard) -> [Event] {
-        let key = seenKey(region)
-        let previous = defaults.stringArray(forKey: key).map(Set.init)
-        defaults.set(feed.events.map(\.id), forKey: key)
-        guard let previous else { return [] }
         let now = Date()
-        return feed.events.filter { event in
-            !previous.contains(event.id) && event.start > now && !event.cancelled
-                && event.artists.contains { watching.contains(ArtistKey.make($0)) }
+        var known = (defaults.dictionary(forKey: knownKey(region)) as? [String: Double]) ?? [:]
+        // Before this list existed, only the previous feed's IDs were kept.
+        let isFirst = known.isEmpty && defaults.stringArray(forKey: seenKey(region)) == nil
+        for id in defaults.stringArray(forKey: seenKey(region)) ?? [] where known[id] == nil {
+            known[id] = now.addingTimeInterval(365 * 24 * 3600).timeIntervalSince1970
+        }
+        defaults.removeObject(forKey: seenKey(region))
+
+        let fresh = feed.events.filter { known[$0.id] == nil }
+        for event in feed.events { known[event.id] = event.start.timeIntervalSince1970 }
+        let yesterday = now.addingTimeInterval(-24 * 3600).timeIntervalSince1970
+        defaults.set(known.filter { $0.value > yesterday }, forKey: knownKey(region))
+        guard !isFirst else { return [] }
+
+        let announced = (defaults.dictionary(forKey: announcedKey) as? [String: Double]) ?? [:]
+        let zone = feed.city.timeZone
+        return fresh.filter { event in
+            event.start > now && !event.cancelled && event.artists.contains { name in
+                let key = ArtistKey.make(name)
+                return watching.contains(key) && announced[showKey(key, event, zone)] == nil
+            }
+        }
+    }
+
+    /// Remembers which artist-venue-day shows were announced, so none is announced twice.
+    private static func markAnnounced(_ keys: [String], until: [String: Date], defaults: UserDefaults = .standard) {
+        let now = Date().timeIntervalSince1970
+        var announced = (defaults.dictionary(forKey: announcedKey) as? [String: Double]) ?? [:]
+        for key in keys { announced[key] = (until[key] ?? Date()).timeIntervalSince1970 }
+        defaults.set(announced.filter { $0.value > now - 24 * 3600 }, forKey: announcedKey)
+    }
+
+    private static let ordinals = ["Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth"]
+
+    /// What an alert says for one artist's new dates. When the artist already had shows here, the
+    /// alert counts up ("Second show added!") instead of repeating "New show".
+    static func wording(artist: String, new: [Event], alreadyListed: Int, place: (Event) -> String) -> (title: String, body: String) {
+        let places = new.prefix(3).map(place).joined(separator: "\n") + (new.count > 3 ? "\n…" : "")
+        switch (alreadyListed, new.count) {
+        case (0, 1):
+            return ("New show: \(new[0].title)", place(new[0]))
+        case (0, _):
+            return ("\(artist): \(new.count) new shows", places)
+        case (_, 1):
+            let index = alreadyListed - 1
+            let ordinal = index < ordinals.count ? ordinals[index] + " show" : "Another show"
+            return ("\(artist): \(ordinal) added!", place(new[0]))
+        default:
+            return ("\(artist): \(new.count) more shows added!", places)
         }
     }
 
     static func check(feed: Feed?, region: String, taste: TasteProfile) async {
         // Only your home area alerts; browsing elsewhere doesn't.
         guard let feed, region == taste.alertRegion else { return }
-        let found = newShows(in: feed, region: region, watching: taste.watchedArtistKeys)
+        let watching = taste.watchedArtistKeys
+        let found = newShows(in: feed, region: region, watching: watching)
         guard taste.alertsEnabled == true, !found.isEmpty else { return }
+        let zone = feed.city.timeZone
+        let now = Date()
+
+        // One alert per artist, however many dates they added at once.
+        var groups: [(key: String, name: String, events: [Event])] = []
+        for event in found.sorted(by: { $0.start < $1.start }) {
+            guard let name = event.artists.first(where: { watching.contains(ArtistKey.make($0)) }) else { continue }
+            let key = ArtistKey.make(name)
+            if let i = groups.firstIndex(where: { $0.key == key }) {
+                groups[i].events.append(event)
+            } else {
+                groups.append((key, name, [event]))
+            }
+        }
+        var keys: [String] = [], until: [String: Date] = [:]
+        for group in groups {
+            for event in group.events {
+                let key = showKey(group.key, event, zone)
+                keys.append(key)
+                until[key] = event.start
+            }
+        }
+        markAnnounced(keys, until: until)
         AlertHistory.record(found.map(\.id))
-        let ids = found.map(\.id)
+
         let venues = Dictionary(feed.venues.map { ($0.id, $0.name) }, uniquingKeysWith: { first, _ in first })
         let formatter = DateFormatter()
-        formatter.timeZone = feed.city.timeZone
+        formatter.timeZone = zone
         formatter.setLocalizedDateFormatFromTemplate("EEE MMM d")
+        let place: (Event) -> String = { event in
+            [venues[event.venueId], formatter.string(from: event.start)].compactMap { $0 }.joined(separator: " · ")
+        }
 
         let center = UNUserNotificationCenter.current()
-        if found.count > maxPerRun {
+        if groups.count > maxPerRun {
             let content = UNMutableNotificationContent()
             content.title = "\(found.count) new shows by artists you follow"
-            content.body = found.prefix(4).map(\.title).joined(separator: ", ") + "…"
-            content.userInfo = ["eventIds": ids]
-            try? await center.add(UNNotificationRequest(identifier: "summary-\(Date().timeIntervalSince1970)", content: content, trigger: nil))
+            content.body = groups.prefix(4).map(\.name).joined(separator: ", ") + "…"
+            content.userInfo = ["eventIds": found.map(\.id)]
+            try? await center.add(UNNotificationRequest(identifier: "summary-\(now.timeIntervalSince1970)", content: content, trigger: nil))
             return
         }
-        for event in found {
+        for group in groups {
+            let newIds = Set(group.events.map(\.id))
+            let alreadyListed = feed.events.filter { event in
+                !newIds.contains(event.id) && event.start > now && !event.cancelled
+                    && event.artists.contains { ArtistKey.make($0) == group.key }
+            }.count
+            let text = wording(artist: group.name, new: group.events, alreadyListed: alreadyListed, place: place)
             let content = UNMutableNotificationContent()
-            content.title = "New show: \(event.title)"
-            content.body = [venues[event.venueId], formatter.string(from: event.start)].compactMap { $0 }.joined(separator: " · ")
+            content.title = text.title
+            content.body = text.body
             content.sound = .default
-            content.userInfo = ["eventIds": [event.id]]
-            try? await center.add(UNNotificationRequest(identifier: "show-\(event.id)", content: content, trigger: nil))
+            content.userInfo = ["eventIds": group.events.map(\.id)]
+            let id = "artist-\(group.key)-" + group.events.map(\.id).joined(separator: "-")
+            try? await center.add(UNNotificationRequest(identifier: String(id.prefix(200)), content: content, trigger: nil))
         }
     }
 }
