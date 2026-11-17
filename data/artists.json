@@ -59419,6 +59419,16 @@
 "linksVersion": 2,
 "name": "FREE Perreo Thursdays @ Los Globos"
 },
+"freestonepeaches": {
+"checked": "2026-11-17T13:33:33+00:00",
+"links": {
+"website": "https://www.freestonepeaches.com/"
+},
+"linksChecked": "2026-11-17T13:33:48+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Freestone Peaches"
+},
 "freestyleexplosion": {
 "checked": "2026-11-13T19:57:55+00:00",
 "linksChecked": "2026-11-14T19:00:55+00:00",
@@ -74583,6 +74593,16 @@
 "fans": 551,
 "genre": "Alternative",
 "image": "https://cdn-images.dzcdn.net/images/artist/b5c0cb48e13fb68e90fe5d4a6092c991/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/1207873400",
+"bandcamp": "https://weareiress.bandcamp.com/",
+"instagram": "https://www.instagram.com/weareiress/",
+"soundcloud": "https://soundcloud.com/plagrecords/sets/iress-soaked",
+"spotify": "https://open.spotify.com/artist/7LlAk7lyxBJYpXXT0n7mtc"
+},
+"linksChecked": "2026-11-17T13:30:02+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Iress",
 "related": [
 "Holy Fawn",
@@ -76646,6 +76666,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Jamie Kaler"
+},
+"jamiekimegroup": {
+"checked": "2026-11-17T13:29:54+00:00",
+"linksChecked": "2026-11-17T13:30:02+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "JAMIE KIME GROUP"
 },
 "jamielissow": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -140006,6 +140033,15 @@
 "linksVersion": 2,
 "name": "sklarbrothers"
 },
+"skoto": {
+"appleUrl": "https://music.apple.com/us/artist/skoto/1723508333?uo=4",
+"checked": "2026-11-17T13:33:33+00:00",
+"genre": "Alternative",
+"linksChecked": "2026-11-17T13:33:48+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "SKOTO"
+},
 "skream": {
 "appleUrl": "https://music.apple.com/us/artist/skream/255055183?uo=4",
 "checked": "2026-11-07T07:33:48+00:00",
@@ -143674,6 +143710,18 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Spin The Bottle",
+"related": []
+},
+"spiralteeth": {
+"appleUrl": "https://music.apple.com/us/artist/spiralteeth/1727044115?uo=4",
+"checked": "2026-11-17T13:33:33+00:00",
+"fans": 14,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/c42472a7886c8b31961adbd71fa2e23f/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-17T13:33:48+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "SPIRAL TEETH",
 "related": []
 },
 "spiritpossession": {
@@ -147974,6 +148022,13 @@
 "Izzy Stradlin",
 "Lynyrd Skynyrd"
 ]
+},
+"sunflwrinlosangeles": {
+"checked": "2026-11-17T13:29:54+00:00",
+"linksChecked": "2026-11-17T13:30:02+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "sunflwr in Los Angeles"
 },
 "sungazer": {
 "appleUrl": "https://music.apple.com/us/artist/sungazer/1407146658?uo=4",
@@ -152609,6 +152664,9 @@
 "links": {
 "instagram": "https://www.instagram.com/thief_sounds"
 },
+"linksChecked": "2026-11-17T13:30:02+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
 "name": "Thief",
 "related": [
 "Matte Blvck",
@@ -166753,6 +166811,21 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Yamato Drummers of Japan"
+},
+"yamauba": {
+"appleUrl": "https://music.apple.com/us/artist/yama-uba/1581845744?uo=4",
+"checked": "2026-11-17T13:33:33+00:00",
+"fans": 49,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/c95d782598a2d74a11f4c9743f7a8a61/250x250-000000-80-0-0.jpg",
+"links": {
+"bandcamp": "https://yamauba.bandcamp.com/"
+},
+"linksChecked": "2026-11-17T13:33:48+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "YAMA UBA",
+"related": []
 },
 "yana": {
 "appleUrl": "https://music.apple.com/us/artist/yana/1387306429?uo=4",
