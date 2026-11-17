@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 import adapters
 import enrich as enricher
 import links as linker
-from titles import artist_key, classify, display_title, is_cancelled, is_sold_out, merge_artists, parse_artists
+from titles import artist_key, classify, display_title, is_cancelled, is_sold_out, merge_artists, parse_artists, title_category, VENUE_NIGHTS
 from venues import CITIES
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -34,6 +34,13 @@ PAUSE_BETWEEN_SOURCES = 2
 # Apple sometimes matches a performer's name to a book author.
 # Apple sometimes matches a performer to their book, film or comedy album, which brings a
 # genre that isn't music (Peter Hook -> "Biographies & Memoirs"). These are dropped.
+# Genres that mean a nightlife event matched the wrong act (see the artist records step).
+NOT_CLUB_GENRES = {
+    "Country", "Gospel", "Christian", "Christian & Gospel", "Folk", "Rock", "Hard Rock", "Metal", "Hardcore",
+    "Jazz", "Vocal Jazz", "Orchestral", "Classical", "Chemistry", "Christmas", "Christmas: Classic",
+    "Singer/Songwriter", "Children's Music", "Comedy", "Spoken Word", "Soundtrack", "Easy Listening", "Blues",
+    "Chinese Hip-Hop", "Americana", "Bluegrass",
+}
 NON_MUSIC_GENRES = {
     # Books and audiobooks
     "Graphic Novels", "General Nonfiction for Kids", "Self-Development", "Poetry", "Fiction",
@@ -171,6 +178,13 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
             for raw in raws:
                 guess = raw.pop("category_guess", None)
                 raw["category"] = raw.get("category") or source.get("category") or guess
+                # "GenX Takeover Comedy Tour" filed under music or "other" by a ticketing site is
+                # comedy. Theater keeps its plays ("O Christmas Tea: A British Comedy").
+                if raw["category"] in ("music", "other") and title_category(raw.get("title")) == "comedy":
+                    raw["category"] = "comedy"
+                night = VENUE_NIGHTS.get((raw.get("venue"), artist_key(raw.get("title") or "")))
+                if night:
+                    raw["category"] = night
                 for name, links in (raw.get("artist_links") or {}).items():
                     found_links.setdefault(name, {}).update(links)
             normalized = [dict(e, source=label) for e in (normalize(r, zone) for r in raws) if e]
@@ -218,6 +232,7 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
     )
 
     cache = load_json(artist_path, {})
+    enricher.apply_corrections(cache)
     # Links a source gave for a specific show fill in what MusicBrainz didn't find.
     for name, links in found_links.items():
         record = cache.setdefault(artist_key(name), {"name": name, "checked": "1970-01-01T00:00:00+00:00"})
@@ -239,6 +254,10 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
             print("checked links for %d artists; %d have links" % (checked, sum(1 for r in cache.values() if r.get("links"))))
 
     # Only ship artist records this feed actually uses.
+    # A club night's name ("Gasolina", "MAURICE") often matches some unrelated small act; a match in a
+    # genre no club night plays, with under 1,000 fans, is dropped rather than shown with the wrong
+    # link. Well-known acts (Gary Numan at a club) keep theirs.
+    music_keys = {artist_key(n) for e in upcoming if e["category"] != "party" for n in e["artists"]}
     used = {}
     for event in upcoming:
         for name in event["artists"]:
@@ -247,6 +266,10 @@ def scrape_city(city, run_enrich, budget, minutes, link_minutes=0):
             if record and (record.get("genre") or record.get("related") or record.get("links")):
                 used[key] = {k: v for k, v in record.items() if k not in ("checked", "linksChecked", "linksMatch", "linksVersion")}
                 genre = used[key].get("genre")
+                if (genre in NOT_CLUB_GENRES and key not in music_keys and (used[key].get("fans") or 0) < 1000
+                        and not used[key].get("corrected")):
+                    del used[key]
+                    continue
                 if genre in NON_MUSIC_GENRES:
                     del used[key]["genre"]
                 elif genre in GENRE_RENAMES:

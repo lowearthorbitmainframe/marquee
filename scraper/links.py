@@ -191,6 +191,8 @@ def add_links(names, cache, deadline, save=None, comedians=frozenset()):
         # Artists Apple hasn't been asked about yet still get links. The old
         # "checked" date makes the Apple lookup try them on its next pass.
         record = cache.setdefault(key, {"name": name, "checked": "1970-01-01T00:00:00+00:00"})
+        if record.get("corrected"):
+            continue  # a name we fixed by hand (enrich.CORRECTIONS) isn't searched again
         checked = record.get("linksChecked")
         current = record.get("linksVersion", 1) >= LINKS_VERSION
         if checked and current and now - datetime.fromisoformat(checked) < RETRY_AFTER:

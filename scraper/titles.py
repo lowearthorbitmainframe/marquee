@@ -44,7 +44,9 @@ WHOLE_EVENT = re.compile(
 CATEGORY_NAMES = ("music", "comedy", "film", "theater", "party", "museum", "other")
 CATEGORIES = [
     ("comedy", re.compile(r"\b(comedy|comedians?|stand[- ]?up|improv)\b", re.I)),
-    ("film", re.compile(r"\b(screening|film festival|movie night|in 35mm|in 70mm|double feature)\b", re.I)),
+    # A "Cinema Club:" series name, not a band like Two Door Cinema Club.
+    ("film", re.compile(r"\b(screening|film festival|movie night|in 35mm|in 70mm|double feature)\b|"
+                        r"(?<!door )\b(?:cinema|film|movie) club\s*:", re.I)),
     ("theater", re.compile(r"\b(the musical|a new play|broadway)\b", re.I)),
     ("party", re.compile(r"\b(dance party|rave|dj night|emo night|karaoke|club night|drag|burlesque|b2b|"
                          r"all night long|open to close|extended set|afters|after[- ]?hours|after[- ]?party|warehouse party|day party|"
@@ -128,7 +130,36 @@ def merge_artists(*groups):
     return merged
 
 
+# Performers whose shows belong in a category their titles don't name, e.g. a comedian's
+# holiday "Smooth Jazz Spectacular". Add names as listings turn up in the wrong place.
+KNOWN_PERFORMERS = {
+    "flula borg": "comedy",
+}
+PERFORMER_PATTERN = re.compile(r"\b(" + "|".join(re.escape(n) for n in KNOWN_PERFORMERS) + r")\b", re.I)
+
+
+# Recurring nights at one venue whose title is just a name, by (venue id, artist key of the title).
+VENUE_NIGHTS = {
+    ("los-globos", "maurice"): "party",
+}
+
+
+def title_category(title):
+    """A category the title itself makes clear (a known comedian, "Comedy Show", "Cinema Club"),
+    or None. Strong enough to override a ticketing site's browse page."""
+    performer = PERFORMER_PATTERN.search(title or "")
+    if performer:
+        return KNOWN_PERFORMERS[performer.group(1).lower()]
+    for category, pattern in CATEGORIES:
+        if category in ("comedy", "film") and pattern.search(title or ""):
+            return category
+    return None
+
+
 def classify(title):
+    known = title_category(title)
+    if known:
+        return known
     for category, pattern in CATEGORIES:
         if pattern.search(title):
             return category

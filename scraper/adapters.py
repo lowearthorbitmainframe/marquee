@@ -17,7 +17,7 @@ import urllib.request
 from datetime import date, date as date_type, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-from titles import clean_text, parse_artists
+from titles import clean_text, parse_artists, title_category
 
 
 LA = ZoneInfo("America/Los_Angeles")
@@ -494,7 +494,8 @@ def dice_city(source, fetch, today):
     for item_id, item in seen.items():
         event = dice_event(item)
         if event:
-            event["category"] = categories[item_id]
+            # DICE files some screenings and comedy nights under theater; the title knows better.
+            event["category"] = title_category(item["name"]) or categories[item_id]
             events.append(event)
     return events
 

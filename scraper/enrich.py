@@ -42,6 +42,26 @@ def lookup_deezer(name, fetch):
     return {}
 
 
+# Names the catalog lookups match to the wrong act, by artist key, with the genre to show
+# instead (None for no genre). These never get an Apple Music link or similar artists.
+# Common single-word names are the usual culprits: "MAURICE" at Los Globos is a DJ night,
+# not the country singer Maurice.
+CORRECTIONS = {
+    "maurice": "Dance",
+}
+
+
+def apply_corrections(cache):
+    """Replaces wrong matches in the cache with the corrected record."""
+    for key, genre in CORRECTIONS.items():
+        old = cache.get(key) or {}
+        record = {"name": old.get("name") or key, "checked": old.get("checked") or "1970-01-01T00:00:00+00:00",
+                  "corrected": True}
+        if genre:
+            record["genre"] = genre
+        cache[key] = record
+
+
 def enrich(names, cache, fetch, budget, deadline=None, save=None):
     """Fills `cache` in place, saving as it goes. Returns how many names were looked up."""
     now = datetime.now(timezone.utc)
@@ -49,6 +69,8 @@ def enrich(names, cache, fetch, budget, deadline=None, save=None):
     for name in sorted(set(names)):
         key = artist_key(name)
         if not key:
+            continue
+        if key in CORRECTIONS:
             continue
         cached = cache.get(key)
         if cached:
