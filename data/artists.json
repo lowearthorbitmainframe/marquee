@@ -8689,6 +8689,18 @@
 "name": "Animal Shin",
 "related": []
 },
+"animatedviolence": {
+"appleUrl": "https://music.apple.com/us/artist/animated-violence/1737693562?uo=4",
+"checked": "2026-11-18T13:33:49+00:00",
+"fans": 2,
+"genre": "Punk",
+"image": "https://cdn-images.dzcdn.net/images/artist/b635355065119ca6e39fd220032cb02b/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-18T13:34:09+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Animated Violence",
+"related": []
+},
 "animotion": {
 "appleUrl": "https://music.apple.com/us/artist/animotion/382775?uo=4",
 "checked": "2026-11-13T20:39:29+00:00",
@@ -70695,6 +70707,13 @@
 "name": "Headfooter",
 "related": []
 },
+"headpils": {
+"checked": "2026-11-18T13:33:49+00:00",
+"linksChecked": "2026-11-18T13:34:09+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Head Pils"
+},
 "headsofsteele": {
 "checked": "2026-11-11T19:14:31+00:00",
 "linksChecked": "2026-11-11T19:15:49+00:00",
@@ -96410,6 +96429,18 @@
 "Charlie Simpson"
 ]
 },
+"leer": {
+"appleUrl": "https://music.apple.com/us/artist/leer/1600631196?uo=4",
+"checked": "2026-11-18T13:37:18+00:00",
+"fans": 101,
+"genre": "Punk",
+"image": "https://cdn-images.dzcdn.net/images/artist/14a09b13dae6a7d91f5acb9de0e46dbc/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-18T13:37:22+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Leer",
+"related": []
+},
 "leeranaldo": {
 "appleUrl": "https://music.apple.com/us/artist/lee-ranaldo/18901092?uo=4",
 "checked": "2026-11-13T16:50:40+00:00",
@@ -104692,15 +104723,29 @@
 "related": []
 },
 "marcomendoza": {
-"checked": "1970-01-01T00:00:00+00:00",
-"links": {
-"applemusic": "https://music.apple.com/us/artist/marco-mendoza/81137792",
-"instagram": "https://www.instagram.com/marcomendozaofficial/",
-"spotify": "https://open.spotify.com/artist/7mnsWRY95TpZRGbiCh93Ob",
-"website": "http://www.marcomendoza.com/",
-"youtube": "https://www.youtube.com/channel/UCk3qpun47735rdSGCSj4g0Q"
-},
-"name": "Marco Mendoza"
+"appleUrl": "https://music.apple.com/us/artist/marco-mendoza/81137792?uo=4",
+"checked": "2026-11-18T13:33:49+00:00",
+"fans": 762,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/68b766ee668316c683092dc3930113e0/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-18T13:34:09+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "MARCO MENDOZA",
+"related": [
+"Glenn Hughes",
+"Joe Satriani",
+"Black Star Riders",
+"Thunder",
+"The Lazys",
+"The Dead Daisies",
+"The Wild!",
+"Gunshine",
+"Inglorious",
+"Bonafide",
+"Koritni",
+"The Answer"
+]
 },
 "marcrebillet": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -128630,6 +128675,40 @@
 "name": "Pool Kids",
 "related": []
 },
+"poolside": {
+"appleUrl": "https://music.apple.com/us/artist/poolside/317847592?uo=4",
+"checked": "2026-11-18T13:38:25+00:00",
+"fans": 14147,
+"genre": "Electronic",
+"image": "https://cdn-images.dzcdn.net/images/artist/9efd3f157de0f238a08e01891c2fd383/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/317847592",
+"bandcamp": "https://poolside.bandcamp.com/",
+"instagram": "https://www.instagram.com/poolside/",
+"soundcloud": "https://soundcloud.com/poolside",
+"spotify": "https://open.spotify.com/artist/5szdY7KaSi7epwyffrbV8c",
+"website": "http://poolsidemusic.com/",
+"youtube": "https://www.youtube.com/channel/UCka2GfVhKdJWaPTk2hlgEaA"
+},
+"linksChecked": "2026-11-18T13:38:33+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Poolside",
+"related": [
+"Kraak & Smaak",
+"Parcels",
+"Franc Moody",
+"Jean Tonique",
+"Roosevelt",
+"Miami Horror",
+"Anoraak",
+"LEISURE",
+"L'Imp\u00e9ratrice",
+"Total Giovanni",
+"NEIL FRANCES",
+"Kimchii"
+]
+},
 "poompoomtuesday": {
 "checked": "2026-11-02T06:01:51+00:00",
 "linksChecked": "2026-11-06T01:26:12+00:00",
@@ -132775,6 +132854,18 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Raza Rage"
+},
+"rbber": {
+"appleUrl": "https://music.apple.com/us/artist/r%C3%B8bber/982745836?uo=4",
+"checked": "2026-11-18T13:33:49+00:00",
+"fans": 8,
+"genre": "Electronic",
+"image": "https://cdn-images.dzcdn.net/images/artist/a708a3e69a0fa5218f5d6553a65ea8ac/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-18T13:34:09+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "R\u00d8BBER",
+"related": []
 },
 "rbe": {
 "appleUrl": "https://music.apple.com/us/artist/rbe/1624588428?uo=4",
@@ -152387,6 +152478,18 @@
 "name": "Street Sweepers",
 "related": []
 },
+"streettrash": {
+"appleUrl": "https://music.apple.com/us/artist/street-trash/1758450266?uo=4",
+"checked": "2026-11-18T13:33:49+00:00",
+"fans": 4,
+"genre": "Punk",
+"image": "https://cdn-images.dzcdn.net/images/artist/58d086b42b3651fb26a5c65207770519/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-18T13:34:09+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Street Trash",
+"related": []
+},
 "strike": {
 "appleUrl": "https://music.apple.com/us/artist/the-strike/632957415?uo=4",
 "checked": "2026-11-05T13:26:56+00:00",
@@ -161045,6 +161148,15 @@
 "linksVersion": 2,
 "name": "Tone Bell"
 },
+"tones": {
+"appleUrl": "https://music.apple.com/us/artist/the-tones/1453810450?uo=4",
+"checked": "2026-11-18T13:38:25+00:00",
+"genre": "Reggae",
+"linksChecked": "2026-11-18T13:38:33+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "The Tones"
+},
 "tonyamoon": {
 "checked": "1970-01-01T00:00:00+00:00",
 "linksChecked": "2026-11-06T07:32:47+00:00",
@@ -166104,6 +166216,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "uring Denny Love"
+},
+"uringearthquake": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-18T13:34:09+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "uring Earthquake"
 },
 "uringpottymouthchix": {
 "checked": "1970-01-01T00:00:00+00:00",
