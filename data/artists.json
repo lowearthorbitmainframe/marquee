@@ -16586,6 +16586,18 @@
 "Vybz Kartel"
 ]
 },
+"beethoven": {
+"appleUrl": "https://music.apple.com/us/artist/beethoven/1891436918?uo=4",
+"checked": "2026-11-20T13:33:49+00:00",
+"fans": 627,
+"genre": "Punk",
+"image": "https://cdn-images.dzcdn.net/images/artist/818c3c379368ebc1d26edf227a035988/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-20T13:34:09+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Beethoven",
+"related": []
+},
 "beezy": {
 "appleUrl": "https://music.apple.com/us/artist/beezy/1720525966?uo=4",
 "checked": "2026-11-19T04:48:27+00:00",
@@ -45764,6 +45776,18 @@
 "name": "DEVORA",
 "related": []
 },
+"devotedfans": {
+"appleUrl": "https://music.apple.com/us/artist/devoted-fans/1633079245?uo=4",
+"checked": "2026-11-20T13:37:16+00:00",
+"fans": 3,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/c4a4f67ef6407861610b5176a785b945/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Devoted Fans",
+"related": []
+},
 "devotionaldepechemodetribute": {
 "checked": "2026-11-05T19:33:44+00:00",
 "linksChecked": "2026-11-07T07:46:42+00:00",
@@ -50859,6 +50883,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Dreadneck Wednesdays"
+},
+"dreamarenasanddarkhairedangels": {
+"checked": "2026-11-20T13:37:16+00:00",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Dream Arenas and Dark Haired Angels"
 },
 "dreamchasersnights": {
 "checked": "2026-10-31T03:16:23+00:00",
@@ -64967,6 +64998,15 @@
 "checked": "2026-11-02T06:01:51+00:00",
 "name": "Fundraiser for Nepal"
 },
+"funeralcake": {
+"appleUrl": "https://music.apple.com/us/artist/funeral-cake/1683154976?uo=4",
+"checked": "2026-11-20T13:37:16+00:00",
+"genre": "Alternative",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Funeral Cake"
+},
 "funeralportrait": {
 "appleUrl": "https://music.apple.com/us/artist/the-funeral-portrait/917467004?uo=4",
 "checked": "2026-11-05T07:32:25+00:00",
@@ -78716,6 +78756,13 @@
 "linksVersion": 2,
 "name": "Igor & The Red Elvises",
 "related": []
+},
+"igorkoganslabigband": {
+"checked": "2026-11-20T13:33:49+00:00",
+"linksChecked": "2026-11-20T13:34:09+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Igor Kogan\u2019s LA Big Band"
 },
 "igorlevit": {
 "appleUrl": "https://music.apple.com/us/artist/igor-levit/458267726?uo=4",
@@ -110732,6 +110779,13 @@
 "name": "Marina Fleming",
 "related": []
 },
+"marinbluegrasssessionsnovember": {
+"checked": "2026-11-20T13:37:16+00:00",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Marin Bluegrass Sessions November"
+},
 "marinelli": {
 "appleUrl": "https://music.apple.com/us/artist/marinelli/1498236313?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -110888,6 +110942,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Mark Curry"
+},
+"markeitzelandmore": {
+"checked": "2026-11-20T13:37:16+00:00",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Mark Eitzel and more..."
 },
 "markellis": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -119593,6 +119654,18 @@
 "linksMatch": "only",
 "linksVersion": 2,
 "name": "Movie Club",
+"related": []
+},
+"mozart": {
+"appleUrl": "https://music.apple.com/us/artist/mozart/1500680684?uo=4",
+"checked": "2026-11-20T13:33:49+00:00",
+"fans": 71,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/82103d7981bfb5ffe5012bfa432c7a49/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-20T13:34:09+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Mozart",
 "related": []
 },
 "mozartquintetandworldpremiere": {
@@ -148269,10 +148342,16 @@
 ]
 },
 "secretfamily": {
-"checked": "1970-01-01T00:00:00+00:00",
-"linksChecked": "2026-11-05T07:57:20+00:00",
+"appleUrl": "https://music.apple.com/us/artist/secret-family/1789382863?uo=4",
+"checked": "2026-11-20T13:37:16+00:00",
+"fans": 11,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/1447d974860531d4b81d1c9cf1b2ab82/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-20T13:37:53+00:00",
 "linksMatch": "only",
-"name": "Secret Family"
+"linksVersion": 2,
+"name": "Secret Family",
+"related": []
 },
 "secrets": {
 "appleUrl": "https://music.apple.com/us/artist/secrets/480353690?uo=4",
@@ -152748,6 +152827,18 @@
 "linksVersion": 2,
 "name": "Sleepwalk Live in Los Angeles"
 },
+"sleepyhead": {
+"appleUrl": "https://music.apple.com/us/artist/sleepy-head/1356007932?uo=4",
+"checked": "2026-11-20T13:37:16+00:00",
+"fans": 347,
+"genre": "Pop",
+"image": "https://cdn-images.dzcdn.net/images/artist/b4a07e8c5a930dabc0f8c7242e19cd27/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Sleepyhead",
+"related": []
+},
 "sleevies": {
 "appleUrl": "https://music.apple.com/us/artist/sleevies/1895179868?uo=4",
 "checked": "2026-11-02T06:01:51+00:00",
@@ -153072,6 +153163,13 @@
 "From Indian Lakes",
 "Quarters"
 ]
+},
+"slowjoyawannabetba": {
+"checked": "2026-11-20T13:37:16+00:00",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Slow Joy/ aWannabe/ TBA"
 },
 "slowpulp": {
 "appleUrl": "https://music.apple.com/us/artist/slow-pulp/1247711013?uo=4",
@@ -162000,6 +162098,18 @@
 "linksVersion": 2,
 "name": "Sweet Relief Musicians Fund"
 },
+"sweetwaterblack": {
+"appleUrl": "https://music.apple.com/us/artist/sweetwater-black/1522002394?uo=4",
+"checked": "2026-11-20T13:37:16+00:00",
+"fans": 0,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/271c257765b4f13ec2e6bbc68bc8e7c8/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-20T13:37:53+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Sweetwater Black",
+"related": []
+},
 "swelles": {
 "appleUrl": "https://music.apple.com/us/artist/swelles/1661354187?uo=4",
 "checked": "2026-11-15T19:03:39+00:00",
@@ -165050,6 +165160,13 @@
 "linksMatch": "wikidata",
 "linksVersion": 2,
 "name": "Terry Fator"
+},
+"terynrechristmasbigband": {
+"checked": "2026-11-20T13:33:49+00:00",
+"linksChecked": "2026-11-20T13:34:09+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "TERYN RE\u2019 CHRISTMAS BIG BAND"
 },
 "teskeybrothers": {
 "appleUrl": "https://music.apple.com/us/artist/the-teskey-brothers/1157188407?uo=4",
@@ -180016,6 +180133,13 @@
 "Moods",
 "Tim Atlas"
 ]
+},
+"winterholidayspecial": {
+"checked": "2026-11-20T13:33:49+00:00",
+"linksChecked": "2026-11-20T13:34:09+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Winter Holiday Special"
 },
 "wintersong": {
 "appleUrl": "https://music.apple.com/us/artist/wintersong/940123449?uo=4",
