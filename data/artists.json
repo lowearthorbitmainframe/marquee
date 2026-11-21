@@ -28394,6 +28394,15 @@
 "linksVersion": 2,
 "name": "Camille Waters"
 },
+"camillionaire": {
+"appleUrl": "https://music.apple.com/us/artist/camillionaire/1848472748?uo=4",
+"checked": "2026-11-21T19:08:59+00:00",
+"genre": "Bass",
+"linksChecked": "2026-11-21T19:09:17+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "CAMILLIONAIRE"
+},
 "camirinfarmer": {
 "checked": "2026-11-18T07:36:26+00:00",
 "linksChecked": "2026-11-18T07:37:08+00:00",
@@ -55472,6 +55481,13 @@
 "name": "Electric Avenue",
 "related": []
 },
+"electriccompanytheatre": {
+"checked": "2026-11-21T19:05:59+00:00",
+"linksChecked": "2026-11-21T19:06:14+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "electriccompanytheatre"
+},
 "electricexandyourstraydog": {
 "checked": "2026-11-05T20:49:32+00:00",
 "linksChecked": "2026-11-05T22:01:58+00:00",
@@ -64569,6 +64585,15 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Framework Afterparty"
+},
+"france": {
+"appleUrl": "https://music.apple.com/us/artist/france/1572293718?uo=4",
+"checked": "2026-11-21T19:08:59+00:00",
+"genre": "Hip-Hop/Rap",
+"linksChecked": "2026-11-21T19:09:17+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "France)"
 },
 "francenerouelle": {
 "appleUrl": "https://music.apple.com/us/artist/francene-rouelle/1678166838?uo=4",
@@ -107963,6 +107988,13 @@
 "Lulleaux",
 "FROIDZ"
 ]
+},
+"loucalyptous": {
+"checked": "2026-11-21T19:08:59+00:00",
+"linksChecked": "2026-11-21T19:09:17+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "LOU CALYPTOUS"
 },
 "loudeezi": {
 "appleUrl": "https://music.apple.com/us/artist/lou-deezi/1627666867?uo=4",
@@ -151925,6 +151957,13 @@
 "name": "Sebastien Bordeaux",
 "related": []
 },
+"sebelzinparis": {
+"checked": "2026-11-21T19:08:59+00:00",
+"linksChecked": "2026-11-21T19:09:17+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "SEB EL ZIN (Paris"
+},
 "seblowe": {
 "appleUrl": "https://music.apple.com/us/artist/seb-lowe/1595247915?uo=4",
 "checked": "2026-11-02T19:06:58+00:00",
@@ -158761,6 +158800,18 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Son of Ed",
+"related": []
+},
+"sonofheatwave": {
+"appleUrl": "https://music.apple.com/us/artist/son-of-heatwave/271342954?uo=4",
+"checked": "2026-11-21T19:05:59+00:00",
+"fans": 3,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/b7f5e9262eae6d20a347ca88dcd4edb7/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-21T19:06:14+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Son Of Heatwave",
 "related": []
 },
 "sonoratukukuy": {
@@ -166111,6 +166162,35 @@
 "checked": "2026-11-02T06:01:51+00:00",
 "name": "Sweet D's Country Revue"
 },
+"sweetnobody": {
+"appleUrl": "https://music.apple.com/us/artist/sweet-nobody/1528399134?uo=4",
+"checked": "2026-11-21T19:05:59+00:00",
+"fans": 33,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/087b54e8c3b64abf1c5bf8e9b678acb1/250x250-000000-80-0-0.jpg",
+"links": {
+"bandcamp": "https://sweet-nobody.bandcamp.com/",
+"instagram": "https://www.instagram.com/sweet__nobody/"
+},
+"linksChecked": "2026-11-21T19:06:14+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Sweet Nobody",
+"related": [
+"Flamingods",
+"Steve Mason",
+"Pottery",
+"Only Real",
+"wampire",
+"Ponta Preta",
+"Fontanarosa",
+"BRNS",
+"Quilt",
+"Shannon and The Clams",
+"Flasher",
+"!!!"
+]
+},
 "sweetpickles": {
 "appleUrl": "https://music.apple.com/us/artist/sweet-pickles/1541464921?uo=4",
 "checked": "2026-11-07T01:43:29+00:00",
@@ -169628,6 +169708,13 @@
 "linksMatch": "apple",
 "linksVersion": 2,
 "name": "THANK YOU!"
+},
+"thankyoukabakapyramid": {
+"checked": "2026-11-21T19:08:59+00:00",
+"linksChecked": "2026-11-21T19:09:17+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "THANK YOU* Kabaka Pyramid"
 },
 "thankyouscientist": {
 "appleUrl": "https://music.apple.com/us/artist/thank-you-scientist/414127865?uo=4",
@@ -177931,6 +178018,13 @@
 "Norman Brown",
 "Euge Groove"
 ]
+},
+"upcomingperformances": {
+"checked": "2026-11-21T19:05:59+00:00",
+"linksChecked": "2026-11-21T19:06:14+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "upcomingperformances"
 },
 "uplift": {
 "appleUrl": "https://music.apple.com/us/artist/uplift/216618217?uo=4",
