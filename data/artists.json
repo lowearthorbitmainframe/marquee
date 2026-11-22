@@ -40951,6 +40951,13 @@
 "checked": "2026-11-14T22:32:55+00:00",
 "name": "Dalek // Fatboi Sharif // Person"
 },
+"dalewayne": {
+"checked": "2026-11-22T13:14:25+00:00",
+"linksChecked": "2026-11-22T13:14:52+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Dale Wayne"
+},
 "dalhaus": {
 "appleUrl": "https://music.apple.com/us/artist/dalhaus/1537532330?uo=4",
 "checked": "2026-11-05T03:49:11+00:00",
@@ -47338,6 +47345,13 @@
 "Lee Konitz",
 "Horace Silver"
 ]
+},
+"dezoneal": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-22T13:19:25+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "DEZ O'NEAL"
 },
 "dgtlclr": {
 "appleUrl": "https://music.apple.com/us/artist/dgtl-clr/1243659872?uo=4",
@@ -78666,6 +78680,13 @@
 "Sebastian Kamae"
 ]
 },
+"homesickdrifters": {
+"checked": "2026-11-22T13:14:25+00:00",
+"linksChecked": "2026-11-22T13:14:52+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Homesick Drifters"
+},
 "honeybunandhomeroom": {
 "checked": "2026-11-17T22:51:39+00:00",
 "name": "Honey Bun & Home Room"
@@ -87492,6 +87513,28 @@
 "linksVersion": 2,
 "name": "Jeffrey Reyes Jr"
 },
+"jeffreysilverstein": {
+"appleUrl": "https://music.apple.com/us/artist/jeffrey-silverstein/574799613?uo=4",
+"checked": "2026-11-22T13:14:25+00:00",
+"fans": 198,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/de4345af517730195fcdbd564483b6b2/250x250-000000-80-0-0.jpg",
+"name": "Jeffrey Silverstein",
+"related": [
+"Reverend Baron",
+"John Fahey",
+"Dream Sitch",
+"Steve Gunn",
+"Marisa Anderson",
+"Dick Stusso",
+"Chris Cohen",
+"Tim Hill",
+"Alabaster Deplume",
+"Michael Nau",
+"William Tyler",
+"Ted Lucas"
+]
+},
 "jeffrichards": {
 "checked": "1970-01-01T00:00:00+00:00",
 "links": {
@@ -92087,6 +92130,18 @@
 "linksMatch": "apple",
 "linksVersion": 2,
 "name": "Joseon",
+"related": []
+},
+"joseph": {
+"appleUrl": "https://music.apple.com/us/artist/joseph/1053275225?uo=4",
+"checked": "2026-11-22T13:14:25+00:00",
+"fans": 32,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/c20479cd16c0fc7fbab280eab1112d62/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-22T13:14:52+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "JOSEPH",
 "related": []
 },
 "josephdeebradshow": {
@@ -120620,6 +120675,13 @@
 "Andy Mineo"
 ]
 },
+"milfymedium": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-22T13:19:25+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "THE MILFY MEDIUM"
+},
 "militarygenius": {
 "checked": "1970-01-01T00:00:00+00:00",
 "links": {
@@ -122319,6 +122381,16 @@
 "linksVersion": 2,
 "name": "MON\u00c9T"
 },
+"moniquemarvez": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/the-monique-marvez-show/id1158298812"
+},
+"linksChecked": "2026-11-22T13:19:25+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "MONIQUE MARVEZ"
+},
 "monk": {
 "appleUrl": "https://music.apple.com/us/artist/monk/1275628280?uo=4",
 "checked": "2026-11-06T13:40:19+00:00",
@@ -123310,6 +123382,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Moss Pig"
+},
+"mosswoodprojectandechomarine": {
+"checked": "2026-11-22T13:18:20+00:00",
+"linksChecked": "2026-11-22T13:18:27+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "The Mosswood Project and Echomarine"
 },
 "mostwanted": {
 "appleUrl": "https://music.apple.com/us/artist/most-wanted/1649392396?uo=4",
@@ -128156,6 +128235,36 @@
 "Little Image",
 "Beach Weather",
 "In Color"
+]
+},
+"nighttime": {
+"appleUrl": "https://music.apple.com/us/artist/nighttime/927540436?uo=4",
+"checked": "2026-11-22T13:14:25+00:00",
+"fans": 42,
+"genre": "Alternative Folk",
+"image": "https://cdn-images.dzcdn.net/images/artist/c121fd5c2a1531306995890c8872bbd4/250x250-000000-80-0-0.jpg",
+"links": {
+"bandcamp": "https://nighttimes.bandcamp.com/",
+"instagram": "https://www.instagram.com/nighttime666/",
+"website": "http://nighttime.band/"
+},
+"linksChecked": "2026-11-22T13:14:52+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Nighttime",
+"related": [
+"Tiny Ruins",
+"Claire days",
+"Indigo Sparke",
+"The Innocence Mission",
+"Angel Olsen",
+"Villagers",
+"Shannon Lay",
+"Angelo De Augustine",
+"M. Ward",
+"Cassandra Jenkins",
+"Helena Deland",
+"Cabane"
 ]
 },
 "nigiolee": {
@@ -140665,6 +140774,13 @@
 "linksVersion": 2,
 "name": "Pretty Sweet"
 },
+"prideandseek": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-22T13:19:25+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "PRIDE & SEEK"
+},
 "primadonnarising": {
 "appleUrl": "https://music.apple.com/us/artist/prima-donna-rising/1444717649?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -144026,6 +144142,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "READMITTED"
+},
+"realbigbadandjager": {
+"checked": "2026-11-22T13:14:25+00:00",
+"linksChecked": "2026-11-22T13:14:52+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "The Real Big Bad and Jager"
 },
 "realitycheck": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -155804,6 +155927,13 @@
 "Kolohe Kai",
 "Sons Of Zion"
 ]
+},
+"sibyllinerecorddjs": {
+"checked": "2026-11-22T13:14:25+00:00",
+"linksChecked": "2026-11-22T13:14:52+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Sibylline Record DJs"
 },
 "sickjacken": {
 "appleUrl": "https://music.apple.com/us/artist/sick-jacken/77808381?uo=4",
@@ -171013,6 +171143,13 @@
 "linksVersion": 2,
 "name": "TG BAD"
 },
+"tgituesday": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-22T13:19:25+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "TGI TUESDAY"
+},
 "thaalkaholiks": {
 "appleUrl": "https://music.apple.com/us/artist/tha-alkaholiks/200367?uo=4",
 "checked": "2026-11-14T01:19:27+00:00",
@@ -179293,6 +179430,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Unreal Magic"
+},
+"unresolvedband": {
+"checked": "2026-11-22T13:18:20+00:00",
+"linksChecked": "2026-11-22T13:18:27+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Unresolved Band"
 },
 "unrestricted": {
 "appleUrl": "https://music.apple.com/us/artist/unrestricted/125346005?uo=4",
