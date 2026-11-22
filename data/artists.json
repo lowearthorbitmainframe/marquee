@@ -15889,6 +15889,18 @@
 "Doodseskader"
 ]
 },
+"barbarycoasters": {
+"appleUrl": "https://music.apple.com/us/artist/the-barbary-coasters/302606710?uo=4",
+"checked": "2026-11-22T19:10:02+00:00",
+"fans": 7,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/aacca6fa375c6aae4349897a4b19b0b3/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-22T19:10:15+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "The Barbary Coasters",
+"related": []
+},
 "barbelith": {
 "appleUrl": "https://music.apple.com/us/artist/barbelith/933632434?uo=4",
 "checked": "2026-11-17T22:40:04+00:00",
@@ -31823,6 +31835,13 @@
 "charlieparrmaisyowen": {
 "checked": "2026-11-15T04:53:12+00:00",
 "name": "Charlie Parr \u2022 Maisy Owen"
+},
+"charliepotatoes": {
+"checked": "2026-11-22T19:10:02+00:00",
+"linksChecked": "2026-11-22T19:10:15+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Charlie Potatoes"
 },
 "charlieputh": {
 "appleUrl": "https://music.apple.com/us/artist/charlie-puth/336249253?uo=4",
@@ -87574,6 +87593,16 @@
 "fans": 198,
 "genre": "Country",
 "image": "https://cdn-images.dzcdn.net/images/artist/de4345af517730195fcdbd564483b6b2/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/574799613",
+"bandcamp": "https://jeffreysilverstein.bandcamp.com/",
+"instagram": "https://www.instagram.com/jeffreee/",
+"spotify": "https://open.spotify.com/artist/0X7vWupejzA2A8bwITrWot",
+"website": "https://www.jeffreylewissilverstein.com/"
+},
+"linksChecked": "2026-11-22T19:07:09+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Jeffrey Silverstein",
 "related": [
 "Reverend Baron",
@@ -168006,6 +168035,16 @@
 "sweetdscountryrevue": {
 "checked": "2026-11-02T06:01:51+00:00",
 "name": "Sweet D's Country Revue"
+},
+"sweethearts": {
+"checked": "2026-11-22T19:10:02+00:00",
+"fans": 50,
+"image": "https://cdn-images.dzcdn.net/images/artist/e016f459215880d78c730f660587996b/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-22T19:10:15+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "The Sweet Hearts",
+"related": []
 },
 "sweetnobody": {
 "appleUrl": "https://music.apple.com/us/artist/sweet-nobody/1528399134?uo=4",
