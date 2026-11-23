@@ -109,10 +109,6 @@ struct RootView: View {
                 .tint(Theme.accent)
                 .tabItem { tabLabel("Tonight", "sparkles", 0) }
                 .tag(0)
-            BrowseView()
-                .tint(Theme.accent)
-                .tabItem { tabLabel("Browse", "calendar", 1) }
-                .tag(1)
             VenuesView()
                 .tint(Theme.accent)
                 .tabItem { tabLabel("Venues", "building.columns", 2) }

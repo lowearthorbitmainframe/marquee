@@ -278,16 +278,32 @@ struct ArtistsEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            SectionHeader(title: "Artists you love", subtitle: "Used to find them, and bands like them")
+            SectionHeader(title: "Artists you love", subtitle: "Musicians and comedians. Used for For You, alerts and bands like them")
 
             HStack(spacing: 8) {
-                TextField("Add an artist", text: $draft)
+                TextField("Add an artist or comedian", text: $draft)
                     .textFieldStyle(.roundedBorder)
                     .submitLabel(.done)
                     .onSubmit(add)
                 Button("Add", action: add)
                     .buttonStyle(.bordered)
                     .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+
+            ForEach(suggestions, id: \.name) { suggestion in
+                Button {
+                    draft = suggestion.name
+                    add()
+                } label: {
+                    HStack {
+                        Image(systemName: "plus.circle")
+                        Text(suggestion.name)
+                        Spacer()
+                        Text(suggestion.kind).font(.caption).foregroundStyle(.secondary)
+                    }
+                    .frame(minHeight: 36)
+                }
+                .buttonStyle(.plain)
             }
 
             if !taste.profile.favoriteArtists.isEmpty {
@@ -320,15 +336,18 @@ struct ArtistsEditor: View {
                 .disabled(importingSpotify)
             }
 
-            if !taste.profile.libraryArtists.isEmpty {
-                Text("\(taste.profile.libraryArtists.count) artists imported from your Apple Music library")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            if let spotify = taste.profile.spotifyArtists, !spotify.isEmpty {
-                Text("\(spotify.count) artists imported from Spotify")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+            if !taste.profile.allImportedArtists.isEmpty {
+                Button {
+                    showsLibrary = true
+                } label: {
+                    HStack {
+                        Label(librarySummary, systemImage: "checklist")
+                        Spacer()
+                        Image(systemName: "chevron.right").foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.bordered)
             }
             if let synced = taste.profile.librarySyncedAt, !taste.profile.importedArtists.isEmpty {
                 Text("Checked for new artists \(synced.formatted(.relative(presentation: .named))). Scenester checks again about once a week.")
@@ -347,6 +366,34 @@ struct ArtistsEditor: View {
                 Text(importMessage).font(.footnote).foregroundStyle(.secondary)
             }
         }
+        .sheet(isPresented: $showsLibrary) { LibraryArtistsView() }
+    }
+
+    @EnvironmentObject private var store: FeedStore
+    @State private var showsLibrary = false
+
+    private var librarySummary: String {
+        let all = taste.profile.allImportedArtists.count
+        let off = all - taste.profile.importedArtists.count
+        let base = "\(all) artists from your library"
+        return off > 0 ? base + " (\(off) off)" : base
+    }
+
+    /// Performers on upcoming shows (music, nightlife and comedy) whose names match what's typed.
+    private var suggestions: [(name: String, kind: String)] {
+        let key = ArtistKey.make(draft)
+        guard key.count >= 2 else { return [] }
+        var seen = Set<String>()
+        var found: [(name: String, kind: String)] = []
+        for event in store.events where [.music, .party, .comedy].contains(event.kind) {
+            for name in event.artists {
+                let nameKey = ArtistKey.make(name)
+                guard nameKey.hasPrefix(key), !taste.isFavorite(name), seen.insert(nameKey).inserted else { continue }
+                found.append((name, event.kind == .comedy ? "Comedian" : "Artist"))
+                if found.count == 4 { return found }
+            }
+        }
+        return found
     }
 
     private func add() {

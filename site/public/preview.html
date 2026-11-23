@@ -82,7 +82,7 @@
       <h1 id="note-title">Your venue in Scenester</h1>
       <p id="note-body">This is exactly how your venue appears in Scenester, a free iPhone app that shows what's happening tonight. It's built from the app's live listings, so it updates as your calendar changes. Tap any show to see its page.</p>
       <div class="actions" id="actions"></div>
-      <p class="small">Each "Get tickets" button goes straight to your own ticket page. Scenester doesn't sell tickets, charge venues or take a cut.</p>
+      <p class="small">Each "Get tickets" button goes straight to your own ticket page. Scenester doesn't sell tickets, charge venues or take a cut. Ask us to remove your listing at any time and it's gone within 48 hours.</p>
     </section>
     <div class="phone"><div class="screen" id="screen"><div class="status">Loading the listings…</div></div></div>
   </div>
@@ -201,14 +201,12 @@ function setNote() {
   document.getElementById("note-body").textContent =
     `This is exactly how ${name} appears in Scenester, a free iPhone app that shows what's happening tonight. ` +
     `It's built from the app's live listings, so it updates as your calendar changes. Tap any show to see its page.`;
-  const subject = `${name}: OK to list on Scenester`;
-  const yes = `mailto:venues@heyscenester.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Yes, ${name} is OK to list on Scenester.`)}`;
-  const fix = `mailto:venues@heyscenester.app?subject=${encodeURIComponent(name + ": a change to our Scenester listing")}`;
+  const ask = (what) => `mailto:venues@heyscenester.app?subject=${encodeURIComponent(`${name}: ${what}`)}`;
   const details = `/venues?${new URLSearchParams({ venue: name, region })}`;
   document.getElementById("actions").innerHTML =
-    `<a class="btn yes" href="${yes}">Looks good. Reply &ldquo;Yes&rdquo;</a>` +
-    `<a class="btn alt" href="${fix}">Something's wrong</a>` +
-    `<a class="btn alt" href="${details}">Update your details</a>`;
+    `<a class="btn yes" href="${details}">Update your details</a>` +
+    `<a class="btn alt" href="${ask("change our Scenester listing")}">Request a change</a>` +
+    `<a class="btn alt" href="${ask("remove our Scenester listing")}">Remove our listing</a>`;
 }
 
 async function load() {

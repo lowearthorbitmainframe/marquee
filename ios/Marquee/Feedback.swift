@@ -17,6 +17,7 @@ enum FeedbackKind: String, CaseIterable, Identifiable {
 struct FeedbackSection: View {
     @State private var showsFeedback = false
     @State private var showsVenue = false
+    @State private var showsListing = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -30,9 +31,15 @@ struct FeedbackSection: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             wideButton("Suggest a feature / report a problem", symbol: "bubble.left.and.text.bubble.right") { showsFeedback = true }
+                .padding(.bottom, 8)
+            Text("Run a venue? Ask us to change or remove its listing. Removals happen within 48 hours.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            wideButton("Change/Remove Listing", symbol: "pencil.and.list.clipboard") { showsListing = true }
         }
         .sheet(isPresented: $showsFeedback) { FeedbackView() }
         .sheet(isPresented: $showsVenue) { SuggestVenueView() }
+        .sheet(isPresented: $showsListing) { ListingRequestView() }
     }
 
     private func wideButton(_ title: String, symbol: String, action: @escaping () -> Void) -> some View {

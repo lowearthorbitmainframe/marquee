@@ -26,6 +26,11 @@ struct VenuesView: View {
         store.showCounts[venue.id] ?? 0
     }
 
+    /// Venues you follow get their own section at the top (switchable on the page).
+    @AppStorage("venues.yoursFirst") private var yoursFirst = true
+
+    private var followedFirst: Bool { yoursFirst && !taste.profile.followedVenues.isEmpty }
+
     @State private var isSuggesting = false
     // Kept apart from the search text, which iOS clears when the search field closes.
     @State private var suggestName = ""
@@ -52,11 +57,27 @@ struct VenuesView: View {
                         .background(Theme.card, in: Capsule())
                     }
                     CategoryChips(selection: $category)
-                    ForEach(filtered) { venue in
-                        NavigationLink(value: venue) {
-                            VenueRow(venue: venue, nextShow: nextShow(at: venue), showCount: showCount(venue))
+                    if !taste.profile.followedVenues.isEmpty {
+                        Toggle("Show my venues first", isOn: $yoursFirst)
+                            .font(.subheadline)
+                            .tint(Theme.accent)
+                            .padding(.horizontal, 4)
+                    }
+                    let venues = filtered
+                    if followedFirst {
+                        let mine = venues.filter { taste.profile.followedVenues.contains($0.id) }
+                        if !mine.isEmpty {
+                            SectionHeader(title: "Your venues", subtitle: mine.count == 1 ? "1 venue you follow" : "\(mine.count) venues you follow")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, 6)
+                            ForEach(mine) { row($0) }
+                            SectionHeader(title: "All venues")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, 10)
                         }
-                        .buttonStyle(.plain)
+                        ForEach(venues.filter { !taste.profile.followedVenues.contains($0.id) }) { row($0) }
+                    } else {
+                        ForEach(venues) { row($0) }
                     }
                     // A search that finds nothing is the moment someone knows a venue is missing.
                     if !search.trimmingCharacters(in: .whitespaces).isEmpty && filtered.isEmpty {
@@ -85,6 +106,13 @@ struct VenuesView: View {
             .venueSearch(text: $search)
             .marqueeDestinations()
         }
+    }
+
+    private func row(_ venue: Venue) -> some View {
+        NavigationLink(value: venue) {
+            VenueRow(venue: venue, nextShow: nextShow(at: venue), showCount: showCount(venue))
+        }
+        .buttonStyle(.plain)
     }
 
     private func nextShow(at venue: Venue) -> Event? {

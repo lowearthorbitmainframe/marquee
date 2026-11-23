@@ -26,8 +26,24 @@ struct TasteProfile: Codable, Equatable {
     /// Set once the headliners of shows hearted before that feature existed were added.
     var heartedHeadlinersAdded: Bool?
 
-    /// Everyone imported from a music library, Apple Music or Spotify.
-    var importedArtists: [String] { libraryArtists + (spotifyArtists ?? []) }
+    /// Library artists you switched off on the You page, by artist key. Kept apart from the
+    /// imports so the weekly re-check doesn't bring them back.
+    var excludedArtists: [String]?
+
+    /// Everyone imported from a music library, Apple Music or Spotify, minus the ones you switched off.
+    var importedArtists: [String] {
+        let excluded = Set(excludedArtists ?? [])
+        let all = libraryArtists + (spotifyArtists ?? [])
+        return excluded.isEmpty ? all : all.filter { !excluded.contains(ArtistKey.make($0)) }
+    }
+
+    /// Every imported artist, switched off or not, once each.
+    var allImportedArtists: [String] {
+        var seen = Set<String>()
+        return (libraryArtists + (spotifyArtists ?? [])).filter { seen.insert(ArtistKey.make($0)).inserted }
+    }
+
+    func isExcluded(_ artist: String) -> Bool { (excludedArtists ?? []).contains(ArtistKey.make(artist)) }
 
     var alertRegion: String { homeRegion ?? FeedConfig.defaultRegion.id }
 
@@ -153,6 +169,14 @@ final class TasteStore: ObservableObject {
         } else {
             profile.favoriteArtists.insert(artist, at: 0)
         }
+    }
+
+    /// Switches an imported library artist off (or back on) for For You, Your Artists and alerts.
+    func toggleExcluded(_ artist: String) {
+        let key = ArtistKey.make(artist)
+        var excluded = profile.excludedArtists ?? []
+        if excluded.contains(key) { excluded.removeAll { $0 == key } } else { excluded.append(key) }
+        profile.excludedArtists = excluded
     }
 }
 

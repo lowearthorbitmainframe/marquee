@@ -83,7 +83,6 @@ import SwiftUI
         print("rendered \(name)")
     }
     await render("tonight", TonightView())
-    await render("browse", BrowseView())
     await render("venues", VenuesView())
     let detail = echoplex.first { $0.artists.count >= 2 } ?? echoplex[0]
     await render("event", NavigationStack { EventDetailView(event: detail) }, height: 1000)

@@ -21,3 +21,20 @@ CREATE TABLE IF NOT EXISTS submissions (
   review_notes TEXT
 );
 CREATE INDEX IF NOT EXISTS submissions_token ON submissions(token);
+
+-- "Change/Remove Listing" requests from the app (functions/api/listing-request.js); each is also emailed.
+CREATE TABLE IF NOT EXISTS listing_requests (
+  id TEXT PRIMARY KEY,
+  created TEXT NOT NULL,
+  kind TEXT NOT NULL,          -- remove, change
+  venue TEXT NOT NULL,
+  venue_id TEXT,
+  region TEXT,
+  name TEXT NOT NULL,
+  role TEXT,
+  email TEXT NOT NULL,
+  details TEXT,
+  ip TEXT,
+  status TEXT NOT NULL DEFAULT 'new'   -- new, done
+);
+CREATE INDEX IF NOT EXISTS listing_requests_ip ON listing_requests(ip, created);
