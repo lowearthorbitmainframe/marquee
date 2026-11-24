@@ -465,6 +465,13 @@
 "Lames"
 ]
 },
+"1on1coachingcall": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "1 on 1 Coaching Call"
+},
 "1tbsp": {
 "appleUrl": "https://music.apple.com/us/artist/1tbsp/1548254435?uo=4",
 "checked": "2026-11-05T19:09:40+00:00",
@@ -54259,6 +54266,13 @@
 "Connan Mockasin"
 ]
 },
+"drugforlay": {
+"checked": "2026-11-24T13:39:45+00:00",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Drug Forlay"
+},
 "druhill": {
 "appleUrl": "https://music.apple.com/us/artist/dru-hill/290638?uo=4",
 "checked": "2026-11-12T22:48:36+00:00",
@@ -56348,6 +56362,18 @@
 "codiciado",
 "Grupo Arriesgado"
 ]
+},
+"edgeofdestiny": {
+"appleUrl": "https://music.apple.com/us/artist/edge-of-destiny/1459542931?uo=4",
+"checked": "2026-11-24T13:39:45+00:00",
+"fans": 5,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/998acc4636c1c8ed6ddf1240bf3b649f/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Edge of Destiny",
+"related": []
 },
 "edgeofsoul": {
 "checked": "2026-11-05T20:27:57+00:00",
@@ -59793,6 +59819,18 @@
 "Kaleen",
 "Mohombi"
 ]
+},
+"enolareven": {
+"appleUrl": "https://music.apple.com/us/artist/enola-reven/1767258529?uo=4",
+"checked": "2026-11-24T13:39:45+00:00",
+"fans": 1,
+"genre": "Metal",
+"image": "https://cdn-images.dzcdn.net/images/artist/5da38469d070fe1a3c441ef27fdc0ef3/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Enola Reven",
+"related": []
 },
 "enricafalqui": {
 "appleUrl": "https://music.apple.com/us/artist/enrica-falqui/379241594?uo=4",
@@ -79215,6 +79253,13 @@
 "image": "https://cdn-images.dzcdn.net/images/artist/0ae189b29279c63874e2a9221df69ddf/250x250-000000-80-0-0.jpg",
 "name": "Hillary Hahn",
 "related": []
+},
+"hillaryhutson": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Hillary Hutson"
 },
 "hillbillyvegas": {
 "appleUrl": "https://music.apple.com/us/artist/hillbilly-vegas/358163481?uo=4",
@@ -144260,6 +144305,13 @@
 "linksVersion": 2,
 "name": "Pressing Strings"
 },
+"pretendingchrissie": {
+"checked": "2026-11-24T13:39:45+00:00",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Pretending Chrissie"
+},
 "prettybitter": {
 "appleUrl": "https://music.apple.com/us/artist/pretty-bitter/1582259570?uo=4",
 "checked": "2026-11-16T11:08:07+00:00",
@@ -162145,6 +162197,13 @@
 "name": "Slaughtered",
 "related": []
 },
+"slaveremain": {
+"checked": "2026-11-24T13:39:45+00:00",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Slave Remain"
+},
 "slayer": {
 "appleUrl": "https://music.apple.com/us/artist/slayer/414425?uo=4",
 "checked": "2026-11-05T07:32:25+00:00",
@@ -170738,6 +170797,13 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Sunday Funday"
+},
+"sundaymetalmass": {
+"checked": "2026-11-24T13:39:45+00:00",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Sunday Metal Mass"
 },
 "sundaymourners": {
 "appleUrl": "https://music.apple.com/us/artist/sunday-mourners/1603378551?uo=4",
@@ -183139,6 +183205,27 @@
 "Little Barrie"
 ]
 },
+"u2": {
+"appleUrl": "https://music.apple.com/us/artist/u2/78500?uo=4",
+"checked": "2026-11-24T13:35:33+00:00",
+"fans": 3523,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/b91752665afc5ad29cf034a7757fecc8/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/ie/artist/78500",
+"instagram": "https://www.instagram.com/u2/",
+"soundcloud": "https://soundcloud.com/u2",
+"spotify": "https://open.spotify.com/artist/51Blml2LZPmy7TTiAg47vQ",
+"tiktok": "https://www.tiktok.com/@u2",
+"website": "https://www.u2.com/",
+"youtube": "https://www.youtube.com/channel/UC4gPNusMDwx2Xm-YI35AkCA"
+},
+"linksChecked": "2026-11-24T13:35:41+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "U2",
+"related": []
+},
 "uditnarayan": {
 "appleUrl": "https://music.apple.com/us/artist/udit-narayan/18485031?uo=4",
 "checked": "2026-11-14T04:48:36+00:00",
@@ -187759,6 +187846,40 @@
 "Bring Me the Horizon"
 ]
 },
+"warondrugs": {
+"appleUrl": "https://music.apple.com/us/artist/the-war-on-drugs/282078681?uo=4",
+"checked": "2026-11-24T13:35:33+00:00",
+"fans": 193581,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/f88938ffd800b30e121105b49d2e4604/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/mx/artist/282078681",
+"bandcamp": "https://thewarondrugs.bandcamp.com/",
+"instagram": "https://www.instagram.com/warondrugsjams/",
+"soundcloud": "https://soundcloud.com/thewarondrugs",
+"spotify": "https://open.spotify.com/artist/6g0mn3tzAds6aVeUYRsryU",
+"website": "http://www.thewarondrugs.net/",
+"youtube": "https://www.youtube.com/channel/UCHdMoJivRrKvVBndmkl0_Ow"
+},
+"linksChecked": "2026-11-24T13:35:41+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "The War On Drugs",
+"related": [
+"The National",
+"Future Islands",
+"Kurt Vile",
+"Wilco",
+"My Morning Jacket",
+"Elbow",
+"Spoon",
+"Band of Horses",
+"Ryan Adams",
+"The Shins",
+"Death Cab for Cutie",
+"Belle and Sebastian"
+]
+},
 "warpdinnerdatecrosswords": {
 "checked": "2026-11-07T19:16:35+00:00",
 "linksChecked": "2026-11-07T19:20:14+00:00",
@@ -188449,6 +188570,18 @@
 "linksMatch": "only",
 "linksVersion": 2,
 "name": "Weathers"
+},
+"webelong": {
+"appleUrl": "https://itunes.apple.com/us/artist/we-belong/471180029?uo=4",
+"checked": "2026-11-24T13:39:45+00:00",
+"fans": 17,
+"genre": "Tones",
+"image": "https://cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-24T13:40:12+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "We Belong",
+"related": []
 },
 "wednesday": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -191424,6 +191557,13 @@
 "linksVersion": 2,
 "name": "The Wombats",
 "related": []
+},
+"wonderbread5": {
+"checked": "2026-11-24T13:38:24+00:00",
+"linksChecked": "2026-11-24T13:38:28+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Wonder Bread 5"
 },
 "wonderfox": {
 "checked": "1970-01-01T00:00:00+00:00",
