@@ -36061,6 +36061,15 @@
 "name": "Clearcast",
 "related": []
 },
+"clencher": {
+"appleUrl": "https://music.apple.com/us/artist/clencher/6779214502?uo=4",
+"checked": "2026-11-24T07:44:24+00:00",
+"genre": null,
+"linksChecked": "2026-11-24T07:44:36+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "CLENCHER"
+},
 "cleopatrick": {
 "appleUrl": "https://music.apple.com/us/artist/cleopatrick/1079055121?uo=4",
 "checked": "2026-11-05T13:55:34+00:00",
@@ -67373,6 +67382,9 @@
 "appleUrl": "https://music.apple.com/us/artist/the-free-show/1649117661?uo=4",
 "checked": "2026-11-22T22:36:20+00:00",
 "genre": "Folk",
+"linksChecked": "2026-11-24T07:44:36+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "FREE SHOW"
 },
 "freestonepeaches": {
@@ -71483,6 +71495,18 @@
 "Bratty",
 "Ilse Hendrix"
 ]
+},
+"giselle": {
+"appleUrl": "https://music.apple.com/us/artist/giselle/1188479639?uo=4",
+"checked": "2026-11-24T07:40:22+00:00",
+"fans": 10,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/8215fc0c1e05c9500fb5bbe399ae92e9/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
+"name": "Giselle",
+"related": []
 },
 "gisellepeppers": {
 "checked": "2026-11-06T19:07:17+00:00",
@@ -87718,6 +87742,16 @@
 "linksVersion": 2,
 "name": "Jared Freid"
 },
+"jaredgoldstein": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/sorry-what-with-jared-goldstein/id1754882789"
+},
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Jared Goldstein"
+},
 "jaredlogan": {
 "checked": "1970-01-01T00:00:00+00:00",
 "linksChecked": "2026-11-06T01:26:12+00:00",
@@ -97881,6 +97915,15 @@
 "Virtual Riot",
 "Ray Volpe"
 ]
+},
+"kazimali": {
+"appleUrl": "https://music.apple.com/us/artist/kazim-ali/1255896724?uo=4",
+"checked": "2026-11-24T07:40:22+00:00",
+"genre": "Hip-Hop/Rap",
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Kazim Ali"
 },
 "kbanks": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -120624,6 +120667,13 @@
 "linksVersion": 2,
 "name": "Mere Noltilde"
 },
+"meridianaandofwhatremains": {
+"checked": "2026-11-24T07:44:24+00:00",
+"linksChecked": "2026-11-24T07:44:36+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Meridiana and Of What Remains"
+},
 "merkules": {
 "appleUrl": "https://music.apple.com/us/artist/merkules/519800366?uo=4",
 "checked": "2026-11-06T07:58:54+00:00",
@@ -137903,6 +137953,18 @@
 "linksVersion": 2,
 "name": "PARKHOUSE THANKSGIVING"
 },
+"parrandanavidena": {
+"appleUrl": "https://music.apple.com/us/artist/parranda-navide%C3%B1a/1558391954?uo=4",
+"checked": "2026-11-24T07:40:22+00:00",
+"fans": 5,
+"genre": "Folk-Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/3f2e18ac11cb14b5ebba8874d74f3170/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Parranda Navide\u00f1a",
+"related": []
+},
 "partxvi": {
 "checked": "1970-01-01T00:00:00+00:00",
 "linksChecked": "2026-11-13T16:55:16+00:00",
@@ -143119,6 +143181,22 @@
 "name": "PORK BELLY",
 "related": []
 },
+"porkboii": {
+"appleUrl": "https://music.apple.com/us/artist/porkboii/1493531233?uo=4",
+"checked": "2026-11-24T07:40:22+00:00",
+"fans": 54,
+"genre": "Singer/Songwriter",
+"image": "https://cdn-images.dzcdn.net/images/artist/65feb650a849486114c6346de723a713/250x250-000000-80-0-0.jpg",
+"links": {
+"bandcamp": "https://porkboii.bandcamp.com/",
+"website": "http://porkboii.com/"
+},
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Porkboii",
+"related": []
+},
 "porterrobinson": {
 "appleUrl": "https://music.apple.com/us/artist/porter-robinson/282330711?uo=4",
 "checked": "2026-11-06T19:25:15+00:00",
@@ -143582,6 +143660,13 @@
 "Nightstop",
 "LeBrock"
 ]
+},
+"prageetasharma": {
+"checked": "2026-11-24T07:40:22+00:00",
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Prageeta Sharma"
 },
 "prairie": {
 "appleUrl": "https://music.apple.com/us/artist/prairie/1863731840?uo=4",
@@ -146008,6 +146093,18 @@
 "Sorry",
 "Man/Woman/Chainsaw"
 ]
+},
+"radiorevolt": {
+"appleUrl": "https://music.apple.com/us/artist/radio-revolt/1550178962?uo=4",
+"checked": "2026-11-24T07:44:24+00:00",
+"fans": 17,
+"genre": "Metal",
+"image": "https://cdn-images.dzcdn.net/images/artist/489eee054e46fe9961d3af0cad5cba59/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-24T07:44:36+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "RADIO REVOLT",
+"related": []
 },
 "radneyfoster": {
 "appleUrl": "https://music.apple.com/us/artist/radney-foster/478510?uo=4",
@@ -165731,6 +165828,9 @@
 "fans": 13,
 "genre": null,
 "image": "https://cdn-images.dzcdn.net/images/artist/d787d3c8ecda7e6deb332a3ee48896d5/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
 "name": "Spout",
 "related": []
 },
@@ -169295,6 +169395,38 @@
 "Uriah Heep",
 "Toto",
 "Eddie Money"
+]
+},
+"subculture": {
+"appleUrl": "https://music.apple.com/us/artist/subculture/4906164?uo=4",
+"checked": "2026-11-24T07:40:22+00:00",
+"fans": 1287,
+"genre": "Electronic",
+"image": "https://cdn-images.dzcdn.net/images/artist/4ca3e6ed88c861eab75739d7f3f6069d/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/4906164",
+"bandcamp": "https://subculturebass.bandcamp.com/",
+"instagram": "https://www.instagram.com/subculturebass/",
+"soundcloud": "https://soundcloud.com/subculturebass",
+"spotify": "https://open.spotify.com/artist/1jPSdfdiXFItH1GXCABVQ9"
+},
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "subculture",
+"related": [
+"dreamcastmoe",
+"Jamie Isaac",
+"Pale Jay",
+"Deem Spencer",
+"Malaki",
+"lavender",
+"The Silhouettes Project",
+"Kadhja Bonet",
+"MNDSGn",
+"Kenny Beats",
+"Ivan Ave",
+"JGrrey"
 ]
 },
 "subdocta": {
@@ -172876,7 +173008,9 @@
 "genre": null,
 "image": "https://cdn-images.dzcdn.net/images/artist/05f1948a30c04feb14218bd2272b14b0/250x250-000000-80-0-0.jpg",
 "links": {
-"spotify": "https://open.spotify.com/artist/7b9ea1qYy8iXBCjGTWphtK"
+"instagram": "https://www.instagram.com/taniacassette/",
+"spotify": "https://open.spotify.com/artist/7b9ea1qYy8iXBCjGTWphtK",
+"website": "https://www.taniacassette.com/"
 },
 "linksChecked": "2026-11-24T01:40:56+00:00",
 "linksMatch": "only",
@@ -183857,6 +183991,13 @@
 "Dr. Fresch",
 "Sikdope"
 ]
+},
+"valeriehsiungsthepedestrian": {
+"checked": "2026-11-24T07:40:22+00:00",
+"linksChecked": "2026-11-24T07:40:49+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Valerie Hsiung's \"The Pedestrian"
 },
 "valerietosi": {
 "checked": "1970-01-01T00:00:00+00:00",
