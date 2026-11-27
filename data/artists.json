@@ -5846,6 +5846,18 @@
 "linksVersion": 2,
 "name": "Alfred Robles"
 },
+"algoslave": {
+"appleUrl": "https://music.apple.com/us/artist/algoslave/1847668461?uo=4",
+"checked": "2026-11-27T19:20:14+00:00",
+"fans": 2,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/3431773b578e10e668a9ec76e9a76f71/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-27T19:20:37+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Algoslave",
+"related": []
+},
 "alibis": {
 "appleUrl": "https://music.apple.com/us/artist/alibis/1687581339?uo=4",
 "checked": "2026-11-18T01:35:53+00:00",
@@ -31780,6 +31792,13 @@
 "name": "Cary Elwes",
 "related": []
 },
+"casanovaandkestrel": {
+"checked": "2026-11-27T19:20:14+00:00",
+"linksChecked": "2026-11-27T19:20:37+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Casanova and Kestrel"
+},
 "cascadeeffect": {
 "appleUrl": "https://music.apple.com/us/artist/cascade-effect/1726688188?uo=4",
 "checked": "2026-11-05T13:55:34+00:00",
@@ -53202,6 +53221,13 @@
 "Pearly Drops",
 "Vitesse X"
 ]
+},
+"djtackleboxandmatthewholt": {
+"checked": "2026-11-27T19:20:14+00:00",
+"linksChecked": "2026-11-27T19:20:37+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "DJ Tacklebox & Matthew Holt"
 },
 "djtara": {
 "appleUrl": "https://music.apple.com/us/artist/dj-tara/1426759233?uo=4",
@@ -134997,6 +135023,13 @@
 "name": "New Society +",
 "related": []
 },
+"newtrustandmidcoursecorrection": {
+"checked": "2026-11-27T19:20:14+00:00",
+"linksChecked": "2026-11-27T19:20:37+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "The New Trust and Midcourse Correction"
+},
 "newyearsatsound": {
 "checked": "2026-11-10T19:10:56+00:00",
 "linksChecked": "2026-11-10T19:13:19+00:00",
@@ -156815,6 +156848,21 @@
 "Whiskey Myers"
 ]
 },
+"robbarraco": {
+"appleUrl": "https://music.apple.com/us/artist/rob-barraco/5348003?uo=4",
+"checked": "2026-11-27T19:20:14+00:00",
+"fans": 11,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/c619b2de52d2cdcb7ec53220105fbf42/250x250-000000-80-0-0.jpg",
+"links": {
+"website": "https://www.darkstarorchestra.net/band/"
+},
+"linksChecked": "2026-11-27T19:20:37+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Rob Barraco",
+"related": []
+},
 "robberrobber": {
 "appleUrl": "https://music.apple.com/us/artist/robber-robber/1581686860?uo=4",
 "checked": "2026-11-05T13:26:56+00:00",
@@ -162022,6 +162070,13 @@
 "linksVersion": 2,
 "name": "Santana",
 "related": []
+},
+"santanaways": {
+"checked": "2026-11-27T19:22:43+00:00",
+"linksChecked": "2026-11-27T19:22:47+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Santana Ways"
 },
 "santapawsedition": {
 "checked": "2026-11-07T01:34:14+00:00",
@@ -185471,6 +185526,27 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "TimeBombs",
+"related": []
+},
+"timespentdriving": {
+"appleUrl": "https://music.apple.com/us/artist/time-spent-driving/36221346?uo=4",
+"checked": "2026-11-27T19:20:14+00:00",
+"fans": 122,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/c3186d07b972b9decd571233d780d36d/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/36221346",
+"bandcamp": "https://timespentdriving.bandcamp.com/",
+"instagram": "https://www.instagram.com/timespentdriving/",
+"soundcloud": "https://soundcloud.com/timespentdriving",
+"spotify": "https://open.spotify.com/artist/3FRK7L4QCaaSAY8bPD6EUA",
+"website": "http://www.timespentdriving.com/",
+"youtube": "https://www.youtube.com/channel/UCJc73-vFKCEPLuCWdNcze0w"
+},
+"linksChecked": "2026-11-27T19:20:37+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Time Spent Driving",
 "related": []
 },
 "timewarpla": {
