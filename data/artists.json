@@ -209,6 +209,12 @@
 "name": "12.4",
 "related": []
 },
+"125": {
+"appleUrl": "https://music.apple.com/us/artist/12-5/529596792?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"genre": "Hip-Hop/Rap",
+"name": "12.5"
+},
 "12guestsofxmas": {
 "checked": "1970-01-01T00:00:00+00:00",
 "linksChecked": "2026-11-08T13:08:52+00:00",
@@ -5082,6 +5088,9 @@
 "appleUrl": "https://music.apple.com/us/artist/alejandro-arce/1792125911?uo=4",
 "checked": "2026-11-15T04:53:12+00:00",
 "genre": "Latin",
+"linksChecked": "2026-11-28T10:48:43+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "Alejandro Arce"
 },
 "alejandroescovedo": {
@@ -15263,10 +15272,18 @@
 "genre": "Alternative",
 "image": "https://cdn-images.dzcdn.net/images/artist/28c61b68d185f7e3a1b3ecb14acf4164/250x250-000000-80-0-0.jpg",
 "links": {
+"applemusic": "https://music.apple.com/gb/artist/1715221007",
+"bandcamp": "https://welcome2babecity.bandcamp.com/",
 "instagram": "https://www.instagram.com/babe_city_/",
+"soundcloud": "https://soundcloud.com/welcome2babecity",
 "spotify": "https://open.spotify.com/artist/6gJFTd7nSDcRYemHGlPOid",
-"website": "https://welcome2babecity.com/"
+"tiktok": "https://www.tiktok.com/@babecity",
+"website": "https://welcome2babecity.com/",
+"youtube": "https://www.youtube.com/channel/UCBxGxGqI8pa9yNXNGrLRJtA"
 },
+"linksChecked": "2026-11-28T10:48:43+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Babe City",
 "related": []
 },
@@ -17374,6 +17391,28 @@
 "Milo Korbenski"
 ]
 },
+"bayfaction": {
+"appleUrl": "https://music.apple.com/us/artist/bay-faction/1038764931?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 641,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/5ea8deea251b4cc00d6149fdc180bed6/250x250-000000-80-0-0.jpg",
+"name": "BAY FACTION",
+"related": [
+"Worry Club",
+"The Frights",
+"Tiny Little Houses",
+"Turnover",
+"It Looks Sad.",
+"Sisyfuss",
+"A Great Big Pile of Leaves",
+"From Indian Lakes",
+"Mat Kerekes",
+"Foxing",
+"Remo Drive",
+"Quarters"
+]
+},
 "bayli": {
 "appleUrl": "https://music.apple.com/us/artist/bayli/967938951?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -18557,7 +18596,11 @@
 ]
 },
 "bellamybrothers": {
-"checked": "1970-01-01T00:00:00+00:00",
+"appleUrl": "https://music.apple.com/us/artist/the-bellamy-brothers/81887244?uo=4",
+"checked": "2026-11-28T10:39:01+00:00",
+"fans": 12042,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/dc727ef1aad3ed494fb1f07084b389ee/250x250-000000-80-0-0.jpg",
 "links": {
 "applemusic": "https://music.apple.com/gb/artist/81887244",
 "instagram": "https://www.instagram.com/bellamy_brothers/",
@@ -18565,10 +18608,24 @@
 "website": "http://www.bellamybrothers.com/",
 "youtube": "https://www.youtube.com/user/BellamyBrothers"
 },
-"linksChecked": "2026-11-28T04:46:01+00:00",
-"linksMatch": "only",
+"linksChecked": "2026-11-28T10:39:28+00:00",
+"linksMatch": "apple",
 "linksVersion": 2,
-"name": "Bellamy Brothers"
+"name": "Bellamy Brothers",
+"related": [
+"Kenny Rogers",
+"Bellamy Brothers",
+"Don Williams",
+"The Mavericks",
+"Carlene Carter",
+"Eddie Rabbitt",
+"Tanya Tucker",
+"Dwight Yoakam",
+"Lynn Anderson",
+"The Judds",
+"Charley Pride",
+"Ricky Van Shelton"
+]
 },
 "bellapoarch": {
 "appleUrl": "https://music.apple.com/us/artist/bella-poarch/1567245769?uo=4",
@@ -18968,12 +19025,16 @@
 "genre": "Rock",
 "image": "https://cdn-images.dzcdn.net/images/artist/92cb08a606b00a7b841f6f4b467dd67a/250x250-000000-80-0-0.jpg",
 "links": {
-"applemusic": "https://music.apple.com/us/artist/ben-folds/463277",
+"applemusic": "https://music.apple.com/gb/artist/463277",
 "instagram": "https://www.instagram.com/actualbenfolds/",
-"spotify": "https://open.spotify.com/artist/55tif8708yyDQlSjh3Trdu?autoplay=true",
+"soundcloud": "https://soundcloud.com/user7557926",
+"spotify": "https://open.spotify.com/artist/55tif8708yyDQlSjh3Trdu",
 "website": "http://www.benfolds.com/",
 "youtube": "https://www.youtube.com/channel/UCNjEo_L1jMY7mMqb5G70JvA"
 },
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Ben Folds",
 "related": [
 "The Decemberists",
@@ -24515,6 +24576,15 @@
 "fans": 3,
 "genre": "Alternative",
 "image": "https://cdn-images.dzcdn.net/images/artist/d39e7d4898ef993e726faf3dbd8bc512/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/67291928",
+"bandcamp": "https://bonnieprincebilly.bandcamp.com/",
+"spotify": "https://open.spotify.com/artist/2zAvisjImPICTNsRgagqlV",
+"website": "http://www.bonnieprincebilly.com/"
+},
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Bonnie Prince Billy",
 "related": []
 },
@@ -33192,12 +33262,16 @@
 "genre": "R&B/Soul",
 "image": "https://cdn-images.dzcdn.net/images/artist/2987c0a541cbdc74254bea2228d81390/250x250-000000-80-0-0.jpg",
 "links": {
-"applemusic": "https://music.apple.com/us/artist/chaka-khan/17402",
+"applemusic": "https://music.apple.com/us/artist/17402",
 "instagram": "https://www.instagram.com/chakaikhan/",
+"soundcloud": "https://soundcloud.com/chakakhan",
 "spotify": "https://open.spotify.com/artist/6mQfAAqZGBzIfrmlZCeaYT",
-"website": "http://www.chakakhan.com/",
-"youtube": "https://www.youtube.com/user/ChakaKhanChannel"
+"website": "https://www.chakakhan.com/",
+"youtube": "https://www.youtube.com/user/ChakaKhanVEVO"
 },
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Chaka Khan",
 "related": [
 "Earth, Wind & Fire",
@@ -34724,6 +34798,10 @@
 "name": "Cherub Chains",
 "related": []
 },
+"chessterandgiolucca": {
+"checked": "2026-11-28T10:47:30+00:00",
+"name": "Chesster & Gio Lucca"
+},
 "chestfever": {
 "appleUrl": "https://music.apple.com/us/artist/chest-fever/1686685407?uo=4",
 "checked": "2026-11-05T03:49:11+00:00",
@@ -34991,6 +35069,28 @@
 },
 "name": "Childeater",
 "related": []
+},
+"childishgambino": {
+"appleUrl": "https://music.apple.com/us/artist/childish-gambino/466842536?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 1658684,
+"genre": "Hip-Hop/Rap",
+"image": "https://cdn-images.dzcdn.net/images/artist/35ed4d691c7601ffaef55e743bc6fcde/250x250-000000-80-0-0.jpg",
+"name": "Childish Gambino",
+"related": [
+"MAC MILLER",
+"BROCKHAMPTON",
+"Tyler, The Creator",
+"Frank Ocean",
+"Kali Uchis",
+"Steve Lacy",
+"The Internet",
+"Kevin Abstract",
+"Chance the Rapper",
+"Blood Orange",
+"SAMPHA",
+"Kendrick Lamar"
+]
 },
 "childrenofeden": {
 "appleUrl": "https://music.apple.com/us/artist/children-of-eden/1615832?uo=4",
@@ -36509,6 +36609,10 @@
 "linksMatch": "only",
 "linksVersion": 2,
 "name": "CHUKWU"
+},
+"churtch": {
+"checked": "2026-11-28T10:47:30+00:00",
+"name": "CHURTCH"
 },
 "chusandceballos": {
 "appleUrl": "https://music.apple.com/us/artist/chus-ceballos/86723729?uo=4",
@@ -40570,6 +40674,9 @@
 "instagram": "https://www.instagram.com/coopamo/",
 "spotify": "https://open.spotify.com/artist/10bMT4L8FLSsh5OMGp0WFs"
 },
+"linksChecked": "2026-11-28T10:48:43+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
 "name": "Cooper Moore",
 "related": []
 },
@@ -50284,6 +50391,15 @@
 "P-LO"
 ]
 },
+"devoye": {
+"appleUrl": "https://music.apple.com/us/artist/devoye/1355386047?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 7,
+"genre": "Dance",
+"image": "https://cdn-images.dzcdn.net/images/artist/ce3306aef675514b8cc410b5d7792626/250x250-000000-80-0-0.jpg",
+"name": "Devoye",
+"related": []
+},
 "devvydub": {
 "appleUrl": "https://music.apple.com/us/artist/devvy-dub/1257899389?uo=4",
 "checked": "2026-11-13T19:57:55+00:00",
@@ -52913,6 +53029,15 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "DJ Robin Roth"
+},
+"djrock": {
+"appleUrl": "https://music.apple.com/us/artist/dj-rock/1456738659?uo=4",
+"checked": "2026-11-28T10:39:01+00:00",
+"fans": 18,
+"genre": "Electronic",
+"image": "https://cdn-images.dzcdn.net/images/artist/14aab85547e2a5b67c52a972dd4f58c3/250x250-000000-80-0-0.jpg",
+"name": "DJ Rock",
+"related": []
 },
 "djrockstaraaron": {
 "checked": "2026-11-20T22:34:34+00:00",
@@ -56834,12 +56959,38 @@
 "linksVersion": 2,
 "name": "DUBFIRE20"
 },
+"dubinthejungle": {
+"checked": "2026-11-28T10:47:30+00:00",
+"name": "DUB in the JUNGLE"
+},
 "dubstepmeetsswag": {
 "checked": "2026-11-17T07:38:35+00:00",
 "linksChecked": "2026-11-17T07:39:02+00:00",
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Dubstep Meets Swag!"
+},
+"dubvision": {
+"appleUrl": "https://music.apple.com/us/artist/dubvision/453713844?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 149292,
+"genre": "Dance",
+"image": "https://cdn-images.dzcdn.net/images/artist/c60993893bd71451d7d6a2fd782823e1/250x250-000000-80-0-0.jpg",
+"name": "DubVision",
+"related": [
+"Nicky Romero",
+"Sick Individuals",
+"Matisse & Sadko",
+"Jay Hardway",
+"Afrojack",
+"Nervo",
+"Third Party",
+"Steve Aoki",
+"Yves V",
+"Lucas & Steve",
+"Alesso",
+"Mike Williams"
+]
 },
 "duckwrth": {
 "appleUrl": "https://music.apple.com/us/artist/duckwrth/927720279?uo=4",
@@ -66409,6 +66560,15 @@
 "Compton AV"
 ]
 },
+"ferment": {
+"appleUrl": "https://music.apple.com/us/artist/ferment/1752585596?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 8,
+"genre": "Punk",
+"image": "https://cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
+"name": "Ferment",
+"related": []
+},
 "fernandonoronha": {
 "appleUrl": "https://music.apple.com/us/artist/fernando-noronha/573202126?uo=4",
 "checked": "2026-11-18T01:35:53+00:00",
@@ -69975,6 +70135,15 @@
 "linksVersion": 2,
 "name": "Franniballecter"
 },
+"fraternaltwin": {
+"appleUrl": "https://music.apple.com/us/artist/fraternal-twin/984373354?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 114,
+"genre": "Indie Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
+"name": "FRATERNAL TWIN",
+"related": []
+},
 "fraxiom": {
 "appleUrl": "https://music.apple.com/us/artist/fraxiom/1072351002?uo=4",
 "checked": "2026-11-05T23:25:04+00:00",
@@ -72272,6 +72441,10 @@
 "galagalactica": {
 "checked": "2026-11-16T22:44:39+00:00",
 "name": "Gala Galactica"
+},
+"galcherlustwerkliveacemo": {
+"checked": "2026-11-28T10:47:30+00:00",
+"name": "Galcher Lustwerk (Live). AceMo"
 },
 "galdive": {
 "appleUrl": "https://music.apple.com/us/artist/galdive/1442177293?uo=4",
@@ -81127,6 +81300,10 @@
 "checked": "2026-11-22T10:41:35+00:00",
 "name": "Heat House"
 },
+"heavensfeelafterdark": {
+"checked": "2026-11-28T10:47:30+00:00",
+"name": "Heaven\u2019s Feel After Dark"
+},
 "heavensgate": {
 "appleUrl": "https://music.apple.com/us/artist/heavensgate/1402901618?uo=4",
 "checked": "2026-11-05T04:37:18+00:00",
@@ -85732,8 +85909,16 @@
 "genre": "Country",
 "image": "https://cdn-images.dzcdn.net/images/artist/b337569675264d2e93558125946f7af3/250x250-000000-80-0-0.jpg",
 "links": {
-"instagram": "https://www.instagram.com/ian.harrison/"
+"applemusic": "https://music.apple.com/us/artist/1715746807",
+"instagram": "https://www.instagram.com/ian.harrison/",
+"spotify": "https://open.spotify.com/artist/5KNwR0B4tskwLbpfPtt1LG",
+"tiktok": "https://www.tiktok.com/@ianharrisonmusic",
+"website": "https://www.ianharrisonmusic.com/",
+"youtube": "https://www.youtube.com/channel/UC-VB03iaV9y7DLDKCKgraQw"
 },
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Ian Harrison",
 "related": [
 "Adrien Nunez",
@@ -87098,6 +87283,28 @@
 "Les Soucoupes Violentes",
 "The Len Price 3",
 "Marty Stuart & His Fabulous Superlatives"
+]
+},
+"inclination": {
+"appleUrl": "https://music.apple.com/us/artist/inclination/451884700?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 1246,
+"genre": "Metal",
+"image": "https://cdn-images.dzcdn.net/images/artist/041d367e784e127eb75bc0b051570823/250x250-000000-80-0-0.jpg",
+"name": "Inclination",
+"related": [
+"Magnitude",
+"XweaponX",
+"Pain of Truth",
+"Hard Mind",
+"Year of the Knife",
+"Incendiary",
+"Mortality Rate",
+"Missing Link",
+"Contention",
+"Headbussa",
+"Grove Street",
+"Worst Doubt"
 ]
 },
 "incolor": {
@@ -93191,6 +93398,28 @@
 "name": "Jek",
 "related": []
 },
+"jencardini": {
+"appleUrl": "https://music.apple.com/us/artist/jen-cardini/260619351?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 36,
+"genre": "Electronic",
+"image": "https://cdn-images.dzcdn.net/images/artist/618cf4896ba9fad4e8db9017354e0570/250x250-000000-80-0-0.jpg",
+"name": "Jen Cardini",
+"related": [
+"Laurent Garnier",
+"Red Axes",
+"Pardon Moi",
+"Alien Alien",
+"Miss Kittin",
+"Superpitcher",
+"Arnaud Rebotini",
+"You Man",
+"Michael Mayer",
+"Perel",
+"Captain Mustache",
+"Felix da Housecat"
+]
+},
 "jenifamayanja": {
 "appleUrl": "https://music.apple.com/us/artist/jenifa-mayanja/218214800?uo=4",
 "checked": "2026-11-22T22:36:20+00:00",
@@ -96289,6 +96518,16 @@
 "fans": 1174,
 "genre": "Jazz",
 "image": "https://cdn-images.dzcdn.net/images/artist/d7862ed9edab451bcdaddc02c322e845/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/4472406",
+"instagram": "https://www.instagram.com/johnmedeski/",
+"soundcloud": "https://soundcloud.com/johnmedeski",
+"spotify": "https://open.spotify.com/artist/46IQ7Q0jkW6dW0l4e15FFD",
+"website": "http://www.johnmedeski.com/"
+},
+"linksChecked": "2026-11-28T10:41:11+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "John Medeski",
 "related": []
 },
@@ -97441,6 +97680,40 @@
 "linksVersion": 2,
 "name": "Jon McLaughlin and Josh Jenkins"
 },
+"jonpardi": {
+"appleUrl": "https://music.apple.com/us/artist/jon-pardi/371085834?uo=4",
+"checked": "2026-11-28T10:39:01+00:00",
+"fans": 66623,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/7deb26afd705f954c1c161e30f254ecd/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/371085834",
+"instagram": "https://www.instagram.com/jonpardi/",
+"soundcloud": "https://soundcloud.com/jon-pardi-music",
+"spotify": "https://open.spotify.com/artist/4MoAOfV4ROWofLG3a3hhBN",
+"tiktok": "https://www.tiktok.com/@jonpardi",
+"website": "http://www.jonpardi.com/",
+"youtube": "https://www.youtube.com/channel/UCFdIF7wqu8s2A_TdOysgVmw"
+},
+"linksChecked": "2026-11-28T10:39:28+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Jon Pardi",
+"related": [
+"Cody Johnson",
+"Justin Moore",
+"Randall King",
+"Riley Green",
+"Chris Janson",
+"Aaron Watson",
+"Brooks & Dunn",
+"Jason Aldean",
+"Parker McCollum",
+"Midland",
+"Luke Bryan",
+"Blake Shelton"
+]
+},
 "jonpolarbeargonzalez": {
 "checked": "1970-01-01T00:00:00+00:00",
 "linksChecked": "2026-11-05T22:01:58+00:00",
@@ -98266,6 +98539,15 @@
 "Matthew Halsall",
 "Phi-Psonics"
 ]
+},
+"joshlomat": {
+"appleUrl": "https://music.apple.com/us/artist/josh-lomat/1486215051?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 0,
+"genre": "Electronic",
+"image": "https://cdn-images.dzcdn.net/images/artist/aaff3a375f5c23ca1ecaac5b407bc7dd/250x250-000000-80-0-0.jpg",
+"name": "Josh Lomat",
+"related": []
 },
 "joshnelsonandjoesib": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -99269,12 +99551,16 @@
 "genre": "Jazz",
 "image": "https://cdn-images.dzcdn.net/images/artist/1581ba16af41257433d4372855a303b7/250x250-000000-80-0-0.jpg",
 "links": {
-"applemusic": "https://music.apple.com/us/artist/julian-lage/6937093",
+"applemusic": "https://music.apple.com/us/artist/6937093",
+"bandcamp": "https://julianlage.bandcamp.com/",
 "instagram": "https://www.instagram.com/jlage/",
 "spotify": "https://open.spotify.com/artist/2TSuAchdgVzsAa9wDK1IeT",
 "website": "http://www.julianlage.com/",
 "youtube": "https://www.youtube.com/channel/UCtMZP29LNEkI96ezw8I0eGw"
 },
+"linksChecked": "2026-11-28T10:41:11+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Julian Lage",
 "related": [
 "Bill Frisell",
@@ -100324,6 +100610,17 @@
 "fans": 9906,
 "genre": "Dance",
 "image": "https://cdn-images.dzcdn.net/images/artist/88c129a193afd15d7ae4635f37a158df/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/533509509",
+"instagram": "https://www.instagram.com/kaiwachiofficial/",
+"soundcloud": "https://soundcloud.com/kaiwachi",
+"spotify": "https://open.spotify.com/artist/2fNr4ldujwq97v1jWeqs8K",
+"website": "https://www.kaiwachimusic.com/",
+"youtube": "https://music.youtube.com/channel/UCK7y9fUqUZy8HcrxcuPKGqg"
+},
+"linksChecked": "2026-11-28T10:41:11+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Kai Wachi",
 "related": [
 "Excision",
@@ -109365,8 +109662,11 @@
 "links": {
 "instagram": "https://www.instagram.com/thelastrevel/",
 "spotify": "https://open.spotify.com/artist/2PyWfmEeKmRNhQkAJ1zJXw?si=E7Cksc7_QWmg6lMUuaGbdA",
-"website": "https://www.thelastrevel.com/"
+"website": "http://thelastrevel.com/"
 },
+"linksChecked": "2026-11-28T10:41:11+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "The Last Revel",
 "related": [
 "Shovels & Rope",
@@ -109419,8 +109719,12 @@
 "fans": 8,
 "genre": "Folk",
 "image": "https://cdn-images.dzcdn.net/images/artist/8cad32d1d63c5d67098d2d45ce0ee303/250x250-000000-80-0-0.jpg",
-"linksChecked": "2026-11-05T07:41:56+00:00",
+"links": {
+"spotify": "https://open.spotify.com/artist/1TT3HS23SP6RjggzMRH6Tc"
+},
+"linksChecked": "2026-11-28T10:41:11+00:00",
 "linksMatch": "only",
+"linksVersion": 2,
 "name": "The Last Wild Buffalo",
 "related": []
 },
@@ -109860,6 +110164,28 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Laurence Juber\u2019s Airfoil"
+},
+"laurenflax": {
+"appleUrl": "https://music.apple.com/us/artist/lauren-flax/304497752?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 285,
+"genre": "House",
+"image": "https://cdn-images.dzcdn.net/images/artist/00ba132be00ae7866d01a071184c9bd6/250x250-000000-80-0-0.jpg",
+"name": "Lauren Flax",
+"related": [
+"ZARG",
+"DTAILR",
+"Jack Marlow",
+"Jayc",
+"Jake Antonio",
+"Woodcamp",
+"LNRT",
+"Lemtom",
+"Royal Intention",
+"Tim Sanders",
+"Jonty",
+"Secret Floor"
+]
 },
 "laurenfreedman": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -114160,6 +114486,37 @@
 "linksVersion": 2,
 "name": "Local Love Presents"
 },
+"locash": {
+"appleUrl": "https://music.apple.com/us/artist/locash/377628448?uo=4",
+"checked": "2026-11-28T10:39:01+00:00",
+"fans": 3180,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/a9b8944b2b4ba2edc71ed355812a4d64/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/377628448",
+"spotify": "https://open.spotify.com/artist/5IcGbIAgdns0R5EJKHMjCQ",
+"website": "https://locash.com/",
+"youtube": "https://www.youtube.com/channel/UC0vPOxeds7aHnc0LMHP3RkQ"
+},
+"linksChecked": "2026-11-28T10:39:28+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "LOCASH",
+"related": [
+"Chase Rice",
+"Lee Brice",
+"High Valley",
+"Jason Aldean",
+"Jake Owen",
+"Cole Swindell",
+"Dustin Lynch",
+"Dean Brody",
+"Brantley Gilbert",
+"HIXTAPE",
+"Dallas Smith",
+"Tim Hicks"
+]
+},
 "loch": {
 "appleUrl": "https://music.apple.com/us/artist/loch/1814541493?uo=4",
 "checked": "2026-11-05T04:50:49+00:00",
@@ -115246,6 +115603,9 @@
 "links": {
 "website": "https://loshermanosmendoza.com/"
 },
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "Los Hermanos Mendoza",
 "related": []
 },
@@ -116701,6 +117061,17 @@
 "name": "LU",
 "related": []
 },
+"luanndelesseps": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/countess-luann/369024316",
+"instagram": "https://www.instagram.com/countessluann/",
+"spotify": "https://open.spotify.com/artist/5uWeO2hYqC3UGKPziuTMxF?autoplay=true",
+"website": "https://www.countessluann.com/",
+"youtube": "https://www.youtube.com/channel/UCYhYp0geN1xtNQlk9_EBrHA"
+},
+"name": "Luann de Lesseps"
+},
 "lucaalemannoandmarcellocarelli": {
 "checked": "2026-11-14T07:20:28+00:00",
 "linksChecked": "2026-11-14T07:21:38+00:00",
@@ -117466,6 +117837,40 @@
 "linksVersion": 2,
 "name": "Luke Binkow"
 },
+"lukebryan": {
+"appleUrl": "https://music.apple.com/us/artist/luke-bryan/20131064?uo=4",
+"checked": "2026-11-28T10:39:01+00:00",
+"fans": 625533,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/796d9a86269ea04bd32003140b6638bd/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/20131064",
+"instagram": "https://www.instagram.com/lukebryan/",
+"soundcloud": "https://soundcloud.com/official-luke-bryan",
+"spotify": "https://open.spotify.com/artist/0BvkDsjIUla7X0k6CSWh1I",
+"tiktok": "https://www.tiktok.com/@lukebryan",
+"website": "https://www.lukebryan.com/",
+"youtube": "https://www.youtube.com/channel/UCntGDhwr_YA88wVr0WpOMEA"
+},
+"linksChecked": "2026-11-28T10:39:28+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Luke Bryan",
+"related": [
+"Cole Swindell",
+"Chris Young",
+"Jason Aldean",
+"Blake Shelton",
+"Jake Owen",
+"Thomas Rhett",
+"Dierks Bentley",
+"Lee Brice",
+"Kenny Chesney",
+"Florida Georgia Line",
+"Chase Rice",
+"Justin Moore"
+]
+},
 "lukecombs": {
 "appleUrl": "https://music.apple.com/us/artist/luke-combs/815635315?uo=4",
 "checked": "2026-11-06T01:52:26+00:00",
@@ -117678,6 +118083,15 @@
 "Not For Radio",
 "Tennis"
 ]
+},
+"lunamar": {
+"appleUrl": "https://music.apple.com/us/artist/luna-mar/1137661579?uo=4",
+"checked": "2026-11-28T10:47:30+00:00",
+"fans": 13,
+"genre": "Pop",
+"image": "https://cdn-images.dzcdn.net/images/artist/3cf72fa69a5ad0a85cfc6358d2de6694/250x250-000000-80-0-0.jpg",
+"name": "Luna Mar",
+"related": []
 },
 "lunargold": {
 "appleUrl": "https://music.apple.com/us/artist/lunar-gold/1466875942?uo=4",
@@ -118798,6 +119212,16 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Maddy Kelly"
+},
+"maddysmith": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/mad-house/id1735392840"
+},
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Maddy Smith"
 },
 "madeinnewyork": {
 "checked": "2026-11-09T13:30:33+00:00",
@@ -121845,6 +122269,10 @@
 "linksVersion": 2,
 "name": "Mark Curry"
 },
+"markdumitrescuandegipto": {
+"checked": "2026-11-28T10:47:30+00:00",
+"name": "MARK DUMITRESCU & EGIPTO"
+},
 "markeitzelandmore": {
 "checked": "2026-11-20T13:37:16+00:00",
 "linksChecked": "2026-11-20T13:37:53+00:00",
@@ -124643,6 +125071,10 @@
 "Benches"
 ]
 },
+"mccoyplaistedproject": {
+"checked": "2026-11-28T10:47:30+00:00",
+"name": "McCoy Plaisted Project"
+},
 "mchammersmith": {
 "checked": "1970-01-01T00:00:00+00:00",
 "linksChecked": "2026-11-07T07:16:36+00:00",
@@ -125794,6 +126226,9 @@
 "instagram": "https://www.instagram.com/mermarcum/",
 "spotify": "https://open.spotify.com/artist/1hD768RDip7WrExOXS5pLN"
 },
+"linksChecked": "2026-11-28T10:48:43+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "mer marcum"
 },
 "merryerevxmas": {
@@ -126992,6 +127427,38 @@
 "Closed Tear"
 ]
 },
+"midland": {
+"appleUrl": "https://music.apple.com/us/artist/midland/1171869852?uo=4",
+"checked": "2026-11-28T10:39:01+00:00",
+"fans": 11197,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/651873946c042a39b18b69e8e1898c49/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/1171869852",
+"instagram": "https://www.instagram.com/midlandofficial/",
+"soundcloud": "https://soundcloud.com/midland",
+"spotify": "https://open.spotify.com/artist/1DTZRmlVZBxx2wRQBtx6yi",
+"website": "https://www.midlandofficial.com/"
+},
+"linksChecked": "2026-11-28T10:39:28+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Midland",
+"related": [
+"Aaron Watson",
+"Cody Johnson",
+"Jon Wolfe",
+"Randall King",
+"Jon Pardi",
+"Zach Top",
+"Brooks & Dunn",
+"George Strait",
+"Brad Paisley",
+"Billy Currington",
+"Eric Church",
+"Zac Brown Band"
+]
+},
 "midlifeonmars90s2000scovers": {
 "checked": "2026-11-12T07:40:56+00:00",
 "linksChecked": "2026-11-12T07:44:36+00:00",
@@ -127864,8 +128331,13 @@
 "genre": "Alternative",
 "image": "https://cdn-images.dzcdn.net/images/artist/afeb7a669730accc3a3783c3b62f4239/250x250-000000-80-0-0.jpg",
 "links": {
-"instagram": "https://www.instagram.com/milaculpa/"
+"bandcamp": "https://onewordsentence.bandcamp.com/",
+"instagram": "https://www.instagram.com/milaculpa/",
+"website": "https://milaculpa.com/"
 },
+"linksChecked": "2026-11-28T10:48:43+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "Mila Culpa",
 "related": [
 "Dylan Thom",
@@ -166537,6 +167009,17 @@
 "fans": 25,
 "genre": "Dance",
 "image": "https://cdn-images.dzcdn.net/images/artist/ffeb15a16df070ad20167abf6736ef27/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/983320067",
+"instagram": "https://www.instagram.com/ShipWrekDJ/",
+"soundcloud": "https://soundcloud.com/theshipwrek",
+"spotify": "https://open.spotify.com/artist/1ic0FHNGIjXZAWH6O6Reif",
+"website": "https://shipwreksounds.com/",
+"youtube": "https://music.youtube.com/channel/UCLnTIo0hstImo2RTmOO0jeQ"
+},
+"linksChecked": "2026-11-28T10:41:11+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Ship Wrek",
 "related": []
 },
@@ -166914,12 +167397,18 @@
 "genre": "Electronic",
 "image": "https://cdn-images.dzcdn.net/images/artist/e835729997a9fd7786e61eb47c72df94/250x250-000000-80-0-0.jpg",
 "links": {
-"applemusic": "https://music.apple.com/us/artist/shygirl/456494592",
+"applemusic": "https://music.apple.com/gb/artist/456494592",
+"bandcamp": "https://0800shygirl.bandcamp.com/",
 "instagram": "https://www.instagram.com/0800shygirl/",
+"soundcloud": "https://soundcloud.com/0800shygirl",
 "spotify": "https://open.spotify.com/artist/3M3wTTCDwicRubwMyHyEDy",
-"website": "http://shygirl.tv/",
+"tiktok": "https://www.tiktok.com/@0800shygirl",
+"website": "https://shygirl.tv/",
 "youtube": "https://www.youtube.com/channel/UCMx2-6At2Rx0kapbSjKxwJA"
 },
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Shygirl",
 "related": [
 "SOPHIE",
@@ -168244,6 +168733,9 @@
 "appleUrl": "https://music.apple.com/us/artist/singlewave/1014042385?uo=4",
 "checked": "2026-11-16T22:33:42+00:00",
 "genre": "Dance",
+"linksChecked": "2026-11-28T10:41:11+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "Singlewave"
 },
 "sinkorswim": {
@@ -184976,6 +185468,40 @@
 "name": "Thomas Kotcheff",
 "related": []
 },
+"thomasrhett": {
+"appleUrl": "https://music.apple.com/us/artist/thomas-rhett/502541718?uo=4",
+"checked": "2026-11-28T10:39:01+00:00",
+"fans": 182767,
+"genre": "Country",
+"image": "https://cdn-images.dzcdn.net/images/artist/1439e2c0b31a7ccd933d39cff6b7f201/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/502541718",
+"instagram": "https://www.instagram.com/thomasrhettakins/",
+"soundcloud": "https://soundcloud.com/thomasrhettofficial",
+"spotify": "https://open.spotify.com/artist/6x2LnllRG5uGarZMsD4iO8",
+"tiktok": "https://www.tiktok.com/@thomasrhett",
+"website": "http://thomasrhett.com/",
+"youtube": "https://www.youtube.com/channel/UCr7r9JorcxMDOC5ZQ_ZCs3w"
+},
+"linksChecked": "2026-11-28T10:39:28+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Thomas Rhett",
+"related": [
+"Chris Young",
+"Old Dominion",
+"Cole Swindell",
+"Lee Brice",
+"Luke Bryan",
+"Florida Georgia Line",
+"Carly Pearce",
+"Dustin Lynch",
+"Dylan Scott",
+"Scotty Mccreery",
+"Chase Rice",
+"Maddie & Tae"
+]
+},
 "thomassimonvortex": {
 "appleUrl": "https://music.apple.com/us/artist/thomas-simon-vortex/1761956337?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -186778,7 +187304,10 @@
 ]
 },
 "toddwulfmeyerpending": {
-"checked": "1970-01-01T00:00:00+00:00",
+"checked": "2026-11-28T10:43:36+00:00",
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "Todd Wulfmeyer PENDING"
 },
 "togetheragain": {
@@ -195062,8 +195591,16 @@
 "genre": "Alternative",
 "image": "https://cdn-images.dzcdn.net/images/artist/df3e254581c78995604c43538d28b4c8/250x250-000000-80-0-0.jpg",
 "links": {
-"spotify": "https://open.spotify.com/artist/1vQ5CUq3dcQkRRCGd94UD5"
+"applemusic": "https://music.apple.com/us/artist/1616420685",
+"bandcamp": "https://villagerrr.bandcamp.com/",
+"instagram": "https://www.instagram.com/villagerrrrrrrr/",
+"soundcloud": "https://soundcloud.com/villagerrr",
+"spotify": "https://open.spotify.com/artist/1vQ5CUq3dcQkRRCGd94UD5",
+"website": "https://www.villagerrr.com/"
 },
+"linksChecked": "2026-11-28T10:48:43+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "villagerrr",
 "related": [
 "This Is Lorelei",
@@ -200256,6 +200793,9 @@
 "fans": 13,
 "genre": "Country",
 "image": "https://cdn-images.dzcdn.net/images/artist/7a15a5bce3e3fce5f616b73b67d06783/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-28T10:43:40+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "Wink Keziah & Delux Motel",
 "related": []
 },
