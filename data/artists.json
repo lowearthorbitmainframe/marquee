@@ -27670,6 +27670,13 @@
 "Amara ctk100"
 ]
 },
+"brookecandyandguests": {
+"checked": "2026-11-28T07:35:08+00:00",
+"linksChecked": "2026-11-28T07:35:23+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Brooke Candy & Guests"
+},
 "brookecombe": {
 "appleUrl": "https://music.apple.com/us/artist/brooke-combe/1444637732?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -97323,6 +97330,21 @@
 "Luke Sital-Singh"
 ]
 },
+"jonchi": {
+"appleUrl": "https://music.apple.com/us/artist/jon-chi/494621573?uo=4",
+"checked": "2026-11-28T07:38:05+00:00",
+"fans": 0,
+"genre": "Singer/Songwriter",
+"image": "https://cdn-images.dzcdn.net/images/artist/5aadc69a3f0f5e741cc72608c39f3c4c/250x250-000000-80-0-0.jpg",
+"links": {
+"website": "http://www.jonchi.com/"
+},
+"linksChecked": "2026-11-28T07:38:09+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Jon Chi",
+"related": []
+},
 "jongabrus": {
 "checked": "1970-01-01T00:00:00+00:00",
 "links": {
@@ -111578,6 +111600,13 @@
 "Chelsea Cutler"
 ]
 },
+"lexkortentrio": {
+"checked": "2026-11-28T07:35:08+00:00",
+"linksChecked": "2026-11-28T07:35:23+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Lex Korten Trio"
+},
 "lezwrestle": {
 "checked": "2026-11-17T01:31:23+00:00",
 "linksChecked": "2026-11-17T01:33:01+00:00",
@@ -111854,6 +111883,13 @@
 "linksMatch": "no match",
 "name": "The Licata Brothers",
 "related": []
+},
+"lickndip": {
+"checked": "2026-11-28T07:35:08+00:00",
+"linksChecked": "2026-11-28T07:35:23+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "LICKNDIP"
 },
 "lifeandtimes": {
 "appleUrl": "https://music.apple.com/us/artist/the-life-and-times/51309649?uo=4",
@@ -119585,6 +119621,16 @@
 "The Lowkeys"
 ]
 },
+"majormalfunction": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/major-malfunction/id1564577796"
+},
+"linksChecked": "2026-11-28T07:39:03+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "MAJOR MALFUNCTION"
+},
 "makayamccraven": {
 "appleUrl": "https://music.apple.com/us/artist/makaya-mccraven/321718536?uo=4",
 "checked": "2026-11-13T16:45:12+00:00",
@@ -124392,19 +124438,35 @@
 ]
 },
 "mayerlewine": {
-"checked": "1970-01-01T00:00:00+00:00",
+"appleUrl": "https://music.apple.com/us/artist/may-erlewine/395571082?uo=4",
+"checked": "2026-11-28T07:35:08+00:00",
+"fans": 429,
+"genre": "Singer/Songwriter",
+"image": "https://cdn-images.dzcdn.net/images/artist/47439096fc68d2fa11a0315402530887/250x250-000000-80-0-0.jpg",
 "links": {
-"applemusic": "https://music.apple.com/us/artist/may-erlewine/395571082",
 "bandcamp": "https://mayerlewine.bandcamp.com/",
 "instagram": "https://www.instagram.com/may_erlewine/",
 "spotify": "https://open.spotify.com/artist/2OCklJbxEeL54I1EQOlbxW",
-"website": "http://mayerlewine.com/",
-"youtube": "https://www.youtube.com/channel/UCvqqOX7Z0RBYMQSFL-IrXvA"
+"website": "http://mayerlewine.com/"
 },
-"linksChecked": "2026-11-12T05:30:11+00:00",
+"linksChecked": "2026-11-28T07:35:23+00:00",
 "linksMatch": "only",
 "linksVersion": 2,
-"name": "May Erlewine"
+"name": "May Erlewine",
+"related": [
+"Bahamas",
+"M. Ward",
+"Samantha Crain",
+"Jenn Grant",
+"Damien Jurado",
+"Christian Lee Hutson",
+"Lucy Rose",
+"Becca Mancari",
+"Lake Street Dive",
+"Lucius",
+"Chris Staples",
+"Dawes"
+]
 },
 "mayleetodd": {
 "appleUrl": "https://music.apple.com/us/artist/maylee-todd/375029127?uo=4",
@@ -159116,6 +159178,13 @@
 "linksVersion": 2,
 "name": "Rotting Out & Engine"
 },
+"roughdraftshow": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-28T07:39:03+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "THE ROUGH DRAFT SHOW"
+},
 "rowanruthless": {
 "checked": "2026-11-12T22:27:23+00:00",
 "linksChecked": "2026-11-13T16:35:25+00:00",
@@ -167126,6 +167195,16 @@
 "linksMatch": "no match",
 "linksVersion": 2,
 "name": "Sidney Gish Live Performance"
+},
+"sidneysmith": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/murderess-podcast/id1551831964"
+},
+"linksChecked": "2026-11-28T07:39:03+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "SIDNEY SMITH"
 },
 "siennaspiro": {
 "appleUrl": "https://music.apple.com/us/artist/sienna-spiro/1745678083?uo=4",
@@ -179805,6 +179884,16 @@
 "linksVersion": 2,
 "name": "Suzanne Egertson",
 "related": []
+},
+"suzannelambert": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"podcast": "https://podcasts.apple.com/us/podcast/mean-but-true-with-suzanne-lambert/id1849220380"
+},
+"linksChecked": "2026-11-28T07:39:03+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "SUZANNE LAMBERT"
 },
 "suzukiprograminformationsession": {
 "checked": "2026-11-05T20:27:57+00:00",
