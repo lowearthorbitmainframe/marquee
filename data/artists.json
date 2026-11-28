@@ -18556,6 +18556,20 @@
 "Lydia Kenny"
 ]
 },
+"bellamybrothers": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/81887244",
+"instagram": "https://www.instagram.com/bellamy_brothers/",
+"spotify": "https://open.spotify.com/artist/5iB5AWIa7qreioi0AF3Bxa",
+"website": "http://www.bellamybrothers.com/",
+"youtube": "https://www.youtube.com/user/BellamyBrothers"
+},
+"linksChecked": "2026-11-28T04:46:01+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
+"name": "Bellamy Brothers"
+},
 "bellapoarch": {
 "appleUrl": "https://music.apple.com/us/artist/bella-poarch/1567245769?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -32505,6 +32519,14 @@
 "fans": 2931,
 "genre": "Dance",
 "image": "https://cdn-images.dzcdn.net/images/artist/b9c7cd4af1d8b8daa9d430e02909eb22/250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/catoanaya/",
+"spotify": "https://open.spotify.com/artist/507rh33OTfUsKJiVI6Urec",
+"website": "http://catoanaya.com/"
+},
+"linksChecked": "2026-11-28T04:54:07+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "CATO ANAYA",
 "related": [
 "Tom & Collins",
@@ -60416,6 +60438,18 @@
 "fans": 39186,
 "genre": "Country",
 "image": "https://cdn-images.dzcdn.net/images/artist/77aa9c0c9d9789bb43151a3882166d20/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/ca/artist/1384373733",
+"instagram": "https://www.instagram.com/ellalangleymusic/",
+"soundcloud": "https://soundcloud.com/ellalangley",
+"spotify": "https://open.spotify.com/artist/6BRxQ8cD3eqnrVj6WKDok8",
+"tiktok": "https://www.tiktok.com/@ellalangleymusic1",
+"website": "https://www.ellalangley.com/",
+"youtube": "https://www.youtube.com/channel/UCo80hok0dbQapOH6dJl9Hqw"
+},
+"linksChecked": "2026-11-28T04:49:12+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Ella Langley",
 "related": [
 "Megan Moroney",
@@ -62508,6 +62542,9 @@
 "fans": 1,
 "genre": "Metal",
 "image": "https://cdn-images.dzcdn.net/images/artist/fe5b33b1cfd874700776b7644cacc5b7/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-28T04:46:42+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
 "name": "Envy",
 "related": []
 },
@@ -78504,6 +78541,17 @@
 "fans": 34275,
 "genre": "Dance",
 "image": "https://cdn-images.dzcdn.net/images/artist/5f914a203bbe63e7188cb54fc8c45e4b/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/14947772",
+"instagram": "https://www.instagram.com/guygerber/",
+"soundcloud": "https://soundcloud.com/guygerber",
+"spotify": "https://open.spotify.com/artist/3bqBkAzdPwEDe1JUvb7ZeC",
+"website": "http://guygerber.com/",
+"youtube": "https://www.youtube.com/channel/UC58iutVLEAr6rN4YD2WNqkg"
+},
+"linksChecked": "2026-11-28T04:54:07+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "Guy Gerber",
 "related": [
 "Super Flu",
@@ -91453,6 +91501,9 @@
 "fans": 1318,
 "genre": "Pop",
 "image": "https://cdn-images.dzcdn.net/images/artist/4e314bf6d820bc42b5ef6635c4adc033/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-28T04:54:07+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
 "name": "Janina",
 "related": []
 },
@@ -98364,8 +98415,12 @@
 "genre": "Country",
 "image": "https://cdn-images.dzcdn.net/images/artist/61ff7db6537c241a788905c90046c1e4/250x250-000000-80-0-0.jpg",
 "links": {
+"spotify": "https://open.spotify.com/artist/4yrOIPlpAaSZ0Xb2n5Wdyu",
 "website": "https://joshweathers.com/"
 },
+"linksChecked": "2026-11-28T04:49:12+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "Josh Weathers",
 "related": []
 },
@@ -113532,12 +113587,15 @@
 "genre": "Country",
 "image": "https://cdn-images.dzcdn.net/images/artist/0653f88dca769b8d11ce0049bdac3bbd/250x250-000000-80-0-0.jpg",
 "links": {
-"applemusic": "https://music.apple.com/us/artist/little-texas/169175",
-"instagram": "http://instagram.com/littletexasband",
+"applemusic": "https://music.apple.com/us/artist/169175",
+"instagram": "https://www.instagram.com/littletexasband/",
 "spotify": "https://open.spotify.com/artist/5CCf77sKGlTdfIiIDaVScj",
 "website": "http://www.littletexasonline.com/",
 "youtube": "https://www.youtube.com/user/littletexasband"
 },
+"linksChecked": "2026-11-28T04:49:12+00:00",
+"linksMatch": "only",
+"linksVersion": 2,
 "name": "Little Texas",
 "related": [
 "Clay Walker",
@@ -148072,6 +148130,9 @@
 },
 "playsrumpusroomlive": {
 "checked": "2026-11-26T04:57:44+00:00",
+"linksChecked": "2026-11-28T04:54:07+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "Plays RUMPUS ROOM Live"
 },
 "playthatgoeswrongny": {
@@ -158643,6 +158704,9 @@
 "fans": 379,
 "genre": "Techno",
 "image": "https://cdn-images.dzcdn.net/images/artist/164bcc33abd1001846d954d835ea7f2b/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-28T04:54:07+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
 "name": "Rooftop",
 "related": [
 "Larse",
@@ -167933,6 +167997,15 @@
 "fans": 3586,
 "genre": "Dance",
 "image": "https://cdn-images.dzcdn.net/images/artist/616c45568f27206df7e64bfb618886a3/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/gb/artist/388536791",
+"soundcloud": "https://soundcloud.com/simula",
+"spotify": "https://open.spotify.com/artist/2KCmoJZgpL6hNFdT4l9PTl",
+"youtube": "https://music.youtube.com/channel/UCtL9Nesujzyq-EnAcKkyVVg"
+},
+"linksChecked": "2026-11-28T04:46:42+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Simula",
 "related": [
 "Annix",
@@ -174029,6 +174102,9 @@
 "fans": 1,
 "genre": "Worldwide",
 "image": "https://cdn-images.dzcdn.net/images/artist/5ffcf81d0e50edafde5bf6b563994fa9/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-28T04:46:42+00:00",
+"linksMatch": "ambiguous",
+"linksVersion": 2,
 "name": "Spyro",
 "related": []
 },
@@ -186612,6 +186688,10 @@
 "Poco"
 ]
 },
+"toddwulfmeyerpending": {
+"checked": "1970-01-01T00:00:00+00:00",
+"name": "Todd Wulfmeyer PENDING"
+},
 "togetheragain": {
 "appleUrl": "https://music.apple.com/us/artist/together-again/1523653667?uo=4",
 "checked": "2026-11-27T16:56:46+00:00",
@@ -187624,6 +187704,10 @@
 "fans": 6,
 "genre": "Hip-Hop/Rap",
 "image": "https://cdn-images.dzcdn.net/images/artist/0eaf2f43810b70958e5777c9748b8f0e/250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/funkytoona",
+"spotify": "https://open.spotify.com/artist/2sj019B8OYWlMvkl3ZFlRz"
+},
 "name": "Toona",
 "related": []
 },
@@ -190152,6 +190236,10 @@
 "fans": 9,
 "genre": "Alternative",
 "image": "https://cdn-images.dzcdn.net/images/artist/f36861e4c90c96f4ab2a1125b8c3015e/250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/trumanflyer/",
+"spotify": "https://open.spotify.com/artist/4OCvhW1RJGxHlT7jNjlLvq"
+},
 "name": "Truman Flyer",
 "related": []
 },
@@ -191766,6 +191854,10 @@
 "fans": 5,
 "genre": "Pop",
 "image": "https://cdn-images.dzcdn.net/images/artist/7994be8bd661209d3ae2584e6598eb05/250x250-000000-80-0-0.jpg",
+"links": {
+"instagram": "https://www.instagram.com/ty1ermiller",
+"spotify": "https://open.spotify.com/artist/7tD6cGrcNPMfUl71KlFdBI"
+},
 "name": "Tyler Miller",
 "related": []
 },
@@ -191845,6 +191937,13 @@
 "fans": 26639,
 "genre": "Metal",
 "image": "https://cdn-images.dzcdn.net/images/artist/4af046d6e58aadcb1d117ec7db90fda7/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/t%C3%BDr/140800517",
+"instagram": "https://www.instagram.com/tyr_official/",
+"spotify": "https://open.spotify.com/artist/6TmGNPW2oDM5uaXBILozGa",
+"website": "https://tyr.fo/",
+"youtube": "https://www.youtube.com/user/Tyrband"
+},
 "name": "T\u00fdr",
 "related": [
 "Ensiferum",
@@ -193196,6 +193295,9 @@
 },
 "ushuu": {
 "checked": "2026-11-17T22:41:54+00:00",
+"linksChecked": "2026-11-28T04:46:42+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
 "name": "Ushuu"
 },
 "vacations": {
@@ -201080,6 +201182,18 @@
 "fans": 170,
 "genre": "Dubstep",
 "image": "https://cdn-images.dzcdn.net/images/artist/26b542e2f95e1de9a5ce8714bd7685f1/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/ca/artist/1239652463",
+"bandcamp": "https://wraz.bandcamp.com/",
+"instagram": "https://www.instagram.com/wraz_dubs/",
+"soundcloud": "https://soundcloud.com/wraz",
+"spotify": "https://open.spotify.com/artist/67b5TsLqAzMdmtWZCy2k7D",
+"website": "https://www.wrazmusic.com/",
+"youtube": "https://music.youtube.com/channel/UC7bf-2C5roJd2KiXx6fd2wQ"
+},
+"linksChecked": "2026-11-28T04:46:42+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
 "name": "Wraz",
 "related": [
 "Hypho",
