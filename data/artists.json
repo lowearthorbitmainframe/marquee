@@ -13965,6 +13965,13 @@
 },
 "name": "August Wilson's Seven Guitars"
 },
+"aundraisland": {
+"checked": "2026-11-28T01:34:49+00:00",
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Aundra Island"
+},
 "aura": {
 "appleUrl": "https://music.apple.com/us/artist/au-ra/1160086543?uo=4",
 "checked": "2026-10-31T03:16:23+00:00",
@@ -20928,6 +20935,13 @@
 "linksVersion": 2,
 "name": "Bill Burr",
 "related": []
+},
+"billburrandfriends": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "BILL BURR AND FRIENDS"
 },
 "billcharlap": {
 "appleUrl": "https://music.apple.com/us/artist/bill-charlap/1102266?uo=4",
@@ -56605,6 +56619,13 @@
 "linksVersion": 2,
 "name": "Drunk Shrek"
 },
+"drunktheatre": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "DRUNK THEATRE"
+},
 "drushuu": {
 "appleUrl": "https://music.apple.com/us/artist/dr-ush%C5%ABu/1458389239?uo=4",
 "checked": "2026-11-12T10:42:30+00:00",
@@ -66881,6 +66902,18 @@
 "linksMatch": "wikidata",
 "linksVersion": 2,
 "name": "Fin Taylor"
+},
+"finz": {
+"appleUrl": "https://music.apple.com/us/artist/the-finz/1750149751?uo=4",
+"checked": "2026-11-28T01:34:49+00:00",
+"fans": 0,
+"genre": "Rock",
+"image": "https://cdn-images.dzcdn.net/images/artist/aaa061f845e320604187de1b31e7b857/250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "The Finz",
+"related": []
 },
 "fionacauley": {
 "checked": "1970-01-01T00:00:00+00:00",
@@ -90357,6 +90390,18 @@
 "name": "Jake Sinclair",
 "related": []
 },
+"jakesong": {
+"appleUrl": "https://music.apple.com/us/artist/jake-song/6789494632?uo=4",
+"checked": "2026-11-28T01:34:49+00:00",
+"fans": 0,
+"genre": null,
+"image": "https://cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Jake Song",
+"related": []
+},
 "jakeworthington": {
 "appleUrl": "https://music.apple.com/us/artist/jake-worthington/825776678?uo=4",
 "checked": "2026-11-12T10:42:30+00:00",
@@ -105144,6 +105189,16 @@
 "Dylan Conrique",
 "Maryjo"
 ]
+},
+"kirasoltanovich": {
+"checked": "1970-01-01T00:00:00+00:00",
+"links": {
+"website": "http://www.kiracomedy.com/"
+},
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "wikidata",
+"linksVersion": 2,
+"name": "Kira Soltanovich"
 },
 "kirby": {
 "appleUrl": "https://music.apple.com/us/artist/kirby/1102589771?uo=4",
@@ -130428,6 +130483,27 @@
 "linksVersion": 2,
 "name": "More! Wrestling"
 },
+"morganemslie": {
+"appleUrl": "https://music.apple.com/us/artist/morgan-emslie/1871183783?uo=4",
+"checked": "2026-11-28T01:34:49+00:00",
+"fans": 1,
+"genre": "Alternative",
+"image": "https://cdn-images.dzcdn.net/images/artist/5c013c27bd5c50ab934de762cd2ef197/250x250-000000-80-0-0.jpg",
+"links": {
+"applemusic": "https://music.apple.com/us/artist/1871183783",
+"instagram": "https://www.instagram.com/amped2howl/",
+"soundcloud": "https://soundcloud.com/morgan-emslie-295116512",
+"spotify": "https://open.spotify.com/artist/50pBpRKwQchf7OIEOJ9NDX",
+"tiktok": "https://www.tiktok.com/@amped2howl",
+"website": "https://www.amped2howl.com/",
+"youtube": "https://www.youtube.com/@Amped2Howl"
+},
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "apple",
+"linksVersion": 2,
+"name": "Morgan Emslie",
+"related": []
+},
 "morgangarrett": {
 "appleUrl": "https://music.apple.com/us/artist/morgan-garrett/1662270477?uo=4",
 "checked": "2026-11-10T01:18:20+00:00",
@@ -131386,6 +131462,13 @@
 "linksVersion": 2,
 "name": "Moving Panoramas",
 "related": []
+},
+"mowelch": {
+"checked": "1970-01-01T00:00:00+00:00",
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "Mo Welch"
 },
 "mozart": {
 "appleUrl": "https://music.apple.com/us/artist/mozart/1500680684?uo=4",
@@ -135171,6 +135254,13 @@
 "linksVersion": 2,
 "name": "New Years Eve",
 "related": []
+},
+"newyearseveball": {
+"checked": "2026-11-28T01:34:49+00:00",
+"linksChecked": "2026-11-28T01:35:08+00:00",
+"linksMatch": "no match",
+"linksVersion": 2,
+"name": "New Years Eve Ball"
 },
 "newyearseveballdrop": {
 "checked": "2026-11-15T22:23:31+00:00",
